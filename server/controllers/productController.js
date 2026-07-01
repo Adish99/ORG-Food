@@ -1,56 +1,125 @@
 const Product = require("../models/Product")
 
-//Get all products by search functionality
-const getAllProductController=async(req,res)=>{
-    try{
-const {search,page=1,limit=5,sort}=req.query;
-if(!search){
-    return res.status(400).json({message:"Please provide search value"});
+// Get all products with search, pagination and sorting
+const getAllProductController = async(req,res)=>{
+
+try{
+
+
+const {
+search,
+page=1,
+limit=5,
+sort
+}=req.query;
+
+
+
+// Search filter
+let filter={};
+
+
+if(search){
+
+filter={
+name:{
+$regex:search,
+$options:"i"
+}
 }
 
-//Pagination Calculation
+}
+
+
+
+// Pagination
+
 const skip=(page-1)*limit;
 
-//Sorting 
+
+
+// Sorting
+
 let sortOptions={};
-if(sort){
-    if(sort==="price"){
-        sortOptions={price:1};
-    }
-    if(sort==="-price"){
-        sortOptions={price:-1};
-    }
+
+
+if(sort==="price"){
+
+sortOptions={
+price:1
+};
+
 }
 
-const products=await Product.find({
-    name:{
-        $regex:search,
-        $options:"i"
-    }
-})
+
+if(sort==="-price"){
+
+sortOptions={
+price:-1
+};
+
+}
+
+
+
+// Get Products
+
+const products=await Product.find(filter)
+
 .sort(sortOptions)
+
 .skip(Number(skip))
+
 .limit(Number(limit));
 
-//Total search Products count
-const totalProducts=await Product.countDocuments({
-    name:{
-        $regex:search,
-        $options:"i"
-    }
-});
+
+
+
+// Total count
+
+const totalProducts=
+await Product.countDocuments(filter);
+
+
+
+
 
 return res.status(200).json({
-    message:"Product Found",
-    currentPage:Number(page),
-    totalProducts,
-    totalPages:Math.ceil(totalProducts/limit),
-    products
+
+message:"Product Found",
+
+currentPage:Number(page),
+
+totalProducts,
+
+totalPages:
+Math.ceil(totalProducts/limit),
+
+products
+
+
 });
-    }catch(error){
-console.log("searchProductControllers error:",error);
-return res.status(500).json({message:"Internal Server error!"});
-    }
+
+
+
+}catch(error){
+
+
+console.log(
+"getAllProducts error:",
+error
+);
+
+
+return res.status(500).json({
+
+message:"Internal Server Error"
+
+});
+
+
+}
+
 }
 
 const getSpecificProdController=async(req,res)=>{

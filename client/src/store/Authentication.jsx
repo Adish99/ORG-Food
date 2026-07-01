@@ -13,6 +13,8 @@ const [token,setToken]=useState(localStorage.getItem("orgToken"));
 let isLoggedIn=!!token;
 console.log("isLoggedIn",isLoggedIn);
 
+const userAuthToken=`Bearer ${token}`;
+
 
 //User Logout
 const userLogout=()=>{
@@ -46,7 +48,8 @@ token,
 storeTokenInLs,
 
 isLoggedIn,
- userLogout
+ userLogout,
+ userAuthToken
 }}
 
 >
