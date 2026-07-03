@@ -1,214 +1,177 @@
 import "./Products.css";
-import {useEffect,useState} from "react";
+import { useEffect, useState } from "react";
 import { ProductCard } from "../components/UI/ProductCard";
 import { UseAuth } from "../store/Authentication";
 
+export const Products = () => {
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
 
-export const Products=()=>{
+  const [loading, setLoading] = useState(true);
 
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [sort, setSort] = useState("");
 
-const [products,setProducts]=useState([]);
+  const { userAuthToken } = UseAuth();
 
-const [loading,setLoading]=useState(true);
+  // Fetch Products
+  const getProducts = async () => {
+    try {
+      setLoading(true);
 
-const [search,setSearch]=useState("");
-const [page,setPage]=useState(1);
-const [totalPages,setTotalPages]=useState(1);
-const [sort,setSort]=useState("");
+      const res = await fetch(
+        `http://localhost:8000/api/products/getallprod?search=${search}&category=${category}&page=${page}&limit=5&sort=${sort}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: userAuthToken,
+          },
+        }
+      );
 
-const {userAuthToken}=UseAuth();
+      const data = await res.json();
 
+      console.log(data);
 
-
-const getProducts=async()=>{
-
-
-try{
-
-
-const res=await fetch(
-`http://localhost:8000/api/products/getallprod?search=${search}&page=${page}&limit=5&sort=${sort}`
-,{
-    method:"GET",
-    headers:{
-        Authorization:userAuthToken
+      setProducts(data.products || []);
+      setTotalPages(data.totalPages || 1);
+    } catch (error) {
+      console.log("Fetch products error:", error);
+    } finally {
+      setLoading(false);
     }
-});
-
-
-const data=await res.json();
-
-
-console.log(data);
-
-
-setProducts(data.products);
-
-setTotalPages(data.totalPages);
-
-
-setLoading(false);
-
-
-
-}catch(error){
-
-
-console.log(
-"Fetch products error:",
-error
-);
-
-
-}
-
-
-}
-
-
-useEffect(()=>{
-getProducts();
-},[search,page,sort]);
-
-if(loading){
-
-return <h2>Loading products...</h2>
-
-}
-
-
-
-return(
-    <>
-    <div className="product-controls">
-
-
-<input
-
-type="text"
-
-placeholder="Search products..."
-
-value={search}
-
-onChange={(e)=>{
-
-setSearch(e.target.value);
-
-setPage(1);
-
-}}
-
-/>
-
-
-<select
-
-value={sort}
-
-onChange={(e)=>setSort(e.target.value)}
-
->
-
-
-<option value="">
-Sort By
-</option>
-
-
-<option value="price">
-Price Low to High
-</option>
-
-
-<option value="-price">
-Price High to Low
-</option>
-
-
-</select>
-
-
-</div>
-
-<div className="products-page">
-
-
-<h1>
-All Products
-</h1>
-
-
-
-<div className="products-container">
-
-
-{
-
-products?.map((product)=>(
-
-
-<ProductCard
-
-key={product._id}
-
-product={product}
-
-/>
-
-
-))
-
-}
-
-
-
-</div>
-
-
-</div>
-
-<div className="pagination">
-
-
-<button
-
-disabled={page===1}
-
-onClick={()=>setPage(page-1)}
-
->
-
-Previous
-
-</button>
-
-
-
-<span>
-
-Page {page} of {totalPages}
-
-</span>
-
-
-
-<button
-
-disabled={page===totalPages}
-
-onClick={()=>setPage(page+1)}
-
->
-
-Next
-
-</button>
-
-
-</div>
-
-</>
-)
-
-}
+  };
+
+  // Fetch Categories
+  const getCategories = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:8000/api/category",
+        {
+          method: "GET",
+          headers: {
+            Authorization: userAuthToken,
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      console.log('Categories',data.categories);
+
+      setCategories(data.categories || []);
+    } catch (error) {
+      console.log("Fetch categories error:", error);
+    }
+  };
+
+  // Load Categories Once
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  // Load Products whenever filters change
+  useEffect(() => {
+    getProducts();
+  }, [search, category, page, sort]);
+
+  return (
+    <div className="products-page">
+      <h1>All Products</h1>
+
+      {/* Search + Category + Sort */}
+      <div className="product-controls">
+        {/* Search */}
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
+        />
+
+        {/* Category */}
+        <select
+          value={category}
+          onChange={(e) => {
+            setCategory(e.target.value);
+            setPage(1);
+          }}
+        >
+          <option value="">All Categories</option>
+
+          {categories.map((cat) => (
+            <option
+              key={cat._id}
+              value={cat._id}
+            >
+              {cat.categoryName}
+            </option>
+          ))}
+        </select>
+
+        {/* Sort */}
+        <select
+          value={sort}
+          onChange={(e) => {
+            setSort(e.target.value);
+            setPage(1);
+          }}
+        >
+          <option value="">Sort By</option>
+          <option value="price">Price: Low → High</option>
+          <option value="-price">Price: High → Low</option>
+        </select>
+      </div>
+
+      {/* Loading */}
+      {loading ? (
+        <h2>Loading products...</h2>
+      ) : (
+        <>
+          {/* Products */}
+          <div className="products-container">
+            {products.length > 0 ? (
+              products.map((product) => (
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                />
+              ))
+            ) : (
+              <h2>No products found.</h2>
+            )}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
+              >
+                Previous
+              </button>
+
+              <span>
+                Page {page} of {totalPages}
+              </span>
+
+              <button
+                disabled={page === totalPages}
+                onClick={() => setPage(page + 1)}
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};

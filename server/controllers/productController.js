@@ -1,126 +1,68 @@
 const Product = require("../models/Product")
 
-// Get all products with search, pagination and sorting
-const getAllProductController = async(req,res)=>{
+// Get all products with search, category, pagination and sorting
+const getAllProductController = async (req, res) => {
+  try {
+    const {
+      search,
+      category,
+      page = 1,
+      limit = 5,
+      sort,
+    } = req.query;
 
-try{
+    // Filter object
+    let filter = {};
 
+    // Search by product name
+    if (search) {
+      filter.name = {
+        $regex: search,
+        $options: "i",
+      };
+    }
 
-const {
-search,
-page=1,
-limit=5,
-sort
-}=req.query;
-
-
-
-// Search filter
-let filter={};
-
-
-if(search){
-
-filter={
-name:{
-$regex:search,
-$options:"i"
-}
-}
-
+    // Filter by categoryId
+    if(category){
+    filter.categoryId = category;
 }
 
+    // Pagination
+    const skip = (Number(page) - 1) * Number(limit);
 
+    // Sorting
+    let sortOptions = {};
 
-// Pagination
+    if (sort === "price") {
+      sortOptions = { price: 1 };
+    } else if (sort === "-price") {
+      sortOptions = { price: -1 };
+    }
 
-const skip=(page-1)*limit;
+    // Get products
+    const products = await Product.find(filter)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(Number(limit));
 
+    // Total products count
+    const totalProducts = await Product.countDocuments(filter);
 
+    return res.status(200).json({
+      message: "Products fetched successfully",
+      currentPage: Number(page),
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / Number(limit)),
+      products,
+    });
+  } catch (error) {
+    console.log("getAllProducts error:", error);
 
-// Sorting
-
-let sortOptions={};
-
-
-if(sort==="price"){
-
-sortOptions={
-price:1
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
 };
-
-}
-
-
-if(sort==="-price"){
-
-sortOptions={
-price:-1
-};
-
-}
-
-
-
-// Get Products
-
-const products=await Product.find(filter)
-
-.sort(sortOptions)
-
-.skip(Number(skip))
-
-.limit(Number(limit));
-
-
-
-
-// Total count
-
-const totalProducts=
-await Product.countDocuments(filter);
-
-
-
-
-
-return res.status(200).json({
-
-message:"Product Found",
-
-currentPage:Number(page),
-
-totalProducts,
-
-totalPages:
-Math.ceil(totalProducts/limit),
-
-products
-
-
-});
-
-
-
-}catch(error){
-
-
-console.log(
-"getAllProducts error:",
-error
-);
-
-
-return res.status(500).json({
-
-message:"Internal Server Error"
-
-});
-
-
-}
-
-}
 
 const getSpecificProdController=async(req,res)=>{
     try{

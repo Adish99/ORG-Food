@@ -6,6 +6,7 @@ const userRoutes=require("./router/userRoutes");
 const productRoutes=require("./router/productRoutes");
 const cartRoutes=require("./router/cartRoutes");
 const orderRoutes=require("./router/orderRoutes");
+const categoryRoutes=require("./router/categoryRoutes");
 const app=express();
 const PORT=process.env.PORT_NO || 3000;
 
@@ -32,6 +33,7 @@ app.use("/api",userRoutes);
 app.use("/api/products",productRoutes);
 app.use("/api/cart",cartRoutes);
 app.use("/api/order",orderRoutes);
+app.use("/api/category",categoryRoutes);
 
 //Server Running
 app.listen(PORT,async()=>{
