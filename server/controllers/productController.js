@@ -11,6 +11,8 @@ const getAllProductController = async (req, res) => {
       sort,
     } = req.query;
 
+    console.log("Category received:", category);
+
     // Filter object
     let filter = {};
 
@@ -39,11 +41,13 @@ const getAllProductController = async (req, res) => {
       sortOptions = { price: -1 };
     }
 
+
     // Get products
     const products = await Product.find(filter)
       .sort(sortOptions)
       .skip(skip)
       .limit(Number(limit));
+
 
     // Total products count
     const totalProducts = await Product.countDocuments(filter);

@@ -1,12 +1,15 @@
-const express=require("express");
-const authMiddleware = require("../middleware/authMiddleware");
-const {getAllProductController,getSpecificProdController, getCategoryProductController}= require("../controllers/productController");
+const express = require("express");
+const {
+  getAllProductController,
+  getSpecificProdController,
+  getCategoryProductController,
+} = require("../controllers/productController");
 
-const router=express.Router();
+const router = express.Router();
 
-//Routes
-router.route("/getallprod").get(authMiddleware,getAllProductController);
-router.route("/getprod/:id").get(authMiddleware,getSpecificProdController);
-router.route("/category/:categoryId").get(authMiddleware,getCategoryProductController);
+// Public Routes
+router.route("/getallprod").get(getAllProductController);
+router.route("/getprod/:id").get(getSpecificProdController);
+router.route("/category/:categoryId").get(getCategoryProductController);
 
-module.exports=router;
+module.exports = router;

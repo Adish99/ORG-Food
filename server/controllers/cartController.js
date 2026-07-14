@@ -7,7 +7,7 @@ const addToCartController=async(req,res)=>{
 
     try{
         const userId=req.user._id;
-        const {productId,quantity}=req.body;
+       const { productId, quantity = 1 } = req.body;
         const productExists=await Product.findById(productId);
 
 
@@ -40,6 +40,11 @@ const addToCartController=async(req,res)=>{
             );
 
             // Product already exists
+            if (quantity < 1) {
+    return res.status(400).json({
+        message: "Quantity must be at least 1"
+    });
+}
             if(productIndex > -1){
                 cart.products[productIndex].quantity += quantity;
             }

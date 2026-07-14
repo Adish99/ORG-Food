@@ -1,0 +1,162 @@
+.cart-page{
+    max-width:1100px;
+    margin:40px auto;
+    padding:20px;
+}
+
+.cart-page h1{
+    text-align:center;
+    color:#2e7d32;
+    margin-bottom:35px;
+    font-size:2.2rem;
+}
+
+.cart-container{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.cart-card{
+    display:flex;
+    align-items:center;
+    gap:25px;
+    background:#fff;
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.1);
+    transition:.3s;
+}
+
+.cart-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 24px rgba(0,0,0,.15);
+}
+
+.cart-card img{
+    width:140px;
+    height:140px;
+    object-fit:cover;
+    border-radius:12px;
+}
+
+.cart-info{
+    flex:1;
+}
+
+.cart-info h2{
+    color:#2e7d32;
+    margin-bottom:10px;
+}
+
+.cart-price{
+    color:#ff6f00;
+    font-size:1.2rem;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.cart-quantity{
+    font-weight:600;
+    color:#555;
+}
+
+.remove-btn{
+    background:#e53935;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.remove-btn:hover{
+    background:#c62828;
+}
+
+.cart-summary{
+    margin-top:35px;
+    background:#fff;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 6px 18px rgba(0,0,0,.1);
+    text-align:right;
+}
+
+.cart-summary h2{
+    color:#2e7d32;
+    margin-bottom:20px;
+}
+
+.checkout-btn{
+    background:#2e7d32;
+    color:white;
+    border:none;
+    padding:12px 28px;
+    font-size:16px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.checkout-btn:hover{
+    background:#1b5e20;
+}
+
+.empty-cart{
+    text-align:center;
+    margin-top:120px;
+    color:#777;
+    font-size:1.4rem;
+}
+
+.quantity-control{
+    display:flex;
+    align-items:center;
+    width:120px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    overflow:hidden;
+}
+
+.quantity-control button{
+    width:40px;
+    height:40px;
+    border:none;
+    background:#2e7d32;
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.quantity-control button:hover{
+    background:#1b5e20;
+}
+
+.quantity-control span{
+    flex:1;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+}
+
+
+@media(max-width:768px){
+
+.cart-card{
+    flex-direction:column;
+    text-align:center;
+}
+
+.cart-summary{
+    text-align:center;
+}
+
+.cart-card img{
+    width:180px;
+    height:180px;
+}
+
+}

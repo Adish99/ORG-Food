@@ -1,5 +1,6 @@
 import {useEffect,useState} from "react";
 import "./Home.css";
+import { NavLink } from "react-router-dom";
 
 
 export const Home=()=>{
@@ -77,10 +78,11 @@ dairy products and dry fruits
 delivered to your doorstep.
 </p>
 
-
+<NavLink to="/products">
 <button>
 Shop Now
 </button>
+</NavLink>
 
 
 </div>

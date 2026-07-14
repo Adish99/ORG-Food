@@ -6,9 +6,7 @@ import { UseAuth } from "../store/Authentication";
 export const Products = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-
   const [loading, setLoading] = useState(true);
-
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [page, setPage] = useState(1);
@@ -98,10 +96,11 @@ export const Products = () => {
         {/* Category */}
         <select
           value={category}
-          onChange={(e) => {
-            setCategory(e.target.value);
-            setPage(1);
-          }}
+         onChange={(e) => {
+  console.log("Selected Category:", e.target.value);
+  setCategory(e.target.value);
+  setPage(1);
+}}
         >
           <option value="">All Categories</option>
 

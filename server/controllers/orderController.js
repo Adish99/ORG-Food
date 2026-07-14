@@ -62,7 +62,7 @@ const getUserOrdersController = async(req,res)=>{
         const userId=req.user._id;
 
         const orders = await Order.find({userId})
-        .populate("products.productId")
+        .populate("products.productId","image weight")
         .sort({createdAt:-1});
 
 

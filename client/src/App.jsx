@@ -12,6 +12,7 @@ import { Checkout } from "./pages/Checkout";
 import { Orders } from "./pages/Orders";
 import { Logout } from "./pages/Logout";
 import { ProtectedRoute } from "./components/ProtectedRoutes";
+import { OrderDetails } from "./pages/OrderDetail";
 
 
 const App=()=>{
@@ -68,6 +69,14 @@ element:
 </ProtectedRoute>
 )
 },
+ {
+          path: "orders/:id",
+          element: (
+            <ProtectedRoute>
+              <OrderDetails />
+            </ProtectedRoute>
+          )
+        },
 {
     path:"/logout",
     element:<Logout/>

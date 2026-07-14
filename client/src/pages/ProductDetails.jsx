@@ -6,7 +6,7 @@ import { UseAuth } from "../store/Authentication";
 
 export const ProductDetail=()=>{
 
-   const {userAuthToken}= UseAuth();
+   const {userAuthToken,isLoggedIn}= UseAuth();
 
 
 const {id}=useParams();
@@ -63,6 +63,32 @@ getProduct();
 
 
 },[id]);
+
+//Handling addToCart functionality
+const handleAddToCart=async()=>{
+try{
+    const res=await fetch("http://localhost:8000/api/cart/add",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+            Authorization:userAuthToken
+        },
+        body:JSON.stringify({
+            productId:product._id,
+            quantity:1
+        })
+    });
+
+    const data=await res.json();
+    if(res.ok){
+        alert(data.message);
+    }else{
+        alert(data.message);
+    }
+}catch(error){
+    console.log(error);
+}
+}
 
 
 
@@ -129,11 +155,23 @@ Stock Available: {product.stock}
 
 
 
-<button className="add-cart-btn">
-
-Add To Cart 🛒
-
-</button>
+{
+  isLoggedIn ? (
+    <button
+      className="add-cart-btn"
+      onClick={handleAddToCart}
+    >
+      Add To Cart 🛒
+    </button>
+  ) : (
+    <button
+      className="add-cart-btn"
+      disabled
+    >
+      Login to Add Cart
+    </button>
+  )
+}
 
 </div>
 </div>
