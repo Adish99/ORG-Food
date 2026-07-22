@@ -43,7 +43,8 @@ const loginController=async(req,res)=>{
             return res.status(200).json({
                 message:"Login Successfully.",
                 userId:userVerify._id.toString(),
-                token: userVerify.generateUserToken()
+                token: userVerify.generateUserToken(),
+                role:userVerify.role
             });
         }
     }catch(error){

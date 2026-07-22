@@ -1,85 +1,94 @@
 import { createContext, useContext, useState } from "react";
 
-
 // Creating AuthContext
+export const AuthContext = createContext();
 
-export const AuthContext=createContext();
+export const AuthProvider = ({ children }) => {
 
+    const [token, setToken] = useState(
+        localStorage.getItem("orgToken")
+    );
 
+    const [user, setUser] = useState(null);
 
-export const AuthProvider=({children})=>{
-const [token,setToken]=useState(localStorage.getItem("orgToken"));
+    const isLoggedIn = !!token;
 
-let isLoggedIn=!!token;
-console.log("isLoggedIn",isLoggedIn);
+    const userAuthToken = `Bearer ${token}`;
 
-const userAuthToken=`Bearer ${token}`;
+    // Store Token
+    const storeTokenInLs = (serverToken) => {
 
+        localStorage.setItem(
+            "orgToken",
+            serverToken
+        );
 
-//User Logout
-const userLogout=()=>{
-    setToken("");
-   return localStorage.removeItem("orgToken");
-}
+        setToken(serverToken);
 
-// Store token
-const storeTokenInLs=(serverToken)=>{
+    };
 
+    // Store User
+    const storeUser = (userData) => {
 
-localStorage.setItem(
-"orgToken",
-serverToken
-);
+        setUser(userData);
 
+    };
 
-setToken(serverToken);
+    // Logout
+    const userLogout = () => {
 
+        setToken("");
 
-}
+        setUser(null);
 
-return (
+        localStorage.removeItem("orgToken");
 
-<AuthContext.Provider
+    };
 
-value={{
+    return (
 
-token,
+        <AuthContext.Provider
+            value={{
 
-storeTokenInLs,
+                token,
 
-isLoggedIn,
- userLogout,
- userAuthToken
-}}
+                user,
 
->
+                storeUser,
 
+                storeTokenInLs,
 
-{children}
+                isLoggedIn,
 
+                userLogout,
 
-</AuthContext.Provider>
+                userAuthToken
 
+            }}
+        >
 
-)
+            {children}
 
+        </AuthContext.Provider>
 
-}
+    );
 
+};
 
+// Custom Hook
 
+export const UseAuth = () => {
 
-// Custom hook
+    const authContextValue = useContext(AuthContext);
 
-export const UseAuth=()=>{
+    if (!authContextValue) {
 
-const authContextValue=useContext(AuthContext);
-if(!authContextValue){
+        throw new Error(
+            "No auth context value!"
+        );
 
-throw new Error(
-"No auth context value!"
-);
+    }
 
-}
-return authContextValue;
-}
+    return authContextValue;
+
+};

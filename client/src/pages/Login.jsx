@@ -13,7 +13,7 @@ password:""
 
 });
 
-const {storeTokenInLs}=UseAuth();
+const {storeTokenInLs,storeUser}=UseAuth();
 
 const navigate=useNavigate();
 
@@ -47,6 +47,7 @@ console.log(data);
 if(res.ok){
     alert("Login Successful.");
     storeTokenInLs(data.token);
+    storeUser(data.user);
     setLoginData({
         email:"",
         password:""

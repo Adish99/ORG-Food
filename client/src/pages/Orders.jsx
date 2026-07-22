@@ -10,6 +10,8 @@ export const Orders = () => {
   const [loading, setLoading] = useState(true);
 
   const navigate=useNavigate();
+  
+
 
   const getOrders = async () => {
     try {
@@ -91,41 +93,52 @@ export const Orders = () => {
 
             <div className="order-products">
 
-              {order.products.map((item) => (
+             {order.products.map((item, index) => {
 
-                <div
-                  key={item.productId._id}
-                  className="order-product"
-                >
+  console.log("Order Item:", item);
 
-                  <img
-                    src={item.productId.image}
-                    alt={item.name}
-                  />
+  return (
 
-                  <div className="order-product-info">
+    <div
+      key={item.productId?._id || index}
+      className="order-product"
+    >
 
-                    <h4>{item.name}</h4>
+      <img
+        src={
+          item.productId?.image ||
+          "https://via.placeholder.com/80?text=No+Image"
+        }
+        alt={item.name}
+      />
 
-                    <p>{item.productId.weight}</p>
+      <div className="order-product-info">
 
-                  </div>
+        <h4>{item.name}</h4>
 
-                  <div className="order-product-right">
+        <p>
+          {item.productId?.weight || "Product Removed"}
+        </p>
 
-                    <span>
-                      Qty : {item.quantity}
-                    </span>
+      </div>
 
-                    <strong>
-                      Rs. {item.price * item.quantity}
-                    </strong>
+      <div className="order-product-right">
 
-                  </div>
+        <span>
+          Qty : {item.quantity}
+        </span>
 
-                </div>
+        <strong>
+          Rs. {item.price * item.quantity}
+        </strong>
 
-              ))}
+      </div>
+
+    </div>
+
+  );
+
+})}
 
             </div>
 
