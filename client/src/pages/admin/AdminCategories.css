@@ -1,0 +1,96 @@
+.admin-categories-page{
+    padding:30px;
+}
+
+.admin-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.admin-header h1{
+    font-size:2rem;
+    color:#2d6a4f;
+}
+
+.admin-header p{
+    color:#666;
+    margin-top:5px;
+}
+
+.add-category-btn{
+    background:#2d6a4f;
+    color:white;
+    border:none;
+    padding:12px 22px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+}
+
+.add-category-btn:hover{
+    background:#1b4332;
+}
+
+.table-container{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.category-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.category-table th{
+    background:#2d6a4f;
+    color:white;
+    padding:15px;
+    text-align:left;
+}
+
+.category-table td{
+    padding:15px;
+    border-bottom:1px solid #eee;
+}
+
+.category-table tr:hover{
+    background:#f8fff9;
+}
+
+
+.edit-btn{
+    background:#2196f3;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    border-radius:6px;
+    margin-right:10px;
+    cursor:pointer;
+}
+
+.delete-btn{
+    background:#e53935;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.edit-btn:hover{
+    background:#1976d2;
+}
+
+.delete-btn:hover{
+    background:#c62828;
+}
+
+.loading{
+    text-align:center;
+    margin-top:60px;
+}

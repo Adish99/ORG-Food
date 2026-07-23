@@ -21,6 +21,9 @@ import { AdminOrders } from "./pages/admin/AdminOrders";
 import { AdminUsers } from "./pages/admin/AdminUsers";
 import { AddProduct } from "./pages/admin/AddProduct";
 import { EditProduct } from "./pages/admin/EditProduct";
+import { AddCategory } from "./pages/admin/AddCategory";
+import { EditCategory } from "./pages/admin/EditCategory";
+import { AdminOrderDetails } from "./pages/admin/AdminOrderDetails";
 
 
 const App=()=>{
@@ -119,9 +122,21 @@ const router = createBrowserRouter([
         element: <AdminCategories />
       },
       {
+    path: "categories/add",
+    element: <AddCategory />
+},
+{
+    path: "categories/edit/:id",
+    element: <EditCategory />
+},
+      {
         path: "orders",
         element: <AdminOrders />
       },
+      {
+    path: "orders/:id",
+    element: <AdminOrderDetails />
+},
       {
         path: "users",
         element: <AdminUsers />

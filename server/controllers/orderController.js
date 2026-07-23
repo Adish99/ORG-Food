@@ -181,4 +181,228 @@ const cancelOrderController = async(req,res)=>{
     }
 }
 
-module.exports={createOrderController,getUserOrdersController,getSingleOrderController,cancelOrderController};
+// ====================================
+// Get All Orders (Admin)
+// ====================================
+
+const getAllOrdersController = async (req, res) => {
+
+    try {
+
+        const orders = await Order.find()
+
+            .populate(
+                "userId",
+                "username email phone"
+            )
+
+            .populate(
+                "products.productId",
+                "name image weight"
+            )
+
+            .sort({
+                createdAt: -1
+            });
+
+        return res.status(200).json({
+
+            message: "Orders fetched successfully.",
+
+            orders
+
+        });
+
+    } catch (error) {
+
+        console.log(
+            "Get All Orders Error:",
+            error
+        );
+
+        return res.status(500).json({
+
+            message: "Internal Server Error"
+
+        });
+
+    }
+
+};
+
+// ====================================
+// Admin Get Single Order
+// ====================================
+
+const getSingleAdminOrderController = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const order = await Order.findById(id)
+
+            .populate(
+                "userId",
+                "username email phone"
+            )
+
+            .populate(
+                "products.productId"
+            );
+
+        if (!order) {
+
+            return res.status(404).json({
+                message: "Order not found."
+            });
+
+        }
+
+        return res.status(200).json({
+
+            message: "Order fetched successfully.",
+
+            order
+
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        return res.status(500).json({
+            message: "Internal Server Error"
+        });
+
+    }
+
+};
+
+// ====================================
+// Update Order Status (Admin)
+// ====================================
+
+const updateOrderStatusController = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+        const { orderStatus } = req.body;
+
+        const validStatus = [
+
+            "Pending",
+
+            "Processing",
+
+            "Shipped",
+
+            "Delivered",
+
+            "Cancelled"
+
+        ];
+
+        if (!validStatus.includes(orderStatus)) {
+
+            return res.status(400).json({
+
+                message: "Invalid order status."
+
+            });
+
+        }
+
+        const order = await Order.findById(id);
+
+        if (!order) {
+
+            return res.status(404).json({
+
+                message: "Order not found."
+
+            });
+
+        }
+
+        order.orderStatus = orderStatus;
+
+        await order.save();
+
+        return res.status(200).json({
+
+            message: "Order status updated successfully.",
+
+            order
+
+        });
+
+    } catch (error) {
+
+        console.log("Update Order Status Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error"
+
+        });
+
+    }
+
+};
+
+// ====================================
+// Delete Order (Admin)
+// ====================================
+
+const deleteOrderController = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const order = await Order.findById(id);
+
+        if (!order) {
+
+            return res.status(404).json({
+                message: "Order not found."
+            });
+
+        }
+
+        if (
+            order.orderStatus !== "Cancelled" &&
+            order.orderStatus !== "Delivered"
+        ) {
+
+            return res.status(400).json({
+                message: "Only delivered or cancelled orders can be deleted."
+            });
+
+        }
+
+        await Order.findByIdAndDelete(id);
+
+        return res.status(200).json({
+
+            message: "Order deleted successfully."
+
+        });
+
+    } catch (error) {
+
+        console.log("Delete Order Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error"
+
+        });
+
+    }
+
+};
+
+module.exports={createOrderController,getUserOrdersController,getSingleOrderController,cancelOrderController,getAllOrdersController,getSingleAdminOrderController,updateOrderStatusController,deleteOrderController};

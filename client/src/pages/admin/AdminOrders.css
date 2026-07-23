@@ -1,0 +1,140 @@
+.admin-orders-page{
+    padding:40px;
+    background:#f5f7fb;
+    min-height:100vh;
+}
+
+.admin-orders-header{
+    margin-bottom:30px;
+}
+
+.admin-orders-header h1{
+    font-size:34px;
+    color:#1e293b;
+}
+
+.admin-orders-header p{
+    color:#64748b;
+    margin-top:8px;
+}
+
+.orders-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(420px,1fr));
+    gap:25px;
+}
+
+.admin-order-card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.admin-order-card:hover{
+    transform:translateY(-5px);
+}
+
+.order-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.order-top h3{
+    color:#0f172a;
+}
+
+.order-top p{
+    color:#64748b;
+    font-size:14px;
+}
+
+.status{
+    padding:8px 18px;
+    border-radius:20px;
+    color:white;
+    font-weight:bold;
+    font-size:14px;
+}
+
+.pending{
+    background:#f59e0b;
+}
+
+.processing{
+    background:#3b82f6;
+}
+
+.shipped{
+    background:#8b5cf6;
+}
+
+.delivered{
+    background:#22c55e;
+}
+
+.cancelled{
+    background:#ef4444;
+}
+
+.customer-info{
+    margin-bottom:20px;
+}
+
+.customer-info p{
+    margin:8px 0;
+}
+
+.product-preview{
+    background:#f8fafc;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:20px;
+}
+
+.preview-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 0;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.preview-item:last-child{
+    border:none;
+}
+
+.preview-item h4{
+    margin-bottom:5px;
+}
+
+.order-summary{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.view-btn{
+    width:100%;
+    padding:13px;
+    background:#16a34a;
+    color:white;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+    transition:.3s;
+}
+
+.view-btn:hover{
+    background:#15803d;
+}
+
+.loading,
+.no-orders{
+    text-align:center;
+    margin-top:80px;
+}
