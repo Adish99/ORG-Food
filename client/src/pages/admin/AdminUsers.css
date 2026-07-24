@@ -1,0 +1,158 @@
+.admin-users-page{
+
+    padding:30px;
+
+}
+
+.admin-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.admin-header h1{
+
+    font-size:32px;
+
+}
+
+.admin-header p{
+
+    color:#666;
+
+    margin-top:8px;
+
+}
+
+.table-container{
+
+    background:#fff;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+}
+
+.users-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.users-table th{
+
+    background:#2e7d32;
+
+    color:white;
+
+    padding:16px;
+
+    text-align:left;
+
+}
+
+.users-table td{
+
+    padding:16px;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.users-table tr:hover{
+
+    background:#fafafa;
+
+}
+
+.role{
+
+    padding:6px 12px;
+
+    border-radius:30px;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+}
+
+.role.admin{
+
+    background:#e3f2fd;
+
+    color:#1565c0;
+
+}
+
+.role.user{
+
+    background:#e8f5e9;
+
+    color:#2e7d32;
+
+}
+
+.edit-btn{
+
+    padding:8px 14px;
+
+    border:none;
+
+    background:#1976d2;
+
+    color:white;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+}
+
+.edit-btn:hover{
+
+    background:#1565c0;
+
+}
+
+.loading{
+
+    text-align:center;
+
+    margin-top:50px;
+
+}
+.delete-btn{
+
+    margin-left:10px;
+
+    padding:8px 14px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#d32f2f;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+.delete-btn:hover{
+
+    background:#b71c1c;
+
+}
