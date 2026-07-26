@@ -53,6 +53,12 @@ export const AdminLayout = () => {
                     >
                         👥 Users
                     </NavLink>
+                    <NavLink
+                        to="/"
+                        className="sidebar-link"
+                    >
+                        Home
+                    </NavLink>
 
                 </nav>
 
@@ -62,6 +68,7 @@ export const AdminLayout = () => {
                 >
                     🚪 Logout
                 </NavLink>
+
 
             </aside>
 

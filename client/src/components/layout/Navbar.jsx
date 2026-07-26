@@ -2,133 +2,148 @@ import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { UseAuth } from "../../store/Authentication";
 
+export const Navbar = () => {
 
-export const Navbar=()=>{
+    const { isLoggedIn, user } = UseAuth();
 
-const {isLoggedIn}=UseAuth();
+    return (
 
-return(
+        <nav className="navbar">
 
-<nav className="navbar">
+            <div className="logo">
 
+                <NavLink to="/">
+                    🌱 Org-Khana
+                </NavLink>
 
-<div className="logo">
+            </div>
 
-<NavLink to="/">
-🌱 Org-Khana
-</NavLink>
+            <ul className="nav-links">
 
-</div>
+                <li>
 
+                    <NavLink to="/">
+                        Home
+                    </NavLink>
 
+                </li>
 
-<ul className="nav-links">
+                <li>
 
+                    <NavLink to="/products">
+                        Products
+                    </NavLink>
 
-<li>
+                </li>
 
-<NavLink to="/">
+                {/* Show Admin Dashboard only to Admin */}
 
-Home
+                {
 
-</NavLink>
+                    isLoggedIn && user?.role === "admin" && (
 
-</li>
+                        <li>
 
+                            <NavLink to="/admin/dashboard">
+                                Admin
+                            </NavLink>
 
+                        </li>
 
-<li>
+                    )
 
-<NavLink to="/products">
+                }
 
-Products
+                {
 
-</NavLink>
+                    isLoggedIn && (
 
-</li>
+                        <li>
 
+                            <NavLink to="/cart">
+                                Cart 🛒
+                            </NavLink>
 
-{
-    isLoggedIn && 
-<li>
+                        </li>
 
-<NavLink to="/cart">
+                    )
 
-Cart 🛒
+                }
 
-</NavLink>
+                {
 
-</li>
-}
+                    isLoggedIn && (
 
-{
-    isLoggedIn &&
-<li>
+                        <li>
 
-<NavLink to="/orders">
+                            <NavLink to="/orders">
+                                Orders
+                            </NavLink>
 
-Orders
+                        </li>
 
-</NavLink>
+                    )
 
-</li>
-}
+                }
 
-{
-    isLoggedIn &&
-<li>
+                {
 
-<NavLink to="/checkout">
+                    isLoggedIn && (
 
-Checkout
+                        <li>
 
-</NavLink>
+                            <NavLink to="/checkout">
+                                Checkout
+                            </NavLink>
 
-</li>
-}
+                        </li>
 
-{
-    !isLoggedIn?(
-        <>
-       <li>
+                    )
 
-<NavLink to="/login">
+                }
 
-Login
+                {
 
-</NavLink>
+                    !isLoggedIn ? (
 
-</li>
+                        <>
 
-<li>
+                            <li>
 
-<NavLink to="/register">
+                                <NavLink to="/login">
+                                    Login
+                                </NavLink>
 
-Register
+                            </li>
 
-</NavLink>
+                            <li>
 
-</li> 
-</>
-    ):(
-<li>
+                                <NavLink to="/register">
+                                    Register
+                                </NavLink>
 
-<NavLink to="/logout">
+                            </li>
 
-Logout
+                        </>
 
-</NavLink>
+                    ) : (
 
-</li>
-    )
-}
+                        <li>
 
-</ul>
+                            <NavLink to="/logout">
+                                Logout
+                            </NavLink>
 
+                        </li>
 
+                    )
 
-</nav>
+                }
 
-)
+            </ul>
 
-}
+        </nav>
+
+    );
+
+};

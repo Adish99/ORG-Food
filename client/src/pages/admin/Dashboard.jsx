@@ -35,7 +35,7 @@ export const Dashboard = () => {
 
             const res = await fetch(
 
-                "http://localhost:8000/api/auth/admin/dashboard",
+                "http://localhost:8000/api/admin/dashboard",
 
                 {
 

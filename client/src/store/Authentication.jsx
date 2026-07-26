@@ -1,4 +1,9 @@
-import { createContext, useContext, useState } from "react";
+import {
+    createContext,
+    useContext,
+    useState,
+    useEffect
+} from "react";
 
 // Creating AuthContext
 export const AuthContext = createContext();
@@ -11,11 +16,18 @@ export const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
 
+    const [loading, setLoading] = useState(true);
+
     const isLoggedIn = !!token;
 
-    const userAuthToken = `Bearer ${token}`;
+    const userAuthToken = token
+        ? `Bearer ${token}`
+        : "";
 
+    // ==========================
     // Store Token
+    // ==========================
+
     const storeTokenInLs = (serverToken) => {
 
         localStorage.setItem(
@@ -27,23 +39,91 @@ export const AuthProvider = ({ children }) => {
 
     };
 
+    // ==========================
     // Store User
+    // ==========================
+
     const storeUser = (userData) => {
 
         setUser(userData);
 
     };
 
+    // ==========================
     // Logout
+    // ==========================
+
     const userLogout = () => {
+
+        localStorage.removeItem("orgToken");
 
         setToken("");
 
         setUser(null);
 
-        localStorage.removeItem("orgToken");
+    };
+
+    // ==========================
+    // Get Logged In User
+    // ==========================
+
+    const getUser = async () => {
+
+        if (!token) {
+
+            setLoading(false);
+
+            return;
+
+        }
+
+        try {
+
+            const res = await fetch(
+                "http://localhost:8000/api/users",
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (res.ok) {
+
+                const data = await res.json();
+
+                setUser(data);
+
+            } else {
+
+                userLogout();
+
+            }
+
+        } catch (error) {
+
+            console.log(error);
+
+            userLogout();
+
+        } finally {
+
+            setLoading(false);
+
+        }
 
     };
+
+    // ==========================
+    // Run on App Start
+    // ==========================
+
+    useEffect(() => {
+
+        getUser();
+
+    }, [token]);
 
     return (
 
@@ -54,15 +134,17 @@ export const AuthProvider = ({ children }) => {
 
                 user,
 
-                storeUser,
-
-                storeTokenInLs,
+                loading,
 
                 isLoggedIn,
 
-                userLogout,
+                userAuthToken,
 
-                userAuthToken
+                storeTokenInLs,
+
+                storeUser,
+
+                userLogout
 
             }}
         >
@@ -75,7 +157,9 @@ export const AuthProvider = ({ children }) => {
 
 };
 
+// ==========================
 // Custom Hook
+// ==========================
 
 export const UseAuth = () => {
 

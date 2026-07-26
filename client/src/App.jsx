@@ -24,6 +24,7 @@ import { EditProduct } from "./pages/admin/EditProduct";
 import { AddCategory } from "./pages/admin/AddCategory";
 import { EditCategory } from "./pages/admin/EditCategory";
 import { AdminOrderDetails } from "./pages/admin/AdminOrderDetails";
+import { AdminProtectedRoute } from "./components/AdminProtectedRoute";
 
 
 const App=()=>{
@@ -99,7 +100,11 @@ const router = createBrowserRouter([
   // ==========================
   {
     path: "/admin",
-    element: <AdminLayout />,
+    element: (
+      <AdminProtectedRoute>
+<AdminLayout/>
+      </AdminProtectedRoute>
+  ),
     children: [
       {
         path: "dashboard",

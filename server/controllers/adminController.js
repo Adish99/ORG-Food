@@ -4,20 +4,23 @@ const Category = require("../models/Category");
 const Order = require("../models/Order");
 
 const getDashboardStatsController = async (req, res) => {
-
     try {
 
         const totalUsers = await User.countDocuments();
 
-        const totalProducts = await Product.countDocuments();
+const totalProducts = await Product.countDocuments();
 
-        const totalCategories = await Category.countDocuments();
+const totalCategories = await Category.countDocuments();
 
-        const totalOrders = await Order.countDocuments();
+const totalOrders = await Order.countDocuments();
 
-        const deliveredOrders = await Order.find({
-            orderStatus: "Delivered"
-        });
+
+// Get all delivered orders
+const deliveredOrders = await Order.find({
+    orderStatus: "Delivered"
+});
+
+// Calculate total revenue
 
         const totalRevenue = deliveredOrders.reduce(
 
@@ -26,6 +29,24 @@ const getDashboardStatsController = async (req, res) => {
             0
 
         );
+
+        // Latest 5 Orders
+const recentOrders = await Order.find()
+
+    .populate("userId", "username")
+
+    .sort({ createdAt: -1 })
+
+    .limit(5);
+
+// Latest 5 Users
+const recentUsers = await User.find()
+
+    .select("username email createdAt")
+
+    .sort({ createdAt: -1 })
+
+    .limit(5);
 
         return res.status(200).json({
 
@@ -37,7 +58,9 @@ const getDashboardStatsController = async (req, res) => {
 
             totalOrders,
 
-            totalRevenue
+            totalRevenue,
+            recentOrders,
+            recentUsers
 
         });
 

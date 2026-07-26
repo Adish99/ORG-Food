@@ -4,6 +4,6 @@ const { getDashboardStatsController } = require("../controllers/adminController"
 const router=express.Router();
 
 //Routes
-router.route("/admin/dashboard").get(authMiddleware, getDashboardStatsController);
+router.route("/admin/dashboard").get( getDashboardStatsController);
 
 module.exports=router;

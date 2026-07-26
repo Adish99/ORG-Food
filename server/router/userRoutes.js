@@ -1,6 +1,7 @@
 const express=require("express");
 const {registerController,loginController, userDataController, getAllUsersController, updateUserRoleController, deleteUserController} = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
 
 //Router creation
 const router=new express.Router();
@@ -8,9 +9,9 @@ const router=new express.Router();
 //User routes
 router.route("/register").post(registerController);
 router.route("/login").post(loginController);
-router.route("/users").get(authMiddleware,userDataController);
-router.route("/admin/users").get(getAllUsersController);
-router.route("/admin/users/:id").put(updateUserRoleController);
-router.route("/admin/users/:id").delete(authMiddleware,deleteUserController);
+router.route("/users").get(authMiddleware,adminMiddleware,userDataController);
+router.route("/admin/users").get(authMiddleware,adminMiddleware,getAllUsersController);
+router.route("/admin/users/:id").put(adminMiddleware,updateUserRoleController);
+router.route("/admin/users/:id").delete(adminMiddleware,authMiddleware,deleteUserController);
 
 module.exports=router;

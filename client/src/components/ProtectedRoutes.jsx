@@ -5,9 +5,13 @@ import { UseAuth } from "../store/Authentication";
 export const ProtectedRoute=({children})=>{
 
 
-const {isLoggedIn}=UseAuth();
+const {isLoggedIn,loading}=UseAuth();
 
+if (loading) {
 
+    return <h2>Loading...</h2>;
+
+}
 
 if(!isLoggedIn){
 

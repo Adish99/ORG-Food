@@ -40,12 +40,16 @@ const loginController=async(req,res)=>{
         
         if(passwordCompared){
             console.log(`Welcome dear ${userVerify.username}`);
-            return res.status(200).json({
-                message:"Login Successfully.",
-                userId:userVerify._id.toString(),
-                token: userVerify.generateUserToken(),
-                role:userVerify.role
-            });
+          return res.status(200).json({
+    message: "Login Successfully.",
+    token: userVerify.generateUserToken(),
+    user: {
+        _id: userVerify._id,
+        username: userVerify.username,
+        email: userVerify.email,
+        role: userVerify.role
+    }
+});
         }
     }catch(error){
         console.log("Login controller's error:",error);
