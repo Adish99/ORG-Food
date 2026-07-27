@@ -3,6 +3,8 @@ import { useState } from "react";
 import { UseAuth } from "../store/Authentication";
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Loader } from "../components/UI/Loader";
 
 export const Cart=()=>{
 
@@ -99,12 +101,12 @@ const removeProduct = async (productId) => {
     const data = await res.json();
 
     if (res.ok) {
-      alert(data.message);
+      toast.success(data.message);
 
       // Refresh cart
       getUserCart();
     } else {
-      alert(data.message);
+      toast.error(data.message);
     }
   } catch (error) {
     console.log("Remove product error:", error);
@@ -113,7 +115,7 @@ const removeProduct = async (productId) => {
 
 
 if (loading) {
-  return <h2>Loading Cart...</h2>;
+  return <Loader/>
 }
 
 if (!cart || cart.products.length === 0) {

@@ -1,5 +1,5 @@
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-
+import {ToastContainer} from "react-toastify";
 import { WebLayout } from "./components/layout/WebLayout";
 
 import { Home } from "./pages/Home";
@@ -151,9 +151,18 @@ const router = createBrowserRouter([
 ]);
 
 return (
-  <RouterProvider router={router}>
-
+  <>
+   <RouterProvider router={router}>
   </RouterProvider>
+  <ToastContainer position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"></ToastContainer>
+  </>
 )
 }
 

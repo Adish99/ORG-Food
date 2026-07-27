@@ -2,6 +2,7 @@ import {useState} from "react";
 import "./Auth.css";
 import { useNavigate } from "react-router-dom";
 import { UseAuth } from "../store/Authentication";
+import { toast } from "react-toastify";
 
 export const Login=()=>{
 
@@ -12,8 +13,10 @@ email:"",
 password:""
 
 });
+const [isSubmitting, setIsSubmitting] = useState(false);
 
 const {storeTokenInLs,storeUser}=UseAuth();
+
 
 const navigate=useNavigate();
 
@@ -31,7 +34,7 @@ setLoginData({
 
 const handleSubmit=async(e)=>{
     e.preventDefault();
-
+ setIsSubmitting(true);
     try{
 const res=await fetch("http://localhost:8000/api/login",{
     method:"POST",
@@ -42,10 +45,11 @@ const res=await fetch("http://localhost:8000/api/login",{
 });
 
 const data=await res.json();
-console.log(data);
+console.log("Response:", data);
+console.log("Toast",toast);
 
 if(res.ok){
-    alert("Login Successful.");
+    toast.success("Login Successfully");
     storeTokenInLs(data.token);
     storeUser(data.user);
     setLoginData({
@@ -54,11 +58,14 @@ if(res.ok){
     });
 navigate("/");
 }else{
+    toast.error("Login failed!");
     console.log(data.message);
 }
     }catch(error){
         console.log(error);
-    }
+    }finally {
+    setIsSubmitting(false);
+}
 }
 
 return(
@@ -105,10 +112,11 @@ value={loginData.password}
 
 onChange={handleChange}
 />
-<button>
-
-Login
-
+<button
+    type="submit"
+    disabled={isSubmitting}
+>
+    {isSubmitting ? "Logging in..." : "Login"}
 </button>
 
 </form>

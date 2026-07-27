@@ -2,6 +2,7 @@ import "./AddProduct.css";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UseAuth } from "../../store/Authentication";
+import { toast } from "react-toastify";
 
 export const EditProduct = () => {
 
@@ -124,13 +125,13 @@ export const EditProduct = () => {
 
       if (res.ok) {
 
-        alert(data.message);
+        toast.success(data.message);
 
         navigate("/admin/products");
 
       } else {
 
-        alert(data.message);
+        toast.error(data.message);
 
       }
 

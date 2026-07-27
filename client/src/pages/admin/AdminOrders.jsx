@@ -2,6 +2,7 @@ import "./AdminOrders.css";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../../store/Authentication";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../../components/UI/Loader";
 
 export const AdminOrders = () => {
 
@@ -54,7 +55,7 @@ export const AdminOrders = () => {
 
     if (loading) {
 
-        return <h2 className="loading">Loading Orders...</h2>;
+        return <Loader/>
 
     }
 

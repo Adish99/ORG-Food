@@ -2,6 +2,7 @@ import "./Dashboard.css";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../../store/Authentication";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../../components/UI/Loader";
 
 export const Dashboard = () => {
 
@@ -77,7 +78,7 @@ export const Dashboard = () => {
 
     if (loading) {
 
-        return <h2>Loading Dashboard...</h2>;
+        return <Loader/>
 
     }
 

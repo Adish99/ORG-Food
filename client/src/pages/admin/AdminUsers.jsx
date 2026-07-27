@@ -1,6 +1,7 @@
 import "./AdminUsers.css";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../../store/Authentication";
+import { Loader } from "../../components/UI/Loader";
 
 export const AdminUsers = () => {
 
@@ -9,6 +10,7 @@ export const AdminUsers = () => {
     const [users, setUsers] = useState([]);
 
     const [loading, setLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const getUsers = async () => {
 
@@ -58,7 +60,7 @@ export const AdminUsers = () => {
     }, []);
 
     const updateRole = async (id) => {
-
+ setIsSubmitting(true);
     try {
 
         const res = await fetch(
@@ -97,8 +99,9 @@ export const AdminUsers = () => {
 
         console.log(error);
 
+    }finally {
+    setIsSubmitting(false);
     }
-
 };
 
 const deleteUser = async (id) => {
@@ -108,7 +111,7 @@ const deleteUser = async (id) => {
     );
 
     if (!confirmDelete) return;
-
+ setIsSubmitting(true);
     try {
 
         const res = await fetch(
@@ -140,20 +143,19 @@ const deleteUser = async (id) => {
         } else {
 
             alert(data.message);
-
         }
 
     } catch (error) {
 
         console.log(error);
-
+    }finally {
+    setIsSubmitting(false);
     }
-
 };
 
     if (loading) {
 
-        return <h2 className="loading">Loading Users...</h2>;
+        return <Loader/>
 
     }
 
@@ -255,8 +257,9 @@ const deleteUser = async (id) => {
     <button
         className="delete-btn"
         onClick={() => deleteUser(user._id)}
+          disabled={isSubmitting}
     >
-        Delete
+      {isSubmitting ? "Deleting..." : "Delete"}
     </button>
 
 </td>

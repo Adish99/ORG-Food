@@ -2,6 +2,7 @@ import "./Checkout.css";
 import { UseAuth } from "../store/Authentication";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const Checkout=()=>{
 
@@ -17,6 +18,7 @@ const [shippingAddress, setShippingAddress] = useState({
 });
 const [paymentMethod, setPaymentMethod] = useState("COD");
 const [placingOrder, setPlacingOrder] = useState(false);
+const [isSubmitting, setIsSubmitting] = useState(false);
 
 const {userAuthToken}=UseAuth();
 const navigate=useNavigate();
@@ -85,7 +87,7 @@ const grandTotal =
   ) {
     return alert("Please fill all shipping details.");
   }
-
+setIsSubmitting(true);
   try {
 
     setPlacingOrder(true);
@@ -109,13 +111,13 @@ const grandTotal =
 
     if (res.ok) {
 
-      alert(data.message);
+      toast.success(data.message);
 
       navigate("/orders");
 
     } else {
 
-      alert(data.message);
+      toast.error(data.message);
 
     }
 
@@ -126,6 +128,7 @@ const grandTotal =
   } finally {
 
     setPlacingOrder(false);
+    setIsSubmitting(false);
 
   }
 

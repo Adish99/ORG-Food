@@ -11,9 +11,10 @@ export const EditCategory = () => {
     const [category, setCategory] = useState({
         categoryName: ""
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const getCategory = async () => {
-
+ setIsSubmitting(true);
         try {
 
             const res = await fetch(
@@ -34,8 +35,9 @@ export const EditCategory = () => {
 
             console.log(error);
 
+        }finally {
+    setIsSubmitting(false);
         }
-
     };
 
     useEffect(() => {
@@ -120,11 +122,12 @@ export const EditCategory = () => {
                         required
                     />
 
-                    <button type="submit">
-
-                        Update Category
-
-                    </button>
+                    <button
+    type="submit"
+    disabled={isSubmitting}
+>
+    {isSubmitting ? "Updating..." : "Edit Category"}
+</button>
 
                 </form>
 

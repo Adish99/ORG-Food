@@ -1,6 +1,7 @@
 import "./AdminCategories.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../../components/UI/Loader";
 
 export const AdminCategories = () => {
 
@@ -89,9 +90,7 @@ export const AdminCategories = () => {
     if (loading) {
 
         return (
-            <h2 className="loading">
-                Loading Categories...
-            </h2>
+          <Loader/>
         );
 
     }

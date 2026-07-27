@@ -4,7 +4,12 @@ import { UseAuth } from "../../store/Authentication";
 
 export const Navbar = () => {
 
-    const { isLoggedIn, user } = UseAuth();
+    const { isLoggedIn, user,loading } = UseAuth();
+    console.log({
+    isLoggedIn,
+    user,
+    loading
+});
 
     return (
 

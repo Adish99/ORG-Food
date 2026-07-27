@@ -2,6 +2,7 @@ import "./Products.css";
 import { useEffect, useState } from "react";
 import { ProductCard } from "../components/UI/ProductCard";
 import { UseAuth } from "../store/Authentication";
+import { Loader } from "../components/UI/Loader";
 
 export const Products = () => {
   const [products, setProducts] = useState([]);
@@ -75,6 +76,10 @@ export const Products = () => {
   useEffect(() => {
     getProducts();
   }, [search, category, page, sort]);
+
+  if(loading){
+    return <Loader/>
+  }
 
   return (
     <div className="products-page">

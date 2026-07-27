@@ -2,6 +2,8 @@ import "./AdminOrderDetails.css";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UseAuth } from "../../store/Authentication";
+import { toast } from "react-toastify";
+import { Loader } from "../../components/UI/Loader";
 
 export const AdminOrderDetails = () => {
 
@@ -16,6 +18,7 @@ export const AdminOrderDetails = () => {
     const [loading, setLoading] = useState(true);
 
     const [status, setStatus] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const getOrder = async () => {
 
@@ -62,6 +65,7 @@ export const AdminOrderDetails = () => {
     }, []);
 
     const updateStatus = async () => {
+         setIsSubmitting(true);
     try {
 
         console.log("Sending status:", status);
@@ -95,6 +99,8 @@ export const AdminOrderDetails = () => {
 
     } catch (error) {
         console.log(error);
+    }finally {
+    setIsSubmitting(false);
     }
 };
 
@@ -132,13 +138,13 @@ const deleteOrder = async () => {
 
         if (res.ok) {
 
-            alert(data.message);
+            toast.success(data.message);
 
             navigate("/admin/orders");
 
         } else {
 
-            alert(data.message);
+        toast.error(data.message);
 
         }
 
@@ -152,7 +158,7 @@ const deleteOrder = async () => {
 
     if (loading) {
 
-        return <h2 className="loading">Loading Order...</h2>;
+        return <Loader/>
 
     }
 
@@ -386,8 +392,9 @@ const deleteOrder = async () => {
                  <button
     className="update-btn"
     onClick={updateStatus}
+       disabled={isSubmitting}
 >
-    Update Status
+     {isSubmitting ? "Updating..." : "Update Status"}
 </button>
 {(order.orderStatus === "Cancelled" ||
   order.orderStatus === "Delivered") && (

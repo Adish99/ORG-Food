@@ -2,6 +2,7 @@ import {useState} from "react";
 import "./Auth.css";
 import { useNavigate} from "react-router-dom";
 import { UseAuth } from "../store/Authentication";
+import { toast } from "react-toastify";
 
 export const Register=()=>{
 
@@ -15,6 +16,7 @@ phone:"",
 address:""
 
 });
+const [isSubmitting, setIsSubmitting] = useState(false);
 
 const navigate=useNavigate();
 
@@ -34,6 +36,7 @@ setFormData({
 
 const handleSubmit=async(e)=>{
 e.preventDefault();
+ setIsSubmitting(true);
 try{
     const res=await fetch("http://localhost:8000/api/register",{
         method:"POST",
@@ -46,7 +49,7 @@ try{
     const data=await res.json();
       console.log(data);
     if(res.ok){
-        alert("Registration sucessfull.");
+       toast.success("Registration Successfully");
         storeTokenInLs(data.token);
         setFormData({
 username:"",
@@ -60,8 +63,10 @@ navigate("/");
         console.log(data.message);
     }
 }catch(error){
-    alert("Registration failed!");
+   toast.error("Registration failed!");
     console.log(error);
+}finally {
+    setIsSubmitting(false);
 }
 }
 
@@ -145,8 +150,11 @@ onChange={handleChange}
 
 />
 
-<button>
-Register
+<button
+    type="submit"
+    disabled={isSubmitting}
+>
+    {isSubmitting ? "Registering..." : "Register"}
 </button>
 
 </form>

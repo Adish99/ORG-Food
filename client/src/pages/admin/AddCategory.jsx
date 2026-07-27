@@ -1,6 +1,7 @@
 import "./AddCategory.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const AddCategory = () => {
 
@@ -9,6 +10,7 @@ export const AddCategory = () => {
     const [category, setCategory] = useState({
     categoryName: ""
 });
+const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (e) => {
 
@@ -26,6 +28,7 @@ export const AddCategory = () => {
     const handleSubmit = async (e) => {
 
         e.preventDefault();
+         setIsSubmitting(true);
 
         try {
 
@@ -44,13 +47,13 @@ export const AddCategory = () => {
 
             if (res.ok) {
 
-                alert(data.message);
+                toast.success(data.message);
 
                 navigate("/admin/categories");
 
             } else {
 
-                alert(data.message);
+                toast.error(data.message);
 
             }
 
@@ -58,6 +61,8 @@ export const AddCategory = () => {
 
             console.log(error);
 
+        }finally {
+    setIsSubmitting(false);
         }
 
     };
@@ -83,9 +88,12 @@ export const AddCategory = () => {
         required
     />
 
-    <button type="submit">
-        Add Category
-    </button>
+   <button
+    type="submit"
+    disabled={isSubmitting}
+>
+    {isSubmitting ? "Adding...." : "Add Category"}
+</button>
 
 </form>
 

@@ -2,17 +2,21 @@ import "./AdminProducts.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UseAuth } from "../../store/Authentication";
+import { toast } from "react-toastify";
+import { Loader } from "../../components/UI/Loader";
 
 console.log("AdminProducts Rendered");
 
 export const AdminProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const navigate = useNavigate();
 const { userAuthToken } = UseAuth();
   const getProducts = async () => {
-    console.log("Fetching products...");
+     setIsSubmitting(true);
     try {
       const res = await fetch(
         "http://localhost:8000/api/products/getallprod"
@@ -30,6 +34,7 @@ const { userAuthToken } = UseAuth();
       console.log(error);
     } finally {
       setLoading(false);
+        setIsSubmitting(false);
     }
   };
 
@@ -67,7 +72,7 @@ const { userAuthToken } = UseAuth();
 
         if (res.ok) {
 
-            alert(data.message);
+            toast.success(data.message);
 
             setProducts((prev) =>
                 prev.filter((item) => item._id !== id)
@@ -75,7 +80,7 @@ const { userAuthToken } = UseAuth();
 
         } else {
 
-            alert(data.message);
+          toast.error(data.message);
 
         }
 
@@ -88,7 +93,7 @@ const { userAuthToken } = UseAuth();
 };
 
   if (loading) {
-    return <h2 className="loading">Loading Products...</h2>;
+    return <Loader/>
   }
 
   return (
@@ -172,15 +177,17 @@ const { userAuthToken } = UseAuth();
     onClick={() =>
         navigate(`/admin/products/edit/${product._id}`)
     }
+      disabled={isSubmitting}
 >
-    Edit
+        {isSubmitting ? "Editing..." : "Edit"}
 </button>
 
                    <button
     className="delete-btn"
     onClick={() => deleteProduct(product._id)}
+     disabled={isSubmitting}
 >
-    Delete
+       {isSubmitting ? "Deleting..." : "Delete"}
 </button>
 
                   </td>

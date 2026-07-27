@@ -2,6 +2,7 @@ import "./Orders.css";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../store/Authentication";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../components/UI/Loader";
 
 export const Orders = () => {
   const { userAuthToken } = UseAuth();
@@ -42,7 +43,7 @@ export const Orders = () => {
   }, []);
 
   if (loading) {
-    return <h2 className="loading-text">Loading Orders...</h2>;
+    return <Loader/>
   }
 
   return (

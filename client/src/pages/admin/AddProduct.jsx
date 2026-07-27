@@ -2,6 +2,7 @@ import "./AddProduct.css";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../../store/Authentication";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const AddProduct = () => {
 
@@ -66,13 +67,13 @@ const [categories, setCategories] = useState([]);
 
     if(res.ok){
 
-       alert(data.message);
+       toast.success(data.message);
 
 navigate("/admin/products");
 
     }else{
 
-        alert(data.message);
+      toast.error(data.message);
 
     }
 
