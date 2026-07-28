@@ -4,6 +4,7 @@ const express=require("express");
 const cors=require("cors");
 const userRoutes=require("./router/userRoutes");
 const productRoutes=require("./router/productRoutes");
+const contactRoutes=require("./router/contactRoutes");
 const cartRoutes=require("./router/cartRoutes");
 const orderRoutes=require("./router/orderRoutes");
 const categoryRoutes=require("./router/categoryRoutes");
@@ -32,6 +33,7 @@ app.get("/",(req,res)=>{
 // Router Middlewaress
 app.use("/api",userRoutes);
 app.use("/api/products",productRoutes);
+app.use("/api/contact", contactRoutes);
 app.use("/api/cart",cartRoutes);
 app.use("/api/order",orderRoutes);
 app.use("/api/category",categoryRoutes);

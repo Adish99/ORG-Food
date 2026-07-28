@@ -4,7 +4,6 @@ const Category = require("../models/Category");
 const Order = require("../models/Order");
 
 const getDashboardStatsController = async (req, res) => {
-     console.log("Dashboard controller hit");
     try {
 
         const totalUsers = await User.countDocuments();

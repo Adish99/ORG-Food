@@ -25,6 +25,10 @@ import { AddCategory } from "./pages/admin/AddCategory";
 import { EditCategory } from "./pages/admin/EditCategory";
 import { AdminOrderDetails } from "./pages/admin/AdminOrderDetails";
 import { AdminProtectedRoute } from "./components/AdminProtectedRoute";
+import { NotFound } from "./pages/errors/NotFound";
+import { Unauthorized } from "./pages/errors/UnAuthorized";
+import { ErrorPage } from "./pages/errors/ErrorPage";
+import { Contact } from "./pages/Contact";
 
 
 const App=()=>{
@@ -47,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />
+      },
+      {
+        path:"contact",
+        element:<Contact/>
       },
       {
         path: "products",
@@ -147,6 +155,18 @@ const router = createBrowserRouter([
         element: <AdminUsers />
       }
     ]
+  },
+  {
+    path:"/403",
+    element:<Unauthorized/>
+  },
+  {
+    path:"/error",
+    element:<ErrorPage/>
+  },
+  {
+    path:"*",
+    element:<NotFound/>
   }
 ]);
 
