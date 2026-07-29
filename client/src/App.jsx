@@ -29,6 +29,7 @@ import { NotFound } from "./pages/errors/NotFound";
 import { Unauthorized } from "./pages/errors/UnAuthorized";
 import { ErrorPage } from "./pages/errors/ErrorPage";
 import { Contact } from "./pages/Contact";
+import { AdminMessages } from "./pages/admin/AdminMessages";
 
 
 const App=()=>{
@@ -122,6 +123,10 @@ const router = createBrowserRouter([
         path: "products",
         element: <AdminProducts />
       },
+      {
+    path: "messages",
+    element: <AdminMessages />
+},
       {
   path: "products/add",
   element: <AddProduct />

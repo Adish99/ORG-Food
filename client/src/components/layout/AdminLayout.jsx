@@ -53,6 +53,9 @@ export const AdminLayout = () => {
                     >
                         👥 Users
                     </NavLink>
+                    <NavLink to="/admin/messages" className="sidebar-link">
+    Customer Messages
+</NavLink>
                     <NavLink
                         to="/"
                         className="sidebar-link"

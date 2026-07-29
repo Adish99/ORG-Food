@@ -1,0 +1,290 @@
+.admin-messages{
+
+    padding:30px;
+
+}
+
+.admin-messages h1{
+
+    margin-bottom:25px;
+
+}
+
+.admin-messages table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:#fff;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+}
+
+.admin-messages th{
+
+    background:#2d6a4f;
+
+    color:white;
+
+    padding:15px;
+
+}
+
+.admin-messages td{
+
+    padding:15px;
+
+    text-align:center;
+
+    border-bottom:1px solid #ddd;
+
+}
+
+.admin-messages tr:hover{
+
+    background:#f8f8f8;
+
+}
+
+.status{
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    color:white;
+
+    font-size:14px;
+
+}
+
+.read{
+
+    background:#2d6a4f;
+
+}
+
+.unread{
+
+    background:#e63946;
+
+}
+
+.read-btn{
+
+    border:none;
+
+    padding:8px 15px;
+
+    border-radius:6px;
+
+    background:#40916c;
+
+    color:white;
+
+    cursor:pointer;
+
+    margin-right:10px;
+
+}
+
+.delete-btn{
+
+    border:none;
+
+    padding:8px 15px;
+
+    border-radius:6px;
+
+    background:#d62828;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+.read-btn:hover{
+
+    background:#2d6a4f;
+
+}
+
+.delete-btn:hover{
+
+    background:#a4161a;
+
+}
+.view-btn{
+
+    background:#1976d2;
+
+    color:white;
+
+    border:none;
+
+    padding:8px 14px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    margin-right:8px;
+
+}
+
+.view-btn:hover{
+
+    background:#0d47a1;
+
+}
+
+.message-modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.5);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:999;
+
+}
+
+.message-modal-content{
+
+    width:600px;
+
+    max-width:90%;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:12px;
+
+    position:relative;
+
+}
+
+.close-btn{
+
+    position:absolute;
+
+    right:20px;
+
+    top:20px;
+
+    border:none;
+
+    background:none;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+}
+
+.message-text{
+
+    margin-top:20px;
+
+    line-height:1.8;
+
+    white-space:pre-wrap;
+
+}
+
+.delete-modal{
+
+    width:420px;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+}
+
+.delete-modal h2{
+
+    margin-bottom:15px;
+
+}
+
+.delete-modal p{
+
+    color:#555;
+
+    margin-bottom:30px;
+
+    line-height:1.6;
+
+}
+
+.delete-actions{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+}
+
+.cancel-btn{
+
+    background:#6c757d;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 25px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+.cancel-btn:hover{
+
+    background:#495057;
+
+}
+
+.confirm-delete-btn{
+
+    background:#d62828;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 25px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+.confirm-delete-btn:hover{
+
+    background:#a4161a;
+
+}
