@@ -30,6 +30,7 @@ import { Unauthorized } from "./pages/errors/UnAuthorized";
 import { ErrorPage } from "./pages/errors/ErrorPage";
 import { Contact } from "./pages/Contact";
 import { AdminMessages } from "./pages/admin/AdminMessages";
+import { VerifyOtp } from "./pages/verifyOtp";
 
 
 const App=()=>{
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
         path: "register",
         element: <Register />
       },
+      {
+    path: "verify-otp",
+    element: <VerifyOtp />
+},
       {
         path: "login",
         element: <Login />

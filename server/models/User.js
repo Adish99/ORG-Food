@@ -43,6 +43,20 @@ minlength:3
         type:String,
         required:true
     },
+    isVerified: {
+    type: Boolean,
+    default: false
+},
+
+otp: {
+    type: String,
+    default: null
+},
+
+otpExpires: {
+    type: Date,
+    default: null
+}
 },
 {
     timestamps:true

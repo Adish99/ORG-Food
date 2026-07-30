@@ -58,7 +58,16 @@ password:"",
 phone:"",
 address:""
 });
-navigate("/");
+
+navigate("/verify-otp", {
+
+    state: {
+
+        email: data.email
+
+    }
+
+});
     }else{
         console.log(data.message);
     }

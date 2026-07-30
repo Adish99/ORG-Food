@@ -1,61 +1,335 @@
 const User = require("../models/User");
+const generateOTP = require("../utils/generateOTP");
+const sendEmail = require("../utils/sendEmail");
 
-//User Register Controller
-const registerController=async(req,res)=>{
-    try{
-        const {username,email,password,phone,address}=req.body;
-        const emailExits=await User.findOne({email});
-        if(emailExits){
-        return res.status(400).json({message:"Email already exists!"});
-        }
-        const userData=await User.create({username,email,password,phone,address});
-        userData.password=undefined;
-        return res.status(201).json({
-            message:"Registered Successfully.",
-            data:userData,
-            userId:userData._id.toString(),
-            token: userData.generateUserToken()
-        });
-    }catch(error){
-        console.log("user registerController error:",error);
-        return res.status(500).json({message:"Internal server error!"});
-    }
-}
+// ====================================
+// User Register Controller
+// ====================================
 
-//User login Controller
-const loginController=async(req,res)=>{
-    try{
-        const {email,password}=req.body;
-        const userVerify=await User.findOne({email});
-        if(!userVerify){
-            return res.status(400).json({message:"Login not found! please register first."});
-        }
-        // Password verification by custom methods
-        const passwordCompared=await userVerify.passwordVerify(password);
-          if (!passwordCompared) {
-            return res.status(401).json({
-                message: "Invalid credentials"
+const registerController = async (req, res) => {
+
+    try {
+
+        const { username, email, password, phone, address } = req.body;
+
+        const emailExists = await User.findOne({ email });
+
+        if (emailExists) {
+
+            return res.status(400).json({
+                message: "Email already exists!"
             });
+
         }
-        
-        if(passwordCompared){
-            console.log(`Welcome dear ${userVerify.username}`);
-          return res.status(200).json({
-    message: "Login Successfully.",
-    token: userVerify.generateUserToken(),
-    user: {
-        _id: userVerify._id,
-        username: userVerify.username,
-        email: userVerify.email,
-        role: userVerify.role
+
+        const userData = await User.create({
+
+            username,
+            email,
+            password,
+            phone,
+            address
+
+        });
+
+        // Generate OTP
+        const otp = generateOTP();
+
+        userData.otp = otp;
+
+        userData.otpExpires = new Date(
+            Date.now() + 10 * 60 * 1000
+        );
+
+        userData.isVerified = false;
+
+        await userData.save();
+
+        // Send OTP Email
+        await sendEmail(
+
+            userData.email,
+
+            "Verify Your Org-Khana Account",
+
+            `
+                <h2>Welcome to Org-Khana 🌱</h2>
+
+                <p>Thank you for registering.</p>
+
+                <p>Your verification code is:</p>
+
+                <h1>${otp}</h1>
+
+                <p>This OTP will expire in 10 minutes.</p>
+
+                <p>If you didn't register, please ignore this email.</p>
+            `
+
+        );
+
+        return res.status(201).json({
+
+            message: "Registration successful. Please verify your email.",
+
+            email: userData.email
+
+        });
+
+    } catch (error) {
+
+        console.log("User Register Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error"
+
+        });
+
     }
-});
+
+};
+
+// ====================================
+// User Login Controller
+// ====================================
+
+const loginController = async (req, res) => {
+
+    try {
+
+        const { email, password } = req.body;
+
+        const userVerify = await User.findOne({ email });
+
+        if (!userVerify) {
+
+            return res.status(400).json({
+
+                message: "Account not found. Please register first."
+
+            });
+
         }
-    }catch(error){
-        console.log("Login controller's error:",error);
-        return res.status(404).json({message:"Login credentails failed!"});
+
+        // Check if email verified
+        if (!userVerify.isVerified) {
+
+            return res.status(401).json({
+
+                message: "Please verify your email before logging in."
+
+            });
+
+        }
+
+        const passwordCompared = await userVerify.passwordVerify(password);
+
+        if (!passwordCompared) {
+
+            return res.status(401).json({
+
+                message: "Invalid credentials."
+
+            });
+
+        }
+
+        return res.status(200).json({
+
+            message: "Login Successfully.",
+
+            token: userVerify.generateUserToken(),
+
+            user: {
+
+                _id: userVerify._id,
+
+                username: userVerify.username,
+
+                email: userVerify.email,
+
+                role: userVerify.role
+
+            }
+
+        });
+
+    } catch (error) {
+
+        console.log("Login Controller Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error"
+
+        });
+
     }
-}
+
+};
+
+// ====================================
+// Verify OTP Controller
+// ====================================
+
+const verifyOtpController = async (req, res) => {
+
+    try {
+
+        const { email, otp } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+
+            return res.status(404).json({
+                message: "User not found."
+            });
+
+        }
+
+        if (user.isVerified) {
+
+            return res.status(400).json({
+                message: "Account already verified."
+            });
+
+        }
+
+        if (user.otp !== otp) {
+
+            return res.status(400).json({
+                message: "Invalid OTP."
+            });
+
+        }
+
+        if (user.otpExpires < new Date()) {
+
+            return res.status(400).json({
+                message: "OTP has expired."
+            });
+
+        }
+
+        user.isVerified = true;
+
+        user.otp = undefined;
+
+        user.otpExpires = undefined;
+
+        await user.save();
+
+        return res.status(200).json({
+
+            message: "Email verified successfully.",
+
+            token: user.generateUserToken(),
+
+            user: {
+
+                _id: user._id,
+
+                username: user.username,
+
+                email: user.email,
+
+                role: user.role
+
+            }
+
+        });
+
+    } catch (error) {
+
+        console.log("Verify OTP Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error"
+
+        });
+
+    }
+
+};
+
+// ====================================
+// Resend OTP Controller
+// ====================================
+
+const resendOtpController = async (req, res) => {
+
+    try {
+
+        const { email } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+
+            return res.status(404).json({
+                message: "User not found."
+            });
+
+        }
+
+        if (user.isVerified) {
+
+            return res.status(400).json({
+                message: "Account is already verified."
+            });
+
+        }
+
+        const otp = generateOTP();
+
+        user.otp = otp;
+
+        user.otpExpires = new Date(
+            Date.now() + 10 * 60 * 1000
+        );
+
+        await user.save();
+
+        await sendEmail(
+
+            user.email,
+
+            "New Verification OTP",
+
+            `
+                <h2>Org-Khana 🌱</h2>
+
+                <p>Your new verification code is:</p>
+
+                <h1>${otp}</h1>
+
+                <p>This OTP is valid for 10 minutes.</p>
+            `
+
+        );
+
+        return res.status(200).json({
+
+            message: "A new OTP has been sent to your email."
+
+        });
+
+    } catch (error) {
+
+        console.log("Resend OTP Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error"
+
+        });
+
+    }
+
+};
 
 //Authenticate users data controller
 const userDataController=async(req,res)=>{
@@ -201,4 +475,4 @@ const deleteUserController = async (req, res) => {
 
 };
 
-module.exports={registerController,loginController,userDataController,getAllUsersController,updateUserRoleController,deleteUserController};
+module.exports={registerController,loginController,userDataController,getAllUsersController,updateUserRoleController,deleteUserController,verifyOtpController,resendOtpController};
