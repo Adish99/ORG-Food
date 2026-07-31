@@ -315,7 +315,7 @@ const verifyResetOtpController = async (req, res) => {
 
 };
 // ====================================
-// Verify OTP Controller
+// Verify OTP Controller...
 // ====================================
 
 const verifyOtpController = async (req, res) => {
