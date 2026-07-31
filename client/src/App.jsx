@@ -31,6 +31,9 @@ import { ErrorPage } from "./pages/errors/ErrorPage";
 import { Contact } from "./pages/Contact";
 import { AdminMessages } from "./pages/admin/AdminMessages";
 import { VerifyOtp } from "./pages/verifyOtp";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import { VerifyResetOtp } from "./pages/VerifyResetOtp";
+import { ResetPassword } from "./pages/ResetPassword";
 
 
 const App=()=>{
@@ -58,6 +61,18 @@ const router = createBrowserRouter([
         path: "login",
         element: <Login />
       },
+      {
+    path: "forgot-password",
+    element: <ForgotPassword />
+},
+{
+    path: "verify-reset-otp",
+    element: <VerifyResetOtp />
+},
+{
+    path: "reset-password",
+    element: <ResetPassword />
+},
       {
         path:"contact",
         element:<Contact/>

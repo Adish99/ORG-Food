@@ -43,10 +43,6 @@ minlength:3
         type:String,
         required:true
     },
-    isVerified: {
-    type: Boolean,
-    default: false
-},
 
 otp: {
     type: String,
@@ -56,7 +52,22 @@ otp: {
 otpExpires: {
     type: Date,
     default: null
-}
+},
+resetOtp: {
+    type: String
+},
+
+resetOtpExpires: {
+    type: Date
+},
+resetOtpVerified: {
+    type: Boolean,
+    default: false
+},
+isVerified: {
+    type: Boolean,
+    default: false
+},
 },
 {
     timestamps:true

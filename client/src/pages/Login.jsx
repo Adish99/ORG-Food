@@ -118,6 +118,19 @@ onChange={handleChange}
 >
     {isSubmitting ? "Logging in..." : "Login"}
 </button>
+<p className="forgot-link">
+
+    <span
+
+        onClick={() => navigate("/forgot-password")}
+
+    >
+
+        Forgot Password?
+
+    </span>
+
+</p>
 
 </form>
 </div>

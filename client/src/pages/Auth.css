@@ -151,3 +151,28 @@ background:#a8a8a8;
 cursor:not-allowed;
 
 }
+.forgot-link{
+
+margin-top:18px;
+
+text-align:center;
+
+}
+
+.forgot-link span{
+
+color:#2e8b57;
+
+cursor:pointer;
+
+font-weight:600;
+
+transition:.3s;
+
+}
+
+.forgot-link span:hover{
+
+text-decoration:underline;
+
+}

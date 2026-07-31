@@ -170,6 +170,151 @@ const loginController = async (req, res) => {
 };
 
 // ====================================
+// Forgot Password Controller
+// ====================================
+
+const forgotPasswordController = async (req, res) => {
+
+    try {
+
+        const { email } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+
+            return res.status(404).json({
+
+                message: "No account found with this email."
+
+            });
+
+        }
+
+        // Don't allow reset if email isn't verified
+        if (!user.isVerified) {
+
+            return res.status(400).json({
+
+                message: "Please verify your email first."
+
+            });
+
+        }
+
+        // Generate Reset OTP
+        const otp = generateOTP();
+
+      user.resetOtp = otp;
+
+user.resetOtpExpires = new Date(
+    Date.now() + 10 * 60 * 1000
+);
+
+user.resetOtpVerified = false;
+
+        await user.save();
+
+        // Send Email
+        await sendEmail(
+
+            user.email,
+
+            "Reset Your Org-Khana Password",
+
+            `
+                <h2>Forgot Password</h2>
+
+                <p>Your password reset code is:</p>
+
+                <h1>${otp}</h1>
+
+                <p>This OTP will expire in <b>10 minutes</b>.</p>
+
+                <p>If you didn't request a password reset, simply ignore this email.</p>
+            `
+
+        );
+
+        return res.status(200).json({
+
+            message: "Password reset OTP sent successfully.",
+
+            email: user.email
+
+        });
+
+    } catch (error) {
+
+        console.log("Forgot Password Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error."
+
+        });
+
+    }
+
+};
+
+const verifyResetOtpController = async (req, res) => {
+
+    try {
+
+        const { email, otp } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+
+            return res.status(404).json({
+                message: "User not found."
+            });
+
+        }
+
+        if (user.resetOtp !== otp) {
+
+            return res.status(400).json({
+                message: "Invalid OTP."
+            });
+
+        }
+
+        if (!user.resetOtpExpires || user.resetOtpExpires < new Date()) {
+
+            return res.status(400).json({
+                message: "OTP has expired."
+            });
+
+        }
+
+        // ✅ OTP is valid
+        user.resetOtpVerified = true;
+
+        await user.save();
+
+        return res.status(200).json({
+
+            message: "OTP verified successfully."
+
+        });
+
+    } catch (error) {
+
+        console.log("Verify Reset OTP Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error."
+
+        });
+
+    }
+
+};
+// ====================================
 // Verify OTP Controller
 // ====================================
 
@@ -248,6 +393,154 @@ const verifyOtpController = async (req, res) => {
         return res.status(500).json({
 
             message: "Internal Server Error"
+
+        });
+
+    }
+
+};
+
+// ====================================
+// Reset Password Controller
+// ====================================
+
+const resetPasswordController = async (req, res) => {
+
+    try {
+
+        const {
+
+            email,
+
+            newPassword,
+
+            confirmPassword
+
+        } = req.body;
+
+        // ==========================
+        // Check User
+        // ==========================
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+
+            return res.status(404).json({
+
+                message: "User not found."
+
+            });
+
+        }
+
+        // ==========================
+        // OTP Verified?
+        // ==========================
+
+        if (!user.resetOtpVerified) {
+
+            return res.status(400).json({
+
+                message: "Please verify your OTP first."
+
+            });
+
+        }
+
+        // ==========================
+        // OTP Expired?
+        // ==========================
+
+        if (
+
+            !user.resetOtpExpires ||
+
+            user.resetOtpExpires < new Date()
+
+        ) {
+
+            return res.status(400).json({
+
+                message: "OTP has expired."
+
+            });
+
+        }
+
+        // ==========================
+        // Password Match
+        // ==========================
+
+        if (newPassword !== confirmPassword) {
+
+            return res.status(400).json({
+
+                message: "Passwords do not match."
+
+            });
+
+        }
+
+        // ==========================
+        // Password Length
+        // ==========================
+
+        if (newPassword.length < 5) {
+
+            return res.status(400).json({
+
+                message: "Password must be at least 5 characters."
+
+            });
+
+        }
+
+        // ==========================
+        // Prevent Same Password
+        // ==========================
+
+        const isSamePassword = await user.passwordVerify(newPassword);
+
+        if (isSamePassword) {
+
+            return res.status(400).json({
+
+                message: "New password cannot be the same as your old password."
+
+            });
+
+        }
+
+        // ==========================
+        // Update Password
+        // ==========================
+
+        user.password = newPassword;
+
+        // Clear reset information
+
+        user.resetOtp = undefined;
+
+        user.resetOtpExpires = undefined;
+
+        user.resetOtpVerified = false;
+
+        await user.save();
+
+        return res.status(200).json({
+
+            message: "Password reset successfully."
+
+        });
+
+    } catch (error) {
+
+        console.log("Reset Password Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error."
 
         });
 
@@ -475,4 +768,4 @@ const deleteUserController = async (req, res) => {
 
 };
 
-module.exports={registerController,loginController,userDataController,getAllUsersController,updateUserRoleController,deleteUserController,verifyOtpController,resendOtpController};
+module.exports={registerController,loginController,userDataController,getAllUsersController,updateUserRoleController,deleteUserController,verifyOtpController,resendOtpController,forgotPasswordController,verifyResetOtpController,resetPasswordController};
