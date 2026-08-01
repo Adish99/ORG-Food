@@ -1,0 +1,151 @@
+.profile-page{
+    min-height:100vh;
+    background:#f5f7fa;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:40px 20px;
+}
+
+.profile-card{
+    width:100%;
+    max-width:900px;
+    background:#fff;
+    border-radius:15px;
+    padding:35px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.profile-header{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    margin-bottom:30px;
+    padding-bottom:20px;
+    border-bottom:1px solid #e5e5e5;
+}
+
+.profile-avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:#4CAF50;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:2.5rem;
+    font-weight:bold;
+}
+
+.profile-info h2{
+    margin-bottom:8px;
+    color:#222;
+}
+
+.profile-info p{
+    color:#666;
+}
+
+.profile-form{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.profile-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.profile-group label{
+    margin-bottom:8px;
+    font-weight:600;
+    color:#444;
+}
+
+.profile-group input,
+.profile-group textarea{
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:1rem;
+}
+
+.profile-group textarea{
+    resize:none;
+}
+
+.full-width{
+    grid-column:1/3;
+}
+
+.update-btn{
+    grid-column:1/3;
+    padding:14px;
+    border:none;
+    background:#2E8B57;
+    color:white;
+    font-size:1rem;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.update-btn:hover{
+    background:#256f46;
+}
+
+@media(max-width:768px){
+
+.profile-form{
+
+grid-template-columns:1fr;
+
+}
+
+.full-width,
+.update-btn{
+
+grid-column:1;
+
+}
+
+.profile-header{
+
+flex-direction:column;
+text-align:center;
+
+}
+
+}
+.password-input{
+
+    position:relative;
+
+}
+
+.password-input input{
+
+    width:100%;
+    padding-right:50px;
+
+}
+
+.password-toggle{
+
+    position:absolute;
+
+    right:15px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    cursor:pointer;
+
+    user-select:none;
+
+    font-size:1.2rem;
+
+}

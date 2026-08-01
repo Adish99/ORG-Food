@@ -34,6 +34,8 @@ import { VerifyOtp } from "./pages/verifyOtp";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import { VerifyResetOtp } from "./pages/VerifyResetOtp";
 import { ResetPassword } from "./pages/ResetPassword";
+import { Profile } from "./pages/Profile";
+import { AdminProfile } from "./pages/admin/AdminProfile";
 
 
 const App=()=>{
@@ -118,6 +120,14 @@ const router = createBrowserRouter([
         )
       },
       {
+    path: "profile",
+    element: (
+        <ProtectedRoute>
+            <Profile />
+        </ProtectedRoute>
+    )
+},
+      {
         path: "logout",
         element: <Logout />
       }
@@ -146,6 +156,10 @@ const router = createBrowserRouter([
       {
     path: "messages",
     element: <AdminMessages />
+},
+{
+    path: "profile",
+    element: <AdminProfile />
 },
       {
   path: "products/add",

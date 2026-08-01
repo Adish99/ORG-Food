@@ -140,10 +140,26 @@ export const Navbar = () => {
                             </NavLink>
 
                         </li>
+    
 
                     )
+        
 
                 }
+    {
+    isLoggedIn && (
+
+        <li>
+
+            <NavLink to="/profile">
+            My Account
+            </NavLink>
+
+        </li>
+
+    )
+
+}
 
             </ul>
 

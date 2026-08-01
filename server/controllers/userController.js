@@ -665,6 +665,221 @@ const getAllUsersController = async (req, res) => {
 }
 
 // ====================================
+// Get Logged-in User Profile
+// ====================================
+
+const getProfileController = async (req, res) => {
+
+    try {
+
+        const user = req.user;
+
+        return res.status(200).json({
+
+            message: "Profile fetched successfully.",
+
+            user
+
+        });
+
+    } catch (error) {
+
+        console.log("Get Profile Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error."
+
+        });
+
+    }
+
+};
+
+// ====================================
+// Update Logged-in User Profile
+// ====================================
+
+const updateProfileController = async (req, res) => {
+
+    try {
+
+        const { username, phone, address } = req.body;
+
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+
+            return res.status(404).json({
+
+                message: "User not found."
+
+            });
+
+        }
+
+        // Update only allowed fields
+      if (username !== undefined) user.username = username;
+if (phone !== undefined) user.phone = phone;
+if (address !== undefined) user.address = address;
+
+        await user.save();
+
+        return res.status(200).json({
+
+            message: "Profile updated successfully.",
+
+            user: {
+
+                _id: user._id,
+
+                username: user.username,
+
+                email: user.email,
+
+                phone: user.phone,
+
+                address: user.address,
+
+                role: user.role
+
+            }
+
+        });
+
+    } catch (error) {
+
+        console.log("Update Profile Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error."
+
+        });
+
+    }
+
+};
+
+// ====================================
+// Change Password Controller
+// ====================================
+
+const changePasswordController = async (req, res) => {
+
+    try {
+
+        const {
+
+            currentPassword,
+
+            newPassword,
+
+            confirmPassword
+
+        } = req.body;
+
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+
+            return res.status(404).json({
+
+                message: "User not found."
+
+            });
+
+        }
+
+        // ==========================
+        // Verify Current Password
+        // ==========================
+
+        const isMatch = await user.passwordVerify(currentPassword);
+
+        if (!isMatch) {
+
+            return res.status(400).json({
+
+                message: "Current password is incorrect."
+
+            });
+
+        }
+
+        // ==========================
+        // Match Passwords
+        // ==========================
+
+        if (newPassword !== confirmPassword) {
+
+            return res.status(400).json({
+
+                message: "Passwords do not match."
+
+            });
+
+        }
+
+        // ==========================
+        // Minimum Length
+        // ==========================
+
+        if (newPassword.length < 5) {
+
+            return res.status(400).json({
+
+                message: "Password must be at least 5 characters."
+
+            });
+
+        }
+
+        // ==========================
+        // Prevent Same Password
+        // ==========================
+
+        const isSamePassword = await user.passwordVerify(newPassword);
+
+        if (isSamePassword) {
+
+            return res.status(400).json({
+
+                message: "New password cannot be the same as the current password."
+
+            });
+
+        }
+
+        // ==========================
+        // Update Password
+        // ==========================
+
+        user.password = newPassword;
+
+        await user.save();
+
+        return res.status(200).json({
+
+            message: "Password changed successfully."
+
+        });
+
+    } catch (error) {
+
+        console.log("Change Password Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error."
+
+        });
+
+    }
+
+};
+
+// ====================================
 // Update User Role
 // ====================================
 
@@ -768,4 +983,4 @@ const deleteUserController = async (req, res) => {
 
 };
 
-module.exports={registerController,loginController,userDataController,getAllUsersController,updateUserRoleController,deleteUserController,verifyOtpController,resendOtpController,forgotPasswordController,verifyResetOtpController,resetPasswordController};
+module.exports={registerController,loginController,userDataController,getAllUsersController,updateUserRoleController,deleteUserController,verifyOtpController,resendOtpController,forgotPasswordController,verifyResetOtpController,resetPasswordController,getProfileController,updateProfileController,changePasswordController};
