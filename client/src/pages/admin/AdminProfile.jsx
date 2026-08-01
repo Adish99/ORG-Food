@@ -246,7 +246,7 @@ export const AdminProfile = () => {
         }
 
     };
-
+//Admin UI
     return (
 
         <div className="admin-profile">
