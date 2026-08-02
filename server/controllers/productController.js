@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const cloudinary = require("../config/cloudinary");
 
 // Get all products with search, category, pagination and sorting
 const getAllProductController = async (req, res) => {
@@ -96,7 +97,6 @@ const getSpecificProdController = async (req, res) => {
 //Add Products from admin
 
 const addProductController = async (req, res) => {
-
     try {
 
         const {
@@ -105,7 +105,6 @@ const addProductController = async (req, res) => {
             price,
             stock,
             weight,
-            image,
             categoryId,
             isFeatured
         } = req.body;
@@ -117,7 +116,6 @@ const addProductController = async (req, res) => {
             !price ||
             !stock ||
             !weight ||
-            !image ||
             !categoryId
         ) {
 
@@ -127,6 +125,36 @@ const addProductController = async (req, res) => {
 
         }
 
+        let imageUrl = "";
+        if (req.file) {
+
+    const uploadResult = await new Promise((resolve, reject) => {
+
+        cloudinary.uploader.upload_stream(
+
+            {
+
+                folder: "Org-Khana/Products"
+
+            },
+
+            (error, result) => {
+
+                if (error) return reject(error);
+
+                resolve(result);
+
+            }
+
+        ).end(req.file.buffer);
+
+    });
+
+    imageUrl = uploadResult.secure_url;
+
+}
+
+
         // Create product
         const product = await Product.create({
 
@@ -135,7 +163,7 @@ const addProductController = async (req, res) => {
             price,
             stock,
             weight,
-            image,
+            image:imageUrl,
             categoryId,
             isFeatured
 
