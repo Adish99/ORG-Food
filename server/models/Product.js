@@ -38,11 +38,14 @@ const productSchema = new mongoose.Schema(
       // Example: "1kg", "500g", "1L"
     },
 
-    image: {
-      type: String,
-      required: true,
-      trim: true
-    },
+   image:{
+    type:String,
+    required:true
+},
+
+imagePublicId:{
+    type:String,
+},
 
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,

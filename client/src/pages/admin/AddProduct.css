@@ -56,3 +56,18 @@
 .add-product-card button:hover{
     background:#1b4332;
 }
+.product-preview{
+
+    width:180px;
+
+    height:180px;
+
+    object-fit:cover;
+
+    border-radius:12px;
+
+    margin-top:15px;
+
+    border:2px solid #ddd;
+
+}

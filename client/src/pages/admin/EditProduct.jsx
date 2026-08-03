@@ -24,6 +24,7 @@ export const EditProduct = () => {
     categoryId: "",
     isFeatured: false
   });
+  const [previewImage, setPreviewImage] = useState("");
 
   // Fetch Product
   const getProduct = async () => {
@@ -48,6 +49,7 @@ export const EditProduct = () => {
           categoryId: data.data.categoryId,
           isFeatured: data.data.isFeatured
         });
+        setPreviewImage(data.data.image);
 
       }
 
@@ -94,32 +96,90 @@ export const EditProduct = () => {
 
   const handleChange = (e) => {
 
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files } = e.target;
+
+    if (type === "file") {
+
+        setProduct((prev) => ({
+
+            ...prev,
+
+            image: files[0]
+
+        }));
+
+        setPreviewImage(
+
+            URL.createObjectURL(files[0])
+
+        );
+
+        return;
+
+    }
 
     setProduct((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value
+
+        ...prev,
+
+        [name]:
+
+            type === "checkbox"
+
+                ? checked
+
+                : value
+
     }));
 
-  };
+};
 
   const handleSubmit = async (e) => {
 
     e.preventDefault();
 
     try {
+      const formData = new FormData();
+
+formData.append("name", product.name);
+
+formData.append("description", product.description);
+
+formData.append("price", product.price);
+
+formData.append("stock", product.stock);
+
+formData.append("weight", product.weight);
+
+formData.append("categoryId", product.categoryId);
+
+formData.append("isFeatured", product.isFeatured);
+
+if (product.image instanceof File) {
+
+    formData.append("image", product.image);
+
+}
 
       const res = await fetch(
-        `http://localhost:8000/api/products/update/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
+
+    `http://localhost:8000/api/products/update/${id}`,
+
+    {
+
+        method: "PUT",
+
+        headers: {
+
             Authorization: userAuthToken
-          },
-          body: JSON.stringify(product)
-        }
-      );
+
+        },
+
+        body: formData
+
+    }
+
+);
 
       const data = await res.json();
 
@@ -198,14 +258,30 @@ export const EditProduct = () => {
             onChange={handleChange}
           />
 
-          <label>Image URL</label>
+        <label>Product Image</label>
 
-          <input
-            type="text"
-            name="image"
-            value={product.image}
-            onChange={handleChange}
-          />
+<input
+    type="file"
+    name="image"
+    accept="image/*"
+    onChange={handleChange}
+/>
+
+{
+    previewImage && (
+
+        <img
+
+            src={previewImage}
+
+            alt="Preview"
+
+            className="product-preview"
+
+        />
+
+    )
+}
 
           <label>Category</label>
 

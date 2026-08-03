@@ -19,7 +19,7 @@ router.route("/getallprod").get(getAllProductController);
 router.route("/getprod/:id").get(getSpecificProdController);
 router.route("/category/:categoryId").get(getCategoryProductController);
 router.route("/add").post(authMiddleware,adminMiddleware,upload.single("image"),addProductController);
-router.route("/update/:id").put(authMiddleware,adminMiddleware,updateProductController);
+router.route("/update/:id").put(authMiddleware,adminMiddleware,upload.single("image"),updateProductController);
 router.route("/delete/:id").delete(authMiddleware,adminMiddleware,deleteProductController);
 
 module.exports = router;

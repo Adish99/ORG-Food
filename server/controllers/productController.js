@@ -125,8 +125,11 @@ const addProductController = async (req, res) => {
 
         }
 
-        let imageUrl = "";
-        if (req.file) {
+   let imageUrl = "";
+
+let imagePublicId = "";
+
+if (req.file) {
 
     const uploadResult = await new Promise((resolve, reject) => {
 
@@ -152,6 +155,8 @@ const addProductController = async (req, res) => {
 
     imageUrl = uploadResult.secure_url;
 
+    imagePublicId = uploadResult.public_id;
+
 }
 
 
@@ -163,7 +168,8 @@ const addProductController = async (req, res) => {
             price,
             stock,
             weight,
-            image:imageUrl,
+             image: imageUrl,
+    imagePublicId,
             categoryId,
             isFeatured
 
@@ -190,59 +196,137 @@ const addProductController = async (req, res) => {
 
 };
 
+// ====================================
 // Update Product
+// ====================================
+
 const updateProductController = async (req, res) => {
 
-  try {
+    try {
 
-    const id = req.params.id;
+        const { id } = req.params;
 
-    const {
-      name,
-      description,
-      price,
-      stock,
-      weight,
-      image,
-      categoryId,
-      isFeatured
-    } = req.body;
+        const {
 
-    const product = await Product.findById(id);
+            name,
 
-    if (!product) {
+            description,
 
-      return res.status(404).json({
-        message: "Product not found!"
-      });
+            price,
+
+            stock,
+
+            weight,
+
+            categoryId,
+
+            isFeatured
+
+        } = req.body;
+
+        const product = await Product.findById(id);
+
+        if (!product) {
+
+            return res.status(404).json({
+
+                message: "Product not found."
+
+            });
+
+        }
+
+        // ==========================
+        // Upload New Image (Optional)
+        // ==========================
+
+        if (req.file) {
+
+            // Delete old Cloudinary image
+
+            if (product.imagePublicId) {
+
+                await cloudinary.uploader.destroy(
+
+                    product.imagePublicId
+
+                );
+
+            }
+
+            // Upload new image
+
+            const uploadResult = await new Promise(
+
+                (resolve, reject) => {
+
+                    cloudinary.uploader.upload_stream(
+
+                        {
+
+                            folder: "Org-Khana/Products"
+
+                        },
+
+                        (error, result) => {
+
+                            if (error) return reject(error);
+
+                            resolve(result);
+
+                        }
+
+                    ).end(req.file.buffer);
+
+                }
+
+            );
+
+            product.image = uploadResult.secure_url;
+
+            product.imagePublicId = uploadResult.public_id;
+
+        }
+
+        // ==========================
+        // Update Other Fields
+        // ==========================
+
+        product.name = name;
+
+        product.description = description;
+
+        product.price = price;
+
+        product.stock = stock;
+
+        product.weight = weight;
+
+        product.categoryId = categoryId;
+
+        product.isFeatured = isFeatured;
+
+        await product.save();
+
+        return res.status(200).json({
+
+            message: "Product updated successfully.",
+
+            product
+
+        });
+
+    } catch (error) {
+
+        console.log("Update Product Controller Error:", error);
+
+        return res.status(500).json({
+
+            message: "Internal Server Error"
+
+        });
 
     }
-
-    product.name = name;
-    product.description = description;
-    product.price = price;
-    product.stock = stock;
-    product.weight = weight;
-    product.image = image;
-    product.categoryId = categoryId;
-    product.isFeatured = isFeatured;
-
-    await product.save();
-
-    return res.status(200).json({
-      message: "Product updated successfully.",
-      product
-    });
-
-  } catch (error) {
-
-    console.log("Update Product Controller Error:", error);
-
-    return res.status(500).json({
-      message: "Internal Server Error"
-    });
-
-  }
 
 };
 
