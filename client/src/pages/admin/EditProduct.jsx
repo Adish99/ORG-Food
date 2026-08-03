@@ -134,7 +134,7 @@ export const EditProduct = () => {
     }));
 
 };
-
+//After clicking update product this function will run
   const handleSubmit = async (e) => {
 
     e.preventDefault();
