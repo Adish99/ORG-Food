@@ -71,3 +71,26 @@
     border:2px solid #ddd;
 
 }
+.product-preview{
+
+    width:180px;
+
+    height:180px;
+
+    object-fit:cover;
+
+    border-radius:12px;
+
+    margin-top:15px;
+
+    border:2px solid #ddd;
+
+}
+
+button:disabled{
+
+    opacity:0.6;
+
+    cursor:not-allowed;
+
+}

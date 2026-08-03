@@ -25,6 +25,7 @@ export const EditProduct = () => {
     isFeatured: false
   });
   const [previewImage, setPreviewImage] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   // Fetch Product
   const getProduct = async () => {
@@ -137,6 +138,7 @@ export const EditProduct = () => {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+    setIsUploading(true);
 
     try {
       const formData = new FormData();
@@ -199,6 +201,8 @@ if (product.image instanceof File) {
 
       console.log(error);
 
+    }finally{
+      setIsUploading(false);
     }
 
   };
@@ -321,11 +325,25 @@ if (product.image instanceof File) {
 
           </div>
 
-          <button type="submit">
+                           <button
 
-            Update Product
+    type="submit"
 
-          </button>
+    disabled={isUploading}
+
+>
+
+    {
+
+        isUploading
+
+        ? "Uploading..."
+
+        : "Update Product"
+
+    }
+
+</button>
 
         </form>
 

@@ -31,34 +31,53 @@ export const AddProduct = () => {
         isFeatured: false
 
     });
+    const [previewImage, setPreviewImage] = useState("");
+
+const [isUploading, setIsUploading] = useState(false);
 
     // ==========================
     // Handle Input Change
     // ==========================
 
-    const handleChange = (e) => {
+   const handleChange = (e) => {
 
-        const { name, value, type, checked, files } = e.target;
+    const { name, value, type, checked, files } = e.target;
 
-        setProduct({
+    if (type === "file") {
 
-            ...product,
+        setProduct((prev) => ({
 
-            [name]:
+            ...prev,
 
-                type === "checkbox"
+            image: files[0]
 
-                    ? checked
+        }));
 
-                    : type === "file"
+        setPreviewImage(
 
-                    ? files[0]
+            URL.createObjectURL(files[0])
 
-                    : value
+        );
 
-        });
+        return;
 
-    };
+    }
+
+    setProduct((prev) => ({
+
+        ...prev,
+
+        [name]:
+
+            type === "checkbox"
+
+                ? checked
+
+                : value
+
+    }));
+
+};
 
     // ==========================
     // Get Categories
@@ -103,6 +122,7 @@ export const AddProduct = () => {
     const handleSubmit = async (e) => {
 
         e.preventDefault();
+        setIsUploading(true);
 
         try {
 
@@ -164,6 +184,8 @@ export const AddProduct = () => {
 
             toast.error("Something went wrong.");
 
+        }finally{
+            setIsUploading(false);  
         }
 
     };
@@ -257,22 +279,28 @@ export const AddProduct = () => {
                         required
 
                     />
+<label>Product Image</label>
 
-                    <label>Product Image</label>
+<input
+    type="file"
+    name="image"
+    accept="image/*"
+    onChange={handleChange}
+    disabled={isUploading}
+    required
+/>
 
-                    <input
+{
+    previewImage && (
 
-                        type="file"
+        <img
+            src={previewImage}
+            alt="Product Preview"
+            className="product-preview"
+        />
 
-                        name="image"
-
-                        accept="image/*"
-
-                        onChange={handleChange}
-
-                        required
-
-                    />
+    )
+}
 
                     <label>Category</label>
 
@@ -338,11 +366,25 @@ export const AddProduct = () => {
 
                     </div>
 
-                    <button type="submit">
+                   <button
 
-                        Add Product
+    type="submit"
 
-                    </button>
+    disabled={isUploading}
+
+>
+
+    {
+
+        isUploading
+
+        ? "Uploading..."
+
+        : "Add Product"
+
+    }
+
+</button>
 
                 </form>
 

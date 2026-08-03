@@ -330,28 +330,53 @@ const updateProductController = async (req, res) => {
 
 };
 
-//Delete Products by Admin
+
+// ====================================
+// Delete Product
+// ====================================
 
 const deleteProductController = async (req, res) => {
 
     try {
 
-        const id = req.params.id;
+        const { id } = req.params;
 
         const product = await Product.findById(id);
 
         if (!product) {
 
             return res.status(404).json({
-                message: "Product not found!"
+
+                message: "Product not found."
+
             });
 
         }
 
+        // ==========================
+        // Delete Image from Cloudinary
+        // ==========================
+
+        if (product.imagePublicId) {
+
+            await cloudinary.uploader.destroy(
+
+                product.imagePublicId
+
+            );
+
+        }
+
+        // ==========================
+        // Delete Product
+        // ==========================
+
         await Product.findByIdAndDelete(id);
 
         return res.status(200).json({
+
             message: "Product deleted successfully."
+
         });
 
     } catch (error) {
@@ -359,7 +384,9 @@ const deleteProductController = async (req, res) => {
         console.log("Delete Product Controller Error:", error);
 
         return res.status(500).json({
-            message: "Internal Server Error"
+
+            message: "Internal Server Error."
+
         });
 
     }
