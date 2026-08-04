@@ -6,7 +6,8 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 const {
 
-    initiateEsewaPaymentController
+    initiateEsewaPaymentController,
+    verifyEsewaPaymentController
 
 } = require("../controllers/paymentController");
 
@@ -17,6 +18,13 @@ router.post(
     authMiddleware,
 
     initiateEsewaPaymentController
+
+);
+router.get(
+
+    "/esewa/success",
+
+    verifyEsewaPaymentController
 
 );
 

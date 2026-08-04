@@ -1,0 +1,40 @@
+.payment-page{
+    min-height:80vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#f5f7fa;
+}
+
+.payment-card{
+    width:500px;
+    background:white;
+    padding:40px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.payment-card h1{
+    margin-bottom:20px;
+}
+
+.payment-card p{
+    color:#666;
+    margin-bottom:30px;
+    line-height:1.6;
+}
+
+.payment-card button{
+    background:#27ae60;
+    color:white;
+    border:none;
+    padding:12px 28px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.payment-card button:hover{
+    opacity:.9;
+}

@@ -36,6 +36,8 @@ import { VerifyResetOtp } from "./pages/VerifyResetOtp";
 import { ResetPassword } from "./pages/ResetPassword";
 import { Profile } from "./pages/Profile";
 import { AdminProfile } from "./pages/admin/AdminProfile";
+import { PaymentFailure } from "./pages/PaymentFailure";
+import { PaymentSuccess } from "./pages/PaymentSuccess";
 
 
 const App=()=>{
@@ -103,6 +105,22 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         )
       },
+      {
+  path: "payment/success",
+  element: (
+    <ProtectedRoute>
+      <PaymentSuccess />
+    </ProtectedRoute>
+  )
+},
+{
+  path: "payment/failure",
+  element: (
+    <ProtectedRoute>
+      <PaymentFailure />
+    </ProtectedRoute>
+  )
+},
       {
         path: "orders",
         element: (
