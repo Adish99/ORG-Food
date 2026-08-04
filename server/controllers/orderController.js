@@ -1,58 +1,106 @@
 const Order=require("../models/Order");
 const Cart=require("../models/UserCart");
 
-//Create Order
-const createOrderController=async(req,res)=>{
-    try{
-        const userId=req.user._id;
+// ====================================
+// Create Order
+// ====================================
 
-        const {shippingAddress,paymentMethod}=req.body;
+const createOrderController = async (req, res) => {
 
-        const cart=await Cart.findOne({userId})
-        .populate("products.productId");
+    try {
 
-         if(!cart || cart.products.length===0){
+        const userId = req.user._id;
+
+        const {
+
+            shippingAddress,
+
+            paymentMethod
+
+        } = req.body;
+
+        const cart = await Cart.findOne({
+
+            userId
+
+        }).populate("products.productId");
+
+        if (!cart || cart.products.length === 0) {
+
             return res.status(400).json({
-                message:"Cart is empty"
+
+                message: "Cart is empty."
+
             });
+
         }
 
-         let totalAmount=0;
+        let totalAmount = 0;
 
-          cart.products.forEach((item)=>{
-            totalAmount += 
-            item.productId.price * item.quantity;
+        cart.products.forEach((item) => {
+
+            totalAmount +=
+
+                item.productId.price *
+
+                item.quantity;
+
         });
 
-         const order = await Order.create({
+        const order = await Order.create({
+
             userId,
-           products:cart.products.map((item)=>({
-    productId:item.productId._id,
-    name:item.productId.name,
-    price:item.productId.price,
-    quantity:item.quantity
-})),
-            totalAmount,
-            shippingAddress,
-            paymentMethod
-        });
 
- // Clear cart after order
-        cart.products=[];
+            products: cart.products.map((item) => ({
+
+                productId: item.productId._id,
+
+                name: item.productId.name,
+
+                price: item.productId.price,
+
+                quantity: item.quantity
+
+            })),
+
+            totalAmount,
+
+            shippingAddress,
+
+            paymentMethod,
+
+            paymentStatus: "Pending"
+
+        });
+        
+
+        // Clear cart
+
+        cart.products = [];
+
         await cart.save();
 
         return res.status(201).json({
-            message:"Order created successfully",
+
+            message: "Order created successfully.",
+
             order
+
         });
-   
-    }catch(error){
-        console.log("Create order error:",error);
+
+    } catch (error) {
+
+        console.log("Create Order Error:", error);
+
         return res.status(500).json({
-            message:"Something went wrong"
+
+            message: "Internal Server Error."
+
         });
+
     }
-}
+
+};
 
 // Get User Orders
 const getUserOrdersController = async(req,res)=>{

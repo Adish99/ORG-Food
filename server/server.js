@@ -9,6 +9,7 @@ const cartRoutes=require("./router/cartRoutes");
 const orderRoutes=require("./router/orderRoutes");
 const categoryRoutes=require("./router/categoryRoutes");
 const adminRoutes=require("./router/adminRoutes");
+const paymentRoute=require("./router/paymentRoutes");
 const app=express();
 const PORT=process.env.PORT_NO || 3000;
 
@@ -38,6 +39,7 @@ app.use("/api/cart",cartRoutes);
 app.use("/api/order",orderRoutes);
 app.use("/api/category",categoryRoutes);
 app.use("/api",adminRoutes);
+app.use("/api/payment", paymentRoute);
 
 //Server Running
 app.listen(PORT,async()=>{

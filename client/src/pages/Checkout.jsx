@@ -111,9 +111,22 @@ setIsSubmitting(true);
 
     if (res.ok) {
 
-      toast.success(data.message);
+     toast.success(data.message);
 
-      navigate("/orders");
+if (paymentMethod === "COD") {
+
+    navigate("/orders");
+
+}
+else if (paymentMethod === "Esewa") {
+
+    initiateEsewaPayment(
+
+        data.order
+
+    );
+
+}
 
     } else {
 
@@ -131,6 +144,79 @@ setIsSubmitting(true);
     setIsSubmitting(false);
 
   }
+
+};
+const initiateEsewaPayment = async (order) => {
+
+    try {
+
+        const res = await fetch(
+
+            "http://localhost:8000/api/payment/esewa",
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json",
+
+                    Authorization: userAuthToken
+
+                },
+
+                body: JSON.stringify({
+
+                    orderId: order._id
+
+                })
+
+            }
+
+        );
+
+        const data = await res.json();
+
+        if (res.ok) {
+
+           const payment = data.paymentData;
+
+const form = document.createElement("form");
+
+form.method = "POST";
+
+form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
+
+Object.entries(payment).forEach(([key, value]) => {
+
+    const input = document.createElement("input");
+
+    input.type = "hidden";
+
+    input.name = key;
+
+    input.value = value;
+
+    form.appendChild(input);
+
+});
+
+document.body.appendChild(form);
+
+form.submit();
+
+        } else {
+
+            toast.error(data.message);
+
+        }
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
 
 };
 
