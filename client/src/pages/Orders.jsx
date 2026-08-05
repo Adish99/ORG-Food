@@ -1,4 +1,5 @@
 import "./Orders.css";
+import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../store/Authentication";
 import { useNavigate } from "react-router-dom";
@@ -37,6 +38,83 @@ export const Orders = () => {
       setLoading(false);
     }
   };
+
+  const initiateEsewaPayment = async (orderId) => {
+
+    try {
+
+        const res = await fetch(
+
+            "http://localhost:8000/api/payment/esewa/initiate",
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json",
+
+                    Authorization: userAuthToken
+
+                },
+
+                body: JSON.stringify({
+
+                    orderId
+
+                })
+
+            }
+
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) {
+
+            return toast.error(data.message);
+
+        }
+
+        const form = document.createElement("form");
+
+        form.method = "POST";
+
+        form.action =
+            "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
+
+        Object.entries(data.paymentData).forEach(
+
+            ([key, value]) => {
+
+                const input = document.createElement("input");
+
+                input.type = "hidden";
+
+                input.name = key;
+
+                input.value = value;
+
+                form.appendChild(input);
+
+            }
+
+        );
+
+        document.body.appendChild(form);
+
+        form.submit();
+
+    } catch (error) {
+
+        console.log(error);
+
+        toast.error("Unable to initiate payment.");
+
+    }
+
+};
 
   useEffect(() => {
     getOrders();
@@ -146,14 +224,27 @@ export const Orders = () => {
 
               <div className="footer-info">
 
-                <p>
+               <p>
 
-                  <strong>Payment:</strong>{" "}
+<strong>Payment Method:</strong>
 
-                  {order.paymentMethod}
+{order.paymentMethod}
 
-                </p>
+</p>
 
+<p>
+
+<strong>Payment Status:</strong>
+
+<span
+    className={`payment-status ${order.paymentStatus.toLowerCase()}`}
+>
+
+    {order.paymentStatus}
+
+</span>
+
+</p>
                 <p>
 
                   <strong>Items:</strong>{" "}
@@ -182,6 +273,34 @@ export const Orders = () => {
 >
 View Details
 </button>
+{
+
+order.paymentMethod === "Esewa" &&
+order.paymentStatus !== "Paid" && (
+
+<button
+
+    className="pay-again-btn"
+
+    onClick={() => initiateEsewaPayment(order._id)}
+
+>
+
+{
+
+order.paymentStatus === "Failed"
+
+? "Retry Payment"
+
+: "Pay with eSewa"
+
+}
+
+</button>
+
+)
+
+}
 
           </div>
 

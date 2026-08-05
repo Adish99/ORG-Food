@@ -38,6 +38,7 @@ const verifySignature = (decodedData) => {
 
 };
 
+
 // ====================================
 // Initiate eSewa Payment
 // ====================================
@@ -66,9 +67,12 @@ const initiateEsewaPaymentController = async (req, res) => {
 
         }
 
+        // Generate unique transaction UUID for every payment attempt
+        const transactionUUID = `${order._id}-${Date.now()}`;
+
         const message =
             `total_amount=${order.totalAmount},` +
-            `transaction_uuid=${order._id},` +
+            `transaction_uuid=${transactionUUID},` +
             `product_code=${process.env.ESEWA_MERCHANT_CODE}`;
 
         const signature = generateSignature(
@@ -87,7 +91,7 @@ const initiateEsewaPaymentController = async (req, res) => {
 
             total_amount: order.totalAmount,
 
-            transaction_uuid: order._id.toString(),
+            transaction_uuid: transactionUUID,
 
             product_code: process.env.ESEWA_MERCHANT_CODE,
 
@@ -186,11 +190,9 @@ const verifyEsewaPaymentController = async (req, res) => {
 
         // Find Order
 
-        const order = await Order.findById(
+        const orderId = decodedData.transaction_uuid.split("-")[0];
 
-            decodedData.transaction_uuid
-
-        );
+const order = await Order.findById(orderId);
 
         if (!order) {
 

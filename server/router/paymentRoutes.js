@@ -13,7 +13,7 @@ const {
 
 router.post(
 
-    "/esewa",
+    "/esewa/initiate",
 
     authMiddleware,
 
@@ -22,7 +22,7 @@ router.post(
 );
 router.get(
 
-    "/esewa/success",
+    "/esewa/verify",
 
     verifyEsewaPaymentController
 
