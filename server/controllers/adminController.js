@@ -29,6 +29,93 @@ const deliveredOrders = await Order.find({
             0
 
         );
+        // Monthly Revenue
+const monthlyRevenue = await Order.aggregate([
+
+    {
+        $match: {
+            orderStatus: "Delivered"
+        }
+    },
+
+    {
+        $group: {
+
+            _id: {
+
+                year: { $year: "$createdAt" },
+
+                month: { $month: "$createdAt" }
+
+            },
+
+            revenue: {
+
+                $sum: "$totalAmount"
+
+            }
+
+        }
+    },
+
+    {
+        $sort: {
+
+            "_id.year": 1,
+
+            "_id.month": 1
+
+        }
+    }
+
+]);
+const monthNames = [
+
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+
+];
+
+const formattedMonthlyRevenue = monthlyRevenue.map((item) => ({
+
+    month: monthNames[item._id.month - 1],
+
+    revenue: item.revenue
+
+}));
+const formattedMonthlyOrders = monthlyOrders.map((item) => ({
+
+    month: monthNames[item._id.month - 1],
+
+    orders: item.orders
+
+}));
+
+const formattedOrderStatus = orderStatusData.map((item) => ({
+
+    status: item._id,
+
+    count: item.count
+
+}));
+
+const formattedTopProducts = topSellingProducts.map((item) => ({
+
+    product: item.productName,
+
+    sold: item.totalSold
+
+}));
 
         // Latest 5 Orders
 const recentOrders = await Order.find()
@@ -48,21 +135,126 @@ const recentUsers = await User.find()
 
     .limit(5);
 
-        return res.status(200).json({
+   return res.status(200).json({
 
-            totalUsers,
+    totalUsers,
 
-            totalProducts,
+    totalProducts,
 
-            totalCategories,
+    totalCategories,
 
-            totalOrders,
+    totalOrders,
 
-            totalRevenue,
-            recentOrders,
-            recentUsers
+    totalRevenue,
 
-        });
+    recentOrders,
+
+    recentUsers,
+
+    monthlyRevenue: formattedMonthlyRevenue,
+
+    monthlyOrders: formattedMonthlyOrders,
+
+    orderStatusData: formattedOrderStatus,
+
+    topSellingProducts: formattedTopProducts
+
+});
+
+// Monthly Orders
+const monthlyOrders = await Order.aggregate([
+
+    {
+        $group: {
+
+            _id: {
+
+                year: { $year: "$createdAt" },
+
+                month: { $month: "$createdAt" }
+
+            },
+
+            orders: {
+
+                $sum: 1
+
+            }
+
+        }
+    },
+
+    {
+        $sort: {
+
+            "_id.year": 1,
+
+            "_id.month": 1
+
+        }
+    }
+
+]);
+
+// Order Status Distribution
+const orderStatusData = await Order.aggregate([
+
+    {
+        $group: {
+
+            _id: "$orderStatus",
+
+            count: {
+                $sum: 1
+            }
+
+        }
+
+    },
+
+    {
+        $sort: {
+            _id: 1
+        }
+    }
+
+]);
+
+// Top Selling Products
+const topSellingProducts = await Order.aggregate([
+
+    {
+        $unwind: "$products"
+    },
+
+    {
+        $group: {
+
+            _id: "$products.productId",
+
+            productName: {
+                $first: "$products.name"
+            },
+
+            totalSold: {
+                $sum: "$products.quantity"
+            }
+
+        }
+
+    },
+
+    {
+        $sort: {
+            totalSold: -1
+        }
+    },
+
+    {
+        $limit: 5
+    }
+
+]);
 
     } catch (error) {
 
