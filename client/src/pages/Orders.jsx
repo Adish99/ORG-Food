@@ -10,6 +10,7 @@ export const Orders = () => {
 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [payingOrder, setPayingOrder] = useState("");
 
   const navigate=useNavigate();
   
@@ -42,7 +43,7 @@ export const Orders = () => {
   const initiateEsewaPayment = async (orderId) => {
 
     try {
-
+setPayingOrder(orderId);
         const res = await fetch(
 
             "http://localhost:8000/api/payment/esewa/initiate",
@@ -107,7 +108,7 @@ export const Orders = () => {
         form.submit();
 
     } catch (error) {
-
+setPayingOrder("");
         console.log(error);
 
         toast.error("Unable to initiate payment.");
@@ -224,23 +225,43 @@ export const Orders = () => {
 
               <div className="footer-info">
 
-               <p>
+       <p>
 
-<strong>Payment Method:</strong>
+<strong>Payment Method :</strong>
 
-{order.paymentMethod}
+{
+
+order.paymentMethod === "COD"
+
+? "Cash On Delivery"
+
+: order.paymentMethod
+
+}
 
 </p>
 
 <p>
 
-<strong>Payment Status:</strong>
+<strong>Payment Status :</strong>
 
 <span
     className={`payment-status ${order.paymentStatus.toLowerCase()}`}
 >
 
-    {order.paymentStatus}
+    {
+
+    order.paymentStatus === "Paid"
+
+        ? "🟢 Paid"
+
+        : order.paymentStatus === "Failed"
+
+        ? "🔴 Failed"
+
+        : "🟡 Pending"
+
+    }
 
 </span>
 
@@ -279,20 +300,20 @@ order.paymentMethod === "Esewa" &&
 order.paymentStatus !== "Paid" && (
 
 <button
-
-    className="pay-again-btn"
-
-    onClick={() => initiateEsewaPayment(order._id)}
-
+className="pay-again-btn"
+disabled={payingOrder === order._id}
+onClick={() =>
+initiateEsewaPayment(order._id)
+}
 >
 
 {
 
-order.paymentStatus === "Failed"
+payingOrder === order._id
 
-? "Retry Payment"
+? "Redirecting..."
 
-: "Pay with eSewa"
+: "💳 Pay Now"
 
 }
 
