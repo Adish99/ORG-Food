@@ -168,3 +168,28 @@
     background:#e74c3c;
 
 }
+
+.dashboard-charts{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:25px;
+    margin:35px 0;
+}
+
+.chart-card{
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.chart-card h2{
+    margin-bottom:20px;
+    font-size:20px;
+}
+
+@media(max-width:992px){
+    .dashboard-charts{
+        grid-template-columns:1fr;
+    }
+}

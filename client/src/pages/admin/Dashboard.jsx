@@ -1,4 +1,25 @@
+
 import "./Dashboard.css";
+import {
+
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+
+    BarChart,
+    Bar,
+
+    PieChart,
+    Pie,
+    Cell,
+
+    Legend
+
+} from "recharts";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../../store/Authentication";
 import { useNavigate } from "react-router-dom";
@@ -10,69 +31,61 @@ export const Dashboard = () => {
 
     const navigate = useNavigate();
 
-    const [stats, setStats] = useState({
+    const [dashboardData, setDashboardData] = useState({
+    totalUsers: 0,
+    totalProducts: 0,
+    totalCategories: 0,
+    totalOrders: 0,
+    totalRevenue: 0,
 
-        totalUsers: 0,
+    recentOrders: [],
+    recentUsers: [],
 
-        totalProducts: 0,
-
-        totalCategories: 0,
-
-        totalOrders: 0,
-
-        totalRevenue: 0,
-
-        recentOrders: [],
-
-        recentUsers: []
-
-    });
+    monthlyRevenue: [],
+    monthlyOrders: [],
+    orderStatusData: [],
+    topSellingProducts: []
+});
 
     const [loading, setLoading] = useState(true);
 
-    const getDashboardStats = async () => {
+   const getDashboardData = async () => {
+setLoading(true);
+    try {
 
-        try {
+        const res = await fetch(
 
-            const res = await fetch(
+            "http://localhost:8000/api/admin/dashboard",
 
-                "http://localhost:8000/api/admin/dashboard",
-
-                {
-
-                    headers: {
-
-                        Authorization: userAuthToken
-
-                    }
-
+            {
+                headers: {
+                    Authorization: userAuthToken
                 }
-
-            );
-
-            const data = await res.json();
-
-            if (res.ok) {
-
-                setStats(data);
-
             }
 
-        } catch (error) {
+        );
 
-            console.log(error);
+        const data = await res.json();
 
-        } finally {
+        if (res.ok) {
 
-            setLoading(false);
+            setDashboardData(data);
 
         }
 
-    };
+    } catch (error) {
+
+        console.log(error);
+
+    }finally{
+        setLoading(false);
+    }
+
+};
 
     useEffect(() => {
 
-        getDashboardStats();
+        getDashboardData();
 
     }, []);
 
@@ -102,7 +115,7 @@ export const Dashboard = () => {
 
                     <h3>Total Users</h3>
 
-                    <h1>{stats.totalUsers}</h1>
+                    <h1>{dashboardData.totalUsers}</h1>
 
                 </div>
 
@@ -116,7 +129,7 @@ export const Dashboard = () => {
 
                     <h3>Total Products</h3>
 
-                    <h1>{stats.totalProducts}</h1>
+                    <h1>{dashboardData.totalProducts}</h1>
 
                 </div>
 
@@ -130,7 +143,7 @@ export const Dashboard = () => {
 
                     <h3>Total Categories</h3>
 
-                    <h1>{stats.totalCategories}</h1>
+                    <h1>{dashboardData.totalCategories}</h1>
 
                 </div>
 
@@ -144,7 +157,7 @@ export const Dashboard = () => {
 
                     <h3>Total Orders</h3>
 
-                    <h1>{stats.totalOrders}</h1>
+                    <h1>{dashboardData.totalOrders}</h1>
 
                 </div>
 
@@ -152,11 +165,175 @@ export const Dashboard = () => {
 
                     <h3>Total Revenue</h3>
 
-                    <h1>Rs. {stats.totalRevenue}</h1>
+                    <h1>Rs. {dashboardData.totalRevenue}</h1>
 
                 </div>
 
             </div>
+
+            {/* Dashboard Charts */}
+
+<div className="dashboard-charts">
+
+    {/* Monthly Revenue */}
+
+    <div className="chart-card">
+
+        <h2>Monthly Revenue</h2>
+
+        <ResponsiveContainer width="100%" height={300}>
+
+            <LineChart data={dashboardData.monthlyRevenue}>
+
+                <CartesianGrid strokeDasharray="3 3" />
+
+                <XAxis dataKey="month" />
+
+                <YAxis />
+
+                <Tooltip />
+
+                <Line
+
+                    type="monotone"
+
+                    dataKey="revenue"
+
+                    stroke="#4CAF50"
+
+                    strokeWidth={3}
+
+                />
+
+            </LineChart>
+
+        </ResponsiveContainer>
+
+    </div>
+
+    {/* Monthly Orders */}
+
+    <div className="chart-card">
+
+        <h2>Monthly Orders</h2>
+
+        <ResponsiveContainer width="100%" height={300}>
+
+            <BarChart data={dashboardData.monthlyOrders}>
+
+                <CartesianGrid strokeDasharray="3 3" />
+
+                <XAxis dataKey="month" />
+
+                <YAxis />
+
+                <Tooltip />
+
+                <Bar
+
+                    dataKey="orders"
+
+                    fill="#2196F3"
+
+                />
+
+            </BarChart>
+
+        </ResponsiveContainer>
+
+    </div>
+
+    {/* Order Status */}
+
+    <div className="chart-card">
+
+        <h2>Order Status</h2>
+
+        <ResponsiveContainer width="100%" height={300}>
+
+            <PieChart>
+
+                <Pie
+
+                    data={dashboardData.orderStatusData}
+
+                    dataKey="count"
+
+                    nameKey="status"
+
+                    outerRadius={100}
+
+                    label
+
+                >
+
+                    <Cell fill="#FF9800" />
+
+                    <Cell fill="#4CAF50" />
+
+                    <Cell fill="#2196F3" />
+
+                    <Cell fill="#F44336" />
+
+                    <Cell fill="#9C27B0" />
+
+                </Pie>
+
+                <Tooltip />
+
+                <Legend />
+
+            </PieChart>
+
+        </ResponsiveContainer>
+
+    </div>
+
+    {/* Top Selling Products */}
+
+    <div className="chart-card">
+
+        <h2>Top Selling Products</h2>
+
+        <ResponsiveContainer width="100%" height={300}>
+
+            <BarChart
+
+                data={dashboardData.topSellingProducts}
+
+                layout="vertical"
+
+            >
+
+                <CartesianGrid strokeDasharray="3 3" />
+
+                <XAxis type="number" />
+
+                <YAxis
+
+                    dataKey="product"
+
+                    type="category"
+
+                />
+
+                <Tooltip />
+
+                <Bar
+
+                    dataKey="sold"
+
+                    fill="#673AB7"
+
+                />
+
+            </BarChart>
+
+        </ResponsiveContainer>
+
+    </div>
+
+</div>
 
             {/* Recent Orders */}
 
@@ -186,9 +363,9 @@ export const Dashboard = () => {
 
                         {
 
-                            stats.recentOrders.length > 0 ? (
+                            dashboardData.recentOrders.length > 0 ? (
 
-                                stats.recentOrders.map((order) => (
+                                dashboardData.recentOrders.map((order) => (
 
                                     <tr
 
@@ -288,9 +465,9 @@ export const Dashboard = () => {
 
                         {
 
-                            stats.recentUsers.length > 0 ? (
+                            dashboardData.recentUsers.length > 0 ? (
 
-                                stats.recentUsers.map((user) => (
+                                dashboardData.recentUsers.map((user) => (
 
                                     <tr
 

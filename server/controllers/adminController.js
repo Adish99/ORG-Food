@@ -6,255 +6,281 @@ const Order = require("../models/Order");
 const getDashboardStatsController = async (req, res) => {
     try {
 
+        // ==========================
+        // Basic Statistics
+        // ==========================
+
         const totalUsers = await User.countDocuments();
 
-const totalProducts = await Product.countDocuments();
+        const totalProducts = await Product.countDocuments();
 
-const totalCategories = await Category.countDocuments();
+        const totalCategories = await Category.countDocuments();
 
-const totalOrders = await Order.countDocuments();
+        const totalOrders = await Order.countDocuments();
 
+        // ==========================
+        // Total Revenue
+        // ==========================
 
-// Get all delivered orders
-const deliveredOrders = await Order.find({
-    orderStatus: "Delivered"
-});
-
-// Calculate total revenue
+        const deliveredOrders = await Order.find({
+            orderStatus: "Delivered"
+        });
 
         const totalRevenue = deliveredOrders.reduce(
-
             (sum, order) => sum + order.totalAmount,
-
             0
-
         );
+
+        // ==========================
         // Monthly Revenue
-const monthlyRevenue = await Order.aggregate([
+        // ==========================
 
-    {
-        $match: {
-            orderStatus: "Delivered"
-        }
-    },
+        const monthlyRevenue = await Order.aggregate([
 
-    {
-        $group: {
-
-            _id: {
-
-                year: { $year: "$createdAt" },
-
-                month: { $month: "$createdAt" }
-
+            {
+                $match: {
+                    orderStatus: "Delivered"
+                }
             },
 
-            revenue: {
+            {
+                $group: {
+                    _id: {
+                        year: { $year: "$createdAt" },
+                        month: { $month: "$createdAt" }
+                    },
 
-                $sum: "$totalAmount"
-
-            }
-
-        }
-    },
-
-    {
-        $sort: {
-
-            "_id.year": 1,
-
-            "_id.month": 1
-
-        }
-    }
-
-]);
-const monthNames = [
-
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
-
-];
-
-const formattedMonthlyRevenue = monthlyRevenue.map((item) => ({
-
-    month: monthNames[item._id.month - 1],
-
-    revenue: item.revenue
-
-}));
-const formattedMonthlyOrders = monthlyOrders.map((item) => ({
-
-    month: monthNames[item._id.month - 1],
-
-    orders: item.orders
-
-}));
-
-const formattedOrderStatus = orderStatusData.map((item) => ({
-
-    status: item._id,
-
-    count: item.count
-
-}));
-
-const formattedTopProducts = topSellingProducts.map((item) => ({
-
-    product: item.productName,
-
-    sold: item.totalSold
-
-}));
-
-        // Latest 5 Orders
-const recentOrders = await Order.find()
-
-    .populate("userId", "username")
-
-    .sort({ createdAt: -1 })
-
-    .limit(5);
-
-// Latest 5 Users
-const recentUsers = await User.find()
-
-    .select("username email createdAt")
-
-    .sort({ createdAt: -1 })
-
-    .limit(5);
-
-   return res.status(200).json({
-
-    totalUsers,
-
-    totalProducts,
-
-    totalCategories,
-
-    totalOrders,
-
-    totalRevenue,
-
-    recentOrders,
-
-    recentUsers,
-
-    monthlyRevenue: formattedMonthlyRevenue,
-
-    monthlyOrders: formattedMonthlyOrders,
-
-    orderStatusData: formattedOrderStatus,
-
-    topSellingProducts: formattedTopProducts
-
-});
-
-// Monthly Orders
-const monthlyOrders = await Order.aggregate([
-
-    {
-        $group: {
-
-            _id: {
-
-                year: { $year: "$createdAt" },
-
-                month: { $month: "$createdAt" }
-
+                    revenue: {
+                        $sum: "$totalAmount"
+                    }
+                }
             },
 
-            orders: {
-
-                $sum: 1
-
+            {
+                $sort: {
+                    "_id.year": 1,
+                    "_id.month": 1
+                }
             }
 
-        }
-    },
+        ]);
 
-    {
-        $sort: {
+        // ==========================
+        // Monthly Orders
+        // ==========================
 
-            "_id.year": 1,
+        const monthlyOrders = await Order.aggregate([
 
-            "_id.month": 1
+            {
+                $group: {
 
-        }
-    }
+                    _id: {
+                        year: { $year: "$createdAt" },
+                        month: { $month: "$createdAt" }
+                    },
 
-]);
+                    orders: {
+                        $sum: 1
+                    }
 
-// Order Status Distribution
-const orderStatusData = await Order.aggregate([
-
-    {
-        $group: {
-
-            _id: "$orderStatus",
-
-            count: {
-                $sum: 1
-            }
-
-        }
-
-    },
-
-    {
-        $sort: {
-            _id: 1
-        }
-    }
-
-]);
-
-// Top Selling Products
-const topSellingProducts = await Order.aggregate([
-
-    {
-        $unwind: "$products"
-    },
-
-    {
-        $group: {
-
-            _id: "$products.productId",
-
-            productName: {
-                $first: "$products.name"
+                }
             },
 
-            totalSold: {
-                $sum: "$products.quantity"
+            {
+                $sort: {
+                    "_id.year": 1,
+                    "_id.month": 1
+                }
             }
 
-        }
+        ]);
 
-    },
+        // ==========================
+        // Order Status Distribution
+        // ==========================
 
-    {
-        $sort: {
-            totalSold: -1
-        }
-    },
+        const orderStatusData = await Order.aggregate([
 
-    {
-        $limit: 5
-    }
+            {
+                $group: {
 
-]);
+                    _id: "$orderStatus",
+
+                    count: {
+                        $sum: 1
+                    }
+
+                }
+            },
+
+            {
+                $sort: {
+                    _id: 1
+                }
+            }
+
+        ]);
+
+        // ==========================
+        // Top Selling Products
+        // ==========================
+
+        const topSellingProducts = await Order.aggregate([
+
+            {
+                $unwind: "$products"
+            },
+
+            {
+                $group: {
+
+                    _id: "$products.productId",
+
+                    productName: {
+                        $first: "$products.name"
+                    },
+
+                    totalSold: {
+                        $sum: "$products.quantity"
+                    }
+
+                }
+            },
+
+            {
+                $sort: {
+                    totalSold: -1
+                }
+            },
+
+            {
+                $limit: 5
+            }
+
+        ]);
+
+        // ==========================
+        // Month Names
+        // ==========================
+
+        const monthNames = [
+
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+
+        ];
+
+        // ==========================
+        // Format Monthly Revenue
+        // ==========================
+
+        const formattedMonthlyRevenue = monthlyRevenue.map((item) => ({
+
+            month: monthNames[item._id.month - 1],
+
+            revenue: item.revenue
+
+        }));
+
+        // ==========================
+        // Format Monthly Orders
+        // ==========================
+
+        const formattedMonthlyOrders = monthlyOrders.map((item) => ({
+
+            month: monthNames[item._id.month - 1],
+
+            orders: item.orders
+
+        }));
+
+        // ==========================
+        // Format Order Status
+        // ==========================
+
+        const formattedOrderStatus = orderStatusData.map((item) => ({
+
+            status: item._id,
+
+            count: item.count
+
+        }));
+
+        // ==========================
+        // Format Top Products
+        // ==========================
+
+        const formattedTopProducts = topSellingProducts.map((item) => ({
+
+            product: item.productName,
+
+            sold: item.totalSold
+
+        }));
+
+        // ==========================
+        // Recent Orders
+        // ==========================
+
+        const recentOrders = await Order.find()
+
+            .populate("userId", "username")
+
+            .sort({ createdAt: -1 })
+
+            .limit(5);
+
+        // ==========================
+        // Recent Users
+        // ==========================
+
+        const recentUsers = await User.find()
+
+            .select("username email createdAt")
+
+            .sort({ createdAt: -1 })
+
+            .limit(5);
+
+        // ==========================
+        // Final Response
+        // ==========================
+
+        return res.status(200).json({
+
+            totalUsers,
+
+            totalProducts,
+
+            totalCategories,
+
+            totalOrders,
+
+            totalRevenue,
+
+            recentOrders,
+
+            recentUsers,
+
+            monthlyRevenue: formattedMonthlyRevenue,
+
+            monthlyOrders: formattedMonthlyOrders,
+
+            orderStatusData: formattedOrderStatus,
+
+            topSellingProducts: formattedTopProducts
+
+        });
 
     } catch (error) {
 
@@ -267,7 +293,8 @@ const topSellingProducts = await Order.aggregate([
         });
 
     }
-
 };
 
-module.exports={getDashboardStatsController};
+module.exports = {
+    getDashboardStatsController
+};
