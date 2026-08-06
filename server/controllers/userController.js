@@ -930,7 +930,7 @@ const updateUserRoleController = async (req, res) => {
 };
 
 // ====================================
-// Delete User
+// Delete User Controller
 // ====================================
 
 const deleteUserController = async (req, res) => {
