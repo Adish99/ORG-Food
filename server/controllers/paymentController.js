@@ -188,7 +188,7 @@ const verifyEsewaPaymentController = async (req, res) => {
 
         );
 
-        // Find Order
+        // Find Order with the help of orderId
 
         const orderId = decodedData.transaction_uuid.split("-")[0];
 
@@ -202,7 +202,7 @@ const order = await Order.findById(orderId);
 
         }
 
-        // Payment Failed
+        // Payment Failed Condition
 
         if (verificationResponse.data.status !== "COMPLETE") {
 
