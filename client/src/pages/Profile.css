@@ -295,3 +295,13 @@ text-align:center;
 .profile-upload-label input {
     display: none;
 }
+.remove-profile-btn {
+    border: 1px solid #d32f2f !important;
+    background: white !important;
+    color: #d32f2f !important;
+}
+
+.remove-profile-btn:hover {
+    background: #ffebee !important;
+    color: #b71c1c !important;
+}

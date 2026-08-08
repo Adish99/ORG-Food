@@ -5,7 +5,10 @@ import { toast } from "react-toastify";
 
 export const Profile = () => {
 
-    const { userAuthToken } = UseAuth();
+  const {
+    userAuthToken,
+    updateUser
+} = UseAuth();
 
    const [profile, setProfile] = useState({
 
@@ -254,14 +257,18 @@ const handleImageChange = (e) => {
             "Profile picture updated successfully."
         );
 
-        setImagePreview(data.profileImage);
-        setProfile((prev) => ({
-            ...prev,
-            profileImage: data.profileImage
-        }));
+      setImagePreview(data.profileImage);
 
+setProfile((prev) => ({
+    ...prev,
+    profileImage: data.profileImage
+}));
 
-        setSelectedImage(null);
+updateUser({
+    profileImage: data.profileImage
+});
+
+setSelectedImage(null);
 
     } catch (error) {
 
@@ -279,6 +286,63 @@ const handleImageChange = (e) => {
         setUploadingImage(false);
 
     }
+};
+
+const handleRemoveProfileImage = async () => {
+
+    try {
+
+        const res = await fetch(
+            "http://localhost:8000/api/profile/profile-image",
+            {
+                method: "DELETE",
+
+                headers: {
+                    Authorization: userAuthToken
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) {
+
+            toast.error(
+                data.message || "Failed to remove profile picture."
+            );
+
+            return;
+        }
+
+        toast.success(data.message);
+
+       setImagePreview("");
+
+setSelectedImage(null);
+
+setProfile((prev) => ({
+    ...prev,
+    profileImage: "",
+    profileImagePublicId: ""
+}));
+
+updateUser({
+    profileImage: ""
+});
+
+    } catch (error) {
+
+        console.log(
+            "Remove Profile Image Error:",
+            error
+        );
+
+        toast.error(
+            "Something went wrong."
+        );
+
+    }
+
 };
 
     const handlePasswordSubmit = async (e) => {
@@ -344,8 +408,9 @@ const handleImageChange = (e) => {
     return (
 
        <div className="profile-page">
-      <div className="profile-picture-section">
+     <div className="profile-picture-section">
 
+    {/* Profile Picture */}
     <div className="profile-picture">
 
         {imagePreview ? (
@@ -358,27 +423,33 @@ const handleImageChange = (e) => {
         ) : (
 
             <div className="default-avatar">
+
                 {profile.username
                     ?.charAt(0)
                     .toUpperCase() || "A"}
+
             </div>
 
         )}
 
     </div>
 
-  <label className="profile-upload-label">
 
-    Choose Profile Picture
+    {/* Choose Image */}
+    <label className="profile-upload-label">
 
-    <input
-        type="file"
-        accept="image/*"
-        onChange={handleImageChange}
-    />
+        Choose Profile Picture
 
-</label>
+        <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+        />
 
+    </label>
+
+
+    {/* Upload */}
     {selectedImage && (
 
         <button
@@ -391,6 +462,22 @@ const handleImageChange = (e) => {
                 ? "Uploading..."
                 : "Upload Profile Picture"
             }
+
+        </button>
+
+    )}
+
+
+    {/* Remove */}
+    {imagePreview && (
+
+        <button
+            type="button"
+            className="remove-profile-btn"
+            onClick={handleRemoveProfileImage}
+        >
+
+            Remove Profile Picture
 
         </button>
 
@@ -473,11 +560,32 @@ onChange={handleChange}
 
 </div>
 
-<button className="update-btn">
+{selectedImage && (
 
-Update Profile
+    <button
+        type="button"
+        onClick={handleProfileImageUpload}
+        disabled={uploadingImage}
+    >
+        {uploadingImage
+            ? "Uploading..."
+            : "Upload Profile Picture"
+        }
+    </button>
 
-</button>
+)}
+
+{imagePreview && (
+
+    <button
+        type="button"
+        className="remove-profile-btn"
+        onClick={handleRemoveProfileImage}
+    >
+        Remove Profile Picture
+    </button>
+
+)}
 
 </form>
 

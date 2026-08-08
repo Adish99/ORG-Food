@@ -48,6 +48,21 @@ export const AuthProvider = ({ children }) => {
         setUser(userData);
 
     };
+    // ==========================
+// Update Logged In User
+// ==========================
+
+const updateUser = (updatedData) => {
+
+    setUser((prevUser) => ({
+
+        ...prevUser,
+
+        ...updatedData
+
+    }));
+
+};
 
     // ==========================
     // Logout
@@ -92,6 +107,7 @@ export const AuthProvider = ({ children }) => {
             if (res.ok) {
 
                 const data = await res.json();
+                console.log("GET USER RESPONSE:", data);
 
                 setUser(data);
 
@@ -128,25 +144,27 @@ export const AuthProvider = ({ children }) => {
     return (
 
         <AuthContext.Provider
-            value={{
+          value={{
 
-                token,
+    token,
 
-                user,
+    user,
 
-                loading,
+    loading,
 
-                isLoggedIn,
+    isLoggedIn,
 
-                userAuthToken,
+    userAuthToken,
 
-                storeTokenInLs,
+    storeTokenInLs,
 
-                storeUser,
+    storeUser,
 
-                userLogout
+    updateUser,
 
-            }}
+    userLogout
+
+}}
         >
 
             {children}

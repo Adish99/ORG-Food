@@ -4,12 +4,20 @@ import { UseAuth } from "../../store/Authentication";
 
 export const Navbar = () => {
 
-    const { isLoggedIn, user,loading } = UseAuth();
+    const {
+        isLoggedIn,
+        user,
+        loading
+    } = UseAuth();
+
     console.log({
-    isLoggedIn,
-    user,
-    loading
-});
+        isLoggedIn,
+        user,
+        loading
+    });
+    if (loading) {
+        return null;
+    }
 
     return (
 
@@ -23,29 +31,28 @@ export const Navbar = () => {
 
             </div>
 
+
             <ul className="nav-links">
 
                 <li>
-
                     <NavLink to="/">
                         Home
                     </NavLink>
-
                 </li>
 
-                <li>
 
+                <li>
                     <NavLink to="/products">
                         Products
                     </NavLink>
-
                 </li>
 
-                {/* Show Admin Dashboard only to Admin */}
+
+                {/* Admin */}
 
                 {
-
-                    isLoggedIn && user?.role === "admin" && (
+                    isLoggedIn &&
+                    user?.role === "admin" && (
 
                         <li>
 
@@ -56,11 +63,12 @@ export const Navbar = () => {
                         </li>
 
                     )
-
                 }
 
-                {
 
+                {/* Cart */}
+
+                {
                     isLoggedIn && (
 
                         <li>
@@ -72,11 +80,12 @@ export const Navbar = () => {
                         </li>
 
                     )
-
                 }
 
-                {
 
+                {/* Orders */}
+
+                {
                     isLoggedIn && (
 
                         <li>
@@ -88,11 +97,12 @@ export const Navbar = () => {
                         </li>
 
                     )
-
                 }
 
-                {
 
+                {/* Checkout */}
+
+                {
                     isLoggedIn && (
 
                         <li>
@@ -104,11 +114,12 @@ export const Navbar = () => {
                         </li>
 
                     )
-
                 }
 
-                {
 
+                {/* Login / Register / Logout */}
+
+                {
                     !isLoggedIn ? (
 
                         <>
@@ -120,6 +131,7 @@ export const Navbar = () => {
                                 </NavLink>
 
                             </li>
+
 
                             <li>
 
@@ -140,26 +152,61 @@ export const Navbar = () => {
                             </NavLink>
 
                         </li>
-    
 
                     )
-        
-
                 }
-    {
-    isLoggedIn && (
 
-        <li>
 
-            <NavLink to="/profile">
-            My Account
-            </NavLink>
+                {/* My Account + Profile Picture */}
 
-        </li>
+                {
+                    isLoggedIn && (
 
-    )
+                        <li>
 
-}
+                            <NavLink
+                                to="/profile"
+                                className="account-link"
+                            >
+
+                                <div className="navbar-profile-picture">
+
+                                    {
+                                        user?.profileImage ? (
+
+                                            <img
+                                                src={user.profileImage}
+                                                alt="Profile"
+                                            />
+
+                                        ) : (
+
+                                            <div className="navbar-default-avatar">
+
+                                                {
+                                                    user?.username
+                                                        ?.charAt(0)
+                                                        .toUpperCase() || "A"
+                                                }
+
+                                            </div>
+
+                                        )
+
+                                    }
+
+                                </div>
+
+                                <span>
+                                    My Account
+                                </span>
+
+                            </NavLink>
+
+                        </li>
+
+                    )
+                }
 
             </ul>
 
