@@ -10,6 +10,7 @@ const orderRoutes=require("./router/orderRoutes");
 const categoryRoutes=require("./router/categoryRoutes");
 const adminRoutes=require("./router/adminRoutes");
 const paymentRoute=require("./router/paymentRoutes");
+const profileRoute=require("./router/profileRoutes");
 const app=express();
 const PORT=process.env.PORT_NO || 3000;
 
@@ -40,6 +41,7 @@ app.use("/api/order",orderRoutes);
 app.use("/api/category",categoryRoutes);
 app.use("/api",adminRoutes);
 app.use("/api/payment", paymentRoute);
+app.use("/api/profile", profileRoute);
 
 //Server Running
 app.listen(PORT,async()=>{

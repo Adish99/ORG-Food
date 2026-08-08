@@ -149,3 +149,149 @@ text-align:center;
     font-size:1.2rem;
 
 }
+/* ====================================
+   Profile Picture
+==================================== */
+
+.profile-picture-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.profile-picture {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #2e7d32;
+    background: #f1f8f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.default-avatar {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 50px;
+    font-weight: 600;
+    color: #2e7d32;
+    background: #e8f5e9;
+}
+
+
+/* ====================================
+   File Input
+==================================== */
+
+.profile-picture-section input[type="file"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    background: #fafafa;
+    cursor: pointer;
+}
+
+
+/* ====================================
+   Upload Button
+==================================== */
+
+.profile-picture-section button {
+    border: none;
+    border-radius: 8px;
+
+    padding: 11px 22px;
+
+    background: #2e7d32;
+    color: white;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.profile-picture-section button:hover {
+    background: #256b2a;
+    transform: translateY(-1px);
+}
+
+.profile-picture-section button:disabled {
+    background: #9e9e9e;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* ====================================
+   Mobile
+==================================== */
+
+@media (max-width: 600px) {
+
+    .profile-picture-section {
+        padding: 20px 10px;
+    }
+
+    .profile-picture {
+        width: 110px;
+        height: 110px;
+    }
+
+    .default-avatar {
+        font-size: 42px;
+    }
+
+    .profile-picture-section input[type="file"] {
+        max-width: 100%;
+    }
+
+}
+
+.profile-upload-label {
+    display: inline-block;
+
+    padding: 10px 20px;
+
+    border: 1px solid #2e7d32;
+    border-radius: 8px;
+
+    color: #2e7d32;
+    background: white;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.profile-upload-label:hover {
+    background: #e8f5e9;
+}
+
+.profile-upload-label input {
+    display: none;
+}

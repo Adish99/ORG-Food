@@ -7,17 +7,21 @@ export const Profile = () => {
 
     const { userAuthToken } = UseAuth();
 
-    const [profile, setProfile] = useState({
+   const [profile, setProfile] = useState({
 
-        username: "",
+    username: "",
 
-        email: "",
+    email: "",
 
-        phone: "",
+    phone: "",
 
-        address: ""
+    address: "",
 
-    });
+    profileImage: "",
+
+    profileImagePublicId: ""
+
+});
     const [passwordData, setPasswordData] = useState({
 
     currentPassword: "",
@@ -37,6 +41,9 @@ const [showPassword, setShowPassword] = useState({
     confirm: false
 
 });
+const [selectedImage, setSelectedImage] = useState(null);
+const [imagePreview, setImagePreview] = useState("");
+const [uploadingImage, setUploadingImage] = useState(false);
 
 const handlePasswordChange = (e) => {
 
@@ -61,7 +68,18 @@ const togglePassword = (field) => {
     }));
 
 };
+const handleImageChange = (e) => {
 
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    setSelectedImage(file);
+
+    setImagePreview(
+        URL.createObjectURL(file)
+    );
+};
     // ==========================
     // Get Profile
     // ==========================
@@ -88,11 +106,15 @@ const togglePassword = (field) => {
 
             const data = await res.json();
 
-            if (res.ok) {
+           if (res.ok) {
 
-                setProfile(data.user);
+    setProfile(data.user);
 
-            } else {
+    setImagePreview(
+        data.user.profileImage || ""
+    );
+
+}else {
 
                 toast.error(data.message);
 
@@ -187,6 +209,77 @@ const togglePassword = (field) => {
         }
 
     };
+    const handleProfileImageUpload = async () => {
+
+    if (!selectedImage) {
+        return;
+    }
+
+    try {
+
+        setUploadingImage(true);
+
+        const formData = new FormData();
+
+        formData.append(
+            "profileImage",
+            selectedImage
+        );
+
+        const res = await fetch(
+            "http://localhost:8000/api/profile/profile-image",
+            {
+                method: "PUT",
+
+                headers: {
+                    Authorization: userAuthToken
+                },
+
+                body: formData
+            }
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) {
+
+            toast.error(
+                data.message || "Image upload failed."
+            );
+
+            return;
+        }
+
+        toast.success(
+            "Profile picture updated successfully."
+        );
+
+        setImagePreview(data.profileImage);
+        setProfile((prev) => ({
+            ...prev,
+            profileImage: data.profileImage
+        }));
+
+
+        setSelectedImage(null);
+
+    } catch (error) {
+
+        console.log(
+            "Profile image upload error:",
+            error
+        );
+
+        toast.error(
+            "Something went wrong."
+        );
+
+    } finally {
+
+        setUploadingImage(false);
+
+    }
+};
 
     const handlePasswordSubmit = async (e) => {
 
@@ -251,7 +344,59 @@ const togglePassword = (field) => {
     return (
 
        <div className="profile-page">
+      <div className="profile-picture-section">
 
+    <div className="profile-picture">
+
+        {imagePreview ? (
+
+            <img
+                src={imagePreview}
+                alt="Profile"
+            />
+
+        ) : (
+
+            <div className="default-avatar">
+                {profile.username
+                    ?.charAt(0)
+                    .toUpperCase() || "A"}
+            </div>
+
+        )}
+
+    </div>
+
+  <label className="profile-upload-label">
+
+    Choose Profile Picture
+
+    <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+    />
+
+</label>
+
+    {selectedImage && (
+
+        <button
+            type="button"
+            onClick={handleProfileImageUpload}
+            disabled={uploadingImage}
+        >
+
+            {uploadingImage
+                ? "Uploading..."
+                : "Upload Profile Picture"
+            }
+
+        </button>
+
+    )}
+
+</div>
 <div className="profile-card">
 
 <div className="profile-header">

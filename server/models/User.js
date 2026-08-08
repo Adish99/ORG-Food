@@ -43,6 +43,14 @@ minlength:3
         type:String,
         required:true
     },
+    profileImage: {
+    type: String,
+    default: ""
+},
+profileImagePublicId: {
+    type: String,
+    default: ""
+},
 
 otp: {
     type: String,
