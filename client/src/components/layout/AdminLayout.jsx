@@ -1,7 +1,10 @@
 import "./AdminLayout.css";
 import { NavLink, Outlet } from "react-router-dom";
+import { UseAuth } from "../../store/Authentication";
 
 export const AdminLayout = () => {
+
+    const { user } = UseAuth();
 
     return (
 
@@ -17,6 +20,59 @@ export const AdminLayout = () => {
 
                 </div>
 
+
+                {/* ==========================
+                    Admin Profile
+                ========================== */}
+
+                <NavLink
+                    to="/admin/profile"
+                    className="admin-sidebar-profile"
+                >
+
+                    <div className="admin-sidebar-avatar">
+
+                        {user?.profileImage ? (
+
+                            <img
+                                src={user.profileImage}
+                                alt="Admin Profile"
+                            />
+
+                        ) : (
+
+                            <div className="admin-sidebar-default-avatar">
+
+                                {user?.username
+                                    ?.charAt(0)
+                                    .toUpperCase() || "A"}
+
+                            </div>
+
+                        )}
+
+                    </div>
+
+
+                    <div className="admin-sidebar-user-info">
+
+                        <h3>
+                            {user?.username || "Admin"}
+                        </h3>
+
+                        <span>
+                            {user?.role?.toUpperCase() || "ADMIN"}
+                        </span>
+
+                    </div>
+
+                </NavLink>
+
+
+                {/* ==========================
+                    Navigation
+                ========================== */}
+
                 <nav>
 
                     <NavLink
@@ -26,12 +82,14 @@ export const AdminLayout = () => {
                         📊 Dashboard
                     </NavLink>
 
+
                     <NavLink
                         to="/admin/products"
                         className="sidebar-link"
                     >
                         📦 Products
                     </NavLink>
+
 
                     <NavLink
                         to="/admin/categories"
@@ -40,6 +98,7 @@ export const AdminLayout = () => {
                         🗂 Categories
                     </NavLink>
 
+
                     <NavLink
                         to="/admin/orders"
                         className="sidebar-link"
@@ -47,30 +106,44 @@ export const AdminLayout = () => {
                         🛒 Orders
                     </NavLink>
 
+
                     <NavLink
                         to="/admin/users"
                         className="sidebar-link"
                     >
                         👥 Users
                     </NavLink>
-                    <NavLink to="/admin/messages" className="sidebar-link">
-    Customer Messages
-</NavLink>
 
-    <NavLink to="/admin/profile" className="sidebar-link">
 
-        👤 Profile
+                    <NavLink
+                        to="/admin/messages"
+                        className="sidebar-link"
+                    >
+                        📩 Customer Messages
+                    </NavLink>
 
-    </NavLink>
+
+                    <NavLink
+                        to="/admin/profile"
+                        className="sidebar-link"
+                    >
+                        👤 Profile
+                    </NavLink>
+
 
                     <NavLink
                         to="/"
                         className="sidebar-link"
                     >
-                        Home
+                        🏠 Home
                     </NavLink>
 
                 </nav>
+
+
+                {/* ==========================
+                    Logout
+                ========================== */}
 
                 <NavLink
                     to="/logout"
@@ -79,8 +152,8 @@ export const AdminLayout = () => {
                     🚪 Logout
                 </NavLink>
 
-
             </aside>
+
 
             <main className="admin-main">
 
