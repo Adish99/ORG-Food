@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ProductCard } from "../components/UI/ProductCard";
 import { UseAuth } from "../store/Authentication";
 import { Loader } from "../components/UI/Loader";
+import { ProductSkeleton } from "../components/UI/ProductSkeleton";
 
 export const Products = () => {
   const [products, setProducts] = useState([]);
@@ -77,9 +78,23 @@ export const Products = () => {
     getProducts();
   }, [search, category, page, sort]);
 
-  if(loading){
-    return <Loader/>
-  }
+ if (loading) {
+
+    return (
+
+        <div className="products-grid">
+
+            {Array.from({ length: 8 }).map((_, index) => (
+
+                <ProductSkeleton key={index} />
+
+            ))}
+
+        </div>
+
+    );
+
+}
 
   return (
     <div className="products-page">
