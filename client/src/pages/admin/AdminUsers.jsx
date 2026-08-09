@@ -2,6 +2,7 @@ import "./AdminUsers.css";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../../store/Authentication";
 import { Loader } from "../../components/UI/Loader";
+import { EmptyState } from "../../components/UI/EmptyState";
 
 export const AdminUsers = () => {
 
@@ -279,7 +280,11 @@ const deleteUser = async (id) => {
 
                                     <td colSpan="6">
 
-                                        No Users Found.
+                                       <EmptyState
+    icon="👥"
+    title="No users found"
+    message="There are currently no users matching your search."
+/>
 
                                     </td>
 

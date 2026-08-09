@@ -2,14 +2,16 @@ import "./Cart.css";
 import { useState } from "react";
 import { UseAuth } from "../store/Authentication";
 import { useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Loader } from "../components/UI/Loader";
+import { EmptyState } from "../components/UI/EmptyState";
 
 export const Cart=()=>{
 
     const [cart, setCart] = useState(null);
 const [loading, setLoading] = useState(true);
+const navigate=useNavigate();
 
 const {userAuthToken}=UseAuth();
 
@@ -119,7 +121,13 @@ if (loading) {
 }
 
 if (!cart || cart.products.length === 0) {
-  return <h2>Your cart is empty 🛒</h2>;
+  return  <EmptyState
+      icon="🛒"
+      title="Your cart is empty"
+      message="Looks like you haven't added anything to your cart yet."
+      buttonText="Continue Shopping"
+      onButtonClick={() => navigate("/products")}
+  />
 }
 
 const totalPrice = cart.products.reduce((total, item) => {

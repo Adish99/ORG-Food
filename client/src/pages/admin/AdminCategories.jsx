@@ -2,6 +2,7 @@ import "./AdminCategories.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../../components/UI/Loader";
+import { EmptyState } from "../../components/UI/EmptyState";
 
 export const AdminCategories = () => {
 
@@ -183,7 +184,13 @@ export const AdminCategories = () => {
 
                                         <td colSpan="2">
 
-                                            No Categories Found.
+                                         <EmptyState
+    icon="🗂️"
+    title="No categories yet"
+    message="Create your first product category to organize your store."
+    buttonText="Add Category"
+    onButtonClick={handleAddCategory}
+/>
 
                                         </td>
 

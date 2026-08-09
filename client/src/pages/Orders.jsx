@@ -5,6 +5,7 @@ import { UseAuth } from "../store/Authentication";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../components/UI/Loader";
 import { OrderSkeleton } from "../components/UI/OrderSkeleton";
+import { EmptyState } from "../components/UI/EmptyState";
 
 export const Orders = () => {
   const { userAuthToken } = UseAuth();
@@ -143,13 +144,13 @@ setPayingOrder("");
 
       {orders.length === 0 ? (
 
-        <div className="empty-orders">
-
-          <h2>No Orders Found</h2>
-
-          <p>You haven't placed any orders yet.</p>
-
-        </div>
+       <EmptyState
+    icon="📦"
+    title="No orders yet"
+    message="You haven't placed any orders yet. Start shopping and your orders will appear here."
+    buttonText="Browse Products"
+    onButtonClick={() => navigate("/products")}
+/>
 
       ) : (
 

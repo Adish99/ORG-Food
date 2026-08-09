@@ -2,6 +2,7 @@ import "./AdminMessages.css";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../../store/Authentication";
 import { toast } from "react-toastify";
+import { EmptyState } from "../../components/UI/EmptyState";
 
 export const AdminMessages = () => {
 
@@ -302,7 +303,11 @@ export const AdminMessages = () => {
 
                                 <td colSpan="6">
 
-                                    No customer messages found.
+                                   <EmptyState
+    icon="💬"
+    title="No customer messages"
+    message="You don't have any customer messages at the moment."
+/>
 
                                 </td>
 

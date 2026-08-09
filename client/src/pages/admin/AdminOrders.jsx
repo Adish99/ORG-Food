@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { UseAuth } from "../../store/Authentication";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../../components/UI/Loader";
+import { EmptyState } from "../../components/UI/EmptyState";
 
 export const AdminOrders = () => {
 
@@ -79,9 +80,12 @@ export const AdminOrders = () => {
 
                     (
 
-                        <h2 className="no-orders">
-                            No Orders Found.
-                        </h2>
+                      
+                          <EmptyState
+    icon="📋"
+    title="No orders found"
+    message="There are currently no orders matching your search or filter."
+/>
 
                     )
 

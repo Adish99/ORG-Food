@@ -4,6 +4,8 @@ import { ProductCard } from "../components/UI/ProductCard";
 import { UseAuth } from "../store/Authentication";
 import { Loader } from "../components/UI/Loader";
 import { ProductSkeleton } from "../components/UI/ProductSkeleton";
+import { EmptyState } from "../components/UI/EmptyState";
+import { useNavigate } from "react-router-dom";
 
 export const Products = () => {
   const [products, setProducts] = useState([]);
@@ -16,6 +18,7 @@ export const Products = () => {
   const [sort, setSort] = useState("");
 
   const { userAuthToken } = UseAuth();
+  const navigate=useNavigate();
 
   // Fetch Products
   const getProducts = async () => {
@@ -163,7 +166,13 @@ export const Products = () => {
                 />
               ))
             ) : (
-              <h2>No products found.</h2>
+             <EmptyState
+    icon="🔍"
+    title="No products found"
+    message="We couldn't find any products matching your search or selected category."
+    buttonText="View All Products"
+    onButtonClick={() => navigate("/products")}
+/>
             )}
           </div>
 
