@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import { UseAuth } from "../../store/Authentication";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../../components/UI/Loader";
+import { DashboardSkeleton } from "../../components/UI/DashboardSkeleton";
 
 export const Dashboard = () => {
 
@@ -89,11 +90,9 @@ setLoading(true);
 
     }, []);
 
-    if (loading) {
-
-        return <Loader/>
-
-    }
+   if (loading) {
+    return <DashboardSkeleton />;
+}
 
     return (
 

@@ -2,6 +2,7 @@ import "./AdminProfile.css";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../../store/Authentication";
 import { toast } from "react-toastify";
+import { AdminProfileSkeleton } from "../../components/UI/AdminProfileSkeleton";
 
 export const AdminProfile = () => {
 
@@ -45,13 +46,15 @@ export const AdminProfile = () => {
         confirm: false
     });
 
+    const [loading, setLoading] = useState(true);
+
 
     // ==========================
     // Get Profile
     // ==========================
 
     const getProfile = async () => {
-
+setLoading(true);
         try {
 
             const res = await fetch(
@@ -83,6 +86,8 @@ export const AdminProfile = () => {
 
             console.log(error);
 
+        }finally{
+            setLoading(false);
         }
 
     };
@@ -462,6 +467,10 @@ const handleRemoveProfileImage = async () => {
         }
 
     };
+
+    if(loading){
+        <AdminProfileSkeleton/>
+    }
 
 
     // ==========================

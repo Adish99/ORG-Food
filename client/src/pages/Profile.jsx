@@ -2,6 +2,7 @@ import "./Profile.css";
 import { useEffect, useState } from "react";
 import { UseAuth } from "../store/Authentication";
 import { toast } from "react-toastify";
+import { ProfileSkeleton } from "../components/UI/ProfileSkeleton";
 
 export const Profile = () => {
 
@@ -47,6 +48,7 @@ const [showPassword, setShowPassword] = useState({
 const [selectedImage, setSelectedImage] = useState(null);
 const [imagePreview, setImagePreview] = useState("");
 const [uploadingImage, setUploadingImage] = useState(false);
+const [loading, setLoading] = useState(true);
 
 const handlePasswordChange = (e) => {
 
@@ -88,7 +90,7 @@ const handleImageChange = (e) => {
     // ==========================
 
     const getProfile = async () => {
-
+setLoading(true);
         try {
 
             const res = await fetch(
@@ -127,6 +129,8 @@ const handleImageChange = (e) => {
 
             console.log(error);
 
+        }finally{
+            setLoading(false);
         }
 
     };
@@ -404,6 +408,11 @@ updateUser({
     }
 
 };
+
+if(loading){
+    return <ProfileSkeleton/>
+}
+
 
     return (
 

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { UseAuth } from "../store/Authentication";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../components/UI/Loader";
+import { OrderSkeleton } from "../components/UI/OrderSkeleton";
 
 export const Orders = () => {
   const { userAuthToken } = UseAuth();
@@ -121,9 +122,19 @@ setPayingOrder("");
     getOrders();
   }, []);
 
-  if (loading) {
-    return <Loader/>
-  }
+ if (loading) {
+    return (
+        <div className="orders-page">
+
+            <h1>📦 My Orders</h1>
+
+            {Array.from({ length: 3 }).map((_, index) => (
+                <OrderSkeleton key={index} />
+            ))}
+
+        </div>
+    );
+}
 
   return (
     <div className="orders-page">

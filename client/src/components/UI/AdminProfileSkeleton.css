@@ -1,0 +1,202 @@
+.admin-profile-skeleton {
+    padding: 30px;
+
+    background: #f5f7fa;
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 30px;
+}
+
+
+/* ==========================
+   Cards
+========================== */
+
+.admin-profile-skeleton-card {
+    background: #fff;
+
+    border-radius: 16px;
+
+    padding: 30px;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ==========================
+   Header
+========================== */
+
+.admin-profile-skeleton-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 24px;
+
+    margin-bottom: 30px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid #eee;
+}
+
+
+.admin-profile-skeleton-avatar {
+    width: 110px;
+    height: 110px;
+
+    border-radius: 50%;
+
+    flex-shrink: 0;
+}
+
+
+.admin-profile-skeleton-info {
+    flex: 1;
+}
+
+
+.admin-profile-skeleton-name {
+    width: 180px;
+    height: 28px;
+
+    margin-bottom: 12px;
+}
+
+
+.admin-profile-skeleton-email {
+    width: 220px;
+    height: 16px;
+
+    margin-bottom: 12px;
+}
+
+
+.admin-profile-skeleton-role {
+    width: 90px;
+    height: 30px;
+
+    border-radius: 20px;
+
+    margin-bottom: 15px;
+}
+
+
+.admin-profile-skeleton-message {
+    width: 70%;
+    height: 15px;
+}
+
+
+/* ==========================
+   Profile Form
+========================== */
+
+.admin-profile-skeleton-form {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+
+.admin-profile-skeleton-label {
+    width: 90px;
+    height: 15px;
+
+    margin-bottom: 10px;
+}
+
+
+.admin-profile-skeleton-input {
+    width: 100%;
+    height: 45px;
+}
+
+
+.admin-profile-skeleton-textarea {
+    width: 100%;
+    height: 100px;
+}
+
+
+.admin-profile-skeleton-button {
+    width: 180px;
+    height: 45px;
+
+    margin-top: 10px;
+}
+
+
+/* ==========================
+   Password
+========================== */
+
+.admin-profile-skeleton-password-title {
+    width: 190px;
+    height: 27px;
+
+    margin-bottom: 20px;
+}
+
+
+.admin-profile-skeleton-password-input {
+    width: 100%;
+    height: 45px;
+
+    margin-bottom: 15px;
+}
+
+
+/* ==========================
+   Mobile
+========================== */
+
+@media (max-width: 768px) {
+
+    .admin-profile-skeleton {
+        padding: 15px;
+    }
+
+
+    .admin-profile-skeleton-card {
+        padding: 20px;
+    }
+
+
+    .admin-profile-skeleton-header {
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+
+    .admin-profile-skeleton-info {
+        width: 100%;
+    }
+
+
+    .admin-profile-skeleton-name,
+    .admin-profile-skeleton-email,
+    .admin-profile-skeleton-role {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+    .admin-profile-skeleton-form {
+        grid-template-columns: 1fr;
+    }
+
+
+    .admin-profile-skeleton-button {
+        width: 100%;
+    }
+
+}

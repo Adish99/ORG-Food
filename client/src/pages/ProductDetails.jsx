@@ -3,6 +3,7 @@ import {useEffect,useState} from "react";
 import {useParams} from "react-router-dom";
 import { UseAuth } from "../store/Authentication";
 import { Loader } from "../components/UI/Loader";
+import { ProductDetailsSkeleton } from "../components/UI/ProductDetailsSkeleton";
 
 
 export const ProductDetail=()=>{
@@ -95,7 +96,7 @@ try{
 
 if(!product){
 
-return <Loader/>
+return <ProductDetailsSkeleton/>
 
 }
 
