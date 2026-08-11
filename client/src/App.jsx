@@ -38,6 +38,7 @@ import { Profile } from "./pages/Profile";
 import { AdminProfile } from "./pages/admin/AdminProfile";
 import { PaymentFailure } from "./pages/PaymentFailure";
 import { PaymentSuccess } from "./pages/PaymentSuccess";
+import { AdminReviews } from "./pages/admin/AdminReviews";
 
 
 const App=()=>{
@@ -206,6 +207,10 @@ const router = createBrowserRouter([
       {
     path: "orders/:id",
     element: <AdminOrderDetails />
+},
+{
+    path: "reviews",
+    element: <AdminReviews />
 },
       {
         path: "users",

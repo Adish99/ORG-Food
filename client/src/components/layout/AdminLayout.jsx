@@ -106,6 +106,14 @@ export const AdminLayout = () => {
                         🛒 Orders
                     </NavLink>
 
+                    <NavLink
+    to="/admin/reviews"
+    className="sidebar-link"
+>
+    ⭐ Reviews
+</NavLink>
+
+
 
                     <NavLink
                         to="/admin/users"

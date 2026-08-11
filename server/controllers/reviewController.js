@@ -213,9 +213,105 @@ const deleteReviewController = async (req, res) => {
   }
 };
 
+// ==========================
+// Admin - Get All Reviews
+// ==========================
+
+const getAllReviewsAdminController = async (req, res) => {
+
+    try {
+
+        const reviews = await Review.find()
+
+            .populate("userId", "username email")
+
+            .populate("productId", "name image")
+
+            .sort({ createdAt: -1 });
+
+
+        return res.status(200).json({
+
+            message: "Reviews fetched successfully.",
+
+            reviews
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Admin Get Reviews Error:",
+            error
+        );
+
+        return res.status(500).json({
+
+            message: "Failed to fetch reviews."
+
+        });
+
+    }
+
+};
+
+
+// ==========================
+// Admin - Delete Review
+// ==========================
+
+const deleteReviewAdminController = async (req, res) => {
+
+    try {
+
+        const { reviewId } = req.params;
+
+
+        const review = await Review.findById(reviewId);
+
+
+        if (!review) {
+
+            return res.status(404).json({
+
+                message: "Review not found."
+
+            });
+
+        }
+
+
+        await Review.findByIdAndDelete(reviewId);
+
+
+        return res.status(200).json({
+
+            message: "Review deleted successfully."
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Admin Delete Review Error:",
+            error
+        );
+
+        return res.status(500).json({
+
+            message: "Failed to delete review."
+
+        });
+
+    }
+
+};
+
 module.exports = {
   addReviewController,
   getProductReviewsController,
   updateReviewController,
-  deleteReviewController
+  deleteReviewController,
+  getAllReviewsAdminController,
+  deleteReviewAdminController
 };

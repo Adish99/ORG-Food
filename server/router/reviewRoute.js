@@ -8,8 +8,11 @@ const {
   addReviewController,
   getProductReviewsController,
   updateReviewController,
-  deleteReviewController
+  deleteReviewController,
+  deleteReviewAdminController,
+  getAllReviewsAdminController
 } = require("../controllers/reviewController");
+const adminMiddleware = require("../middleware/adminMiddleware");
 
 
 router.route("/add")
@@ -21,5 +24,24 @@ router.route("/add")
   router.route("/:reviewId")
   .put(authMiddleware, updateReviewController)
   .delete(authMiddleware, deleteReviewController);
+
+  // ==========================
+// Admin Review Routes
+// ==========================
+
+router.route("/admin/all")
+    .get(
+        authMiddleware,
+        adminMiddleware,
+        getAllReviewsAdminController
+    );
+
+
+router.route("/admin/:reviewId")
+    .delete(
+        authMiddleware,
+        adminMiddleware,
+        deleteReviewAdminController
+    );
 
 module.exports = router;
