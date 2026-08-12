@@ -39,6 +39,7 @@ import { AdminProfile } from "./pages/admin/AdminProfile";
 import { PaymentFailure } from "./pages/PaymentFailure";
 import { PaymentSuccess } from "./pages/PaymentSuccess";
 import { AdminReviews } from "./pages/admin/AdminReviews";
+import { Wishlist } from "./pages/Wishlist";
 
 
 const App=()=>{
@@ -90,6 +91,14 @@ const router = createBrowserRouter([
         path: "product/:id",
         element: <ProductDetail />
       },
+     {
+    path: "wishlist",
+    element: (
+        <ProtectedRoute>
+            <Wishlist />
+        </ProtectedRoute>
+    )
+},
       {
         path: "cart",
         element: (

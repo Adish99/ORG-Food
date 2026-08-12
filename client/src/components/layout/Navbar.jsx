@@ -46,6 +46,16 @@ export const Navbar = () => {
                         Products
                     </NavLink>
                 </li>
+              {
+    isLoggedIn && (
+        <li>
+            <NavLink to="/wishlist">
+                ❤️ Wishlist
+            </NavLink>
+        </li>
+    )
+}
+                
 
 
                 {/* Admin */}
