@@ -5,7 +5,8 @@ const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
 
 const {
-    toggleWishlistController
+    toggleWishlistController,
+    getWishlistController
 } = require("../controllers/wishlistController");
 
 
@@ -18,6 +19,13 @@ router.route("/toggle")
         authMiddleware,
         toggleWishlistController
     );
+
+    router.route("/")
+    .get(
+        authMiddleware,
+        getWishlistController
+    );
+
 
 
 module.exports = router;

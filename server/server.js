@@ -12,6 +12,7 @@ const adminRoutes=require("./router/adminRoutes");
 const paymentRoute=require("./router/paymentRoutes");
 const profileRoute=require("./router/profileRoutes");
 const reviewRoute=require("./router/reviewRoute");
+const wishlistRoute=require("./router/wishlistRoute");
 const app=express();
 const PORT=process.env.PORT_NO || 3000;
 
@@ -44,6 +45,7 @@ app.use("/api",adminRoutes);
 app.use("/api/payment", paymentRoute);
 app.use("/api/profile", profileRoute);
 app.use("/api/reviews", reviewRoute);
+app.use("/api/wishlist", wishlistRoute);
 
 //Server Running
 app.listen(PORT,async()=>{

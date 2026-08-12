@@ -1,5 +1,5 @@
-const Wishlist = require("../models/wishlist-model");
-const Product = require("../models/product-model");
+const Wishlist=require("../models/Wishlist");
+const Product=require("../models/Product");
 
 
 // ==========================
@@ -139,7 +139,64 @@ const toggleWishlistController = async (req, res) => {
 
 };
 
+// ==========================
+// Get User Wishlist
+// ==========================
+
+const getWishlistController = async (req, res) => {
+
+    try {
+
+        const userId = req.user._id;
+
+        const wishlist = await Wishlist.findOne({
+            userId
+        }).populate(
+            "products.productId"
+        );
+
+
+        // User has no wishlist yet
+        if (!wishlist) {
+
+            return res.status(200).json({
+
+                message: "Wishlist is empty.",
+
+                wishlist: []
+
+            });
+
+        }
+
+
+        return res.status(200).json({
+
+            message: "Wishlist fetched successfully.",
+
+            wishlist: wishlist.products
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Get Wishlist Error:",
+            error
+        );
+
+        return res.status(500).json({
+
+            message: "Unable to fetch wishlist."
+
+        });
+
+    }
+
+};
 
 module.exports = {
-    toggleWishlistController
+    toggleWishlistController,
+    getWishlistController
 };

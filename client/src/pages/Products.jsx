@@ -6,6 +6,7 @@ import { Loader } from "../components/UI/Loader";
 import { ProductSkeleton } from "../components/UI/ProductSkeleton";
 import { EmptyState } from "../components/UI/EmptyState";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const Products = () => {
   const [products, setProducts] = useState([]);
