@@ -286,7 +286,7 @@ if (availableProducts.length === 0) {
     );
 }
 
-
+//JSX
     return (
 
         <div className="wishlist-page">
