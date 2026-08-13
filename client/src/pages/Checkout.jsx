@@ -19,6 +19,10 @@ const [shippingAddress, setShippingAddress] = useState({
 const [paymentMethod, setPaymentMethod] = useState("COD");
 const [placingOrder, setPlacingOrder] = useState(false);
 const [isSubmitting, setIsSubmitting] = useState(false);
+const [couponCode, setCouponCode] = useState("");
+const [appliedCoupon, setAppliedCoupon] = useState(null);
+const [discountAmount, setDiscountAmount] = useState(0);
+const [couponLoading, setCouponLoading] = useState(false);
 
 const {userAuthToken}=UseAuth();
 const navigate=useNavigate();
@@ -75,6 +79,69 @@ const deliveryCharge =
 const grandTotal =
   subtotal + deliveryCharge;
 
+const finalTotal =
+  grandTotal - discountAmount;
+
+  const applyCoupon = async () => {
+
+  if (!couponCode.trim()) {
+    return toast.error("Please enter a coupon code.");
+  }
+
+  try {
+
+    setCouponLoading(true);
+
+    const res = await fetch(
+      "http://localhost:8000/api/coupon/validate",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: userAuthToken
+        },
+        body: JSON.stringify({
+          code: couponCode,
+          totalAmount: grandTotal
+        })
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      return toast.error(data.message);
+    }
+
+    setAppliedCoupon(data.coupon);
+    setDiscountAmount(data.discountAmount);
+
+    toast.success(data.message);
+
+  } catch (error) {
+
+    console.log("Apply Coupon Error:", error);
+
+    toast.error("Unable to apply coupon.");
+
+  } finally {
+
+    setCouponLoading(false);
+
+  }
+
+};
+
+const removeCoupon = () => {
+
+  setAppliedCoupon(null);
+  setDiscountAmount(0);
+  setCouponCode("");
+
+  toast.info("Coupon removed.");
+
+};
+
   const placeOrder = async () => {
 
   if (
@@ -101,8 +168,9 @@ setIsSubmitting(true);
           Authorization: userAuthToken,
         },
         body: JSON.stringify({
-          shippingAddress,
-          paymentMethod,
+         shippingAddress,
+  paymentMethod,
+  couponCode: appliedCoupon?.code || null
         }),
       }
     );
@@ -220,15 +288,16 @@ form.submit();
 
 };
 
-    return(
-        
+   return (
   <div className="checkout-page">
 
     <h1>Checkout</h1>
 
     <div className="checkout-container">
 
-      {/* Left Section */}
+      {/* =========================
+          LEFT SECTION
+      ========================== */}
       <div className="checkout-left">
 
         <div className="checkout-card">
@@ -281,9 +350,11 @@ form.submit();
             rows="4"
             value={shippingAddress.street}
             onChange={handleChange}
-          ></textarea>
+          />
 
         </div>
+
+        {/* Payment Method */}
 
         <div className="checkout-card">
 
@@ -314,112 +385,240 @@ form.submit();
 
       </div>
 
-      {/* Right Section */}
+
+      {/* =========================
+          RIGHT SECTION
+      ========================== */}
 
       <div className="checkout-right">
 
         <div className="summary-card">
 
-  <h2>🛒 Order Summary</h2>
+          <h2>🛒 Order Summary</h2>
 
-  {cart?.products.map((item) => (
 
-    <div
-      key={item.productId._id}
-      className="summary-product"
-    >
+          {/* =========================
+              PRODUCTS
+          ========================== */}
 
-      <div className="summary-product-left">
+          {cart?.products.map((item) => (
 
-        <img
-          src={item.productId.image}
-          alt={item.productId.name}
-          className="summary-product-image"
-        />
+            <div
+              key={item.productId._id}
+              className="summary-product"
+            >
 
-        <div className="summary-product-info">
+              <div className="summary-product-left">
 
-          <h4>{item.productId.name}</h4>
+                <img
+                  src={item.productId.image}
+                  alt={item.productId.name}
+                  className="summary-product-image"
+                />
 
-          <p>{item.productId.weight}</p>
+                <div className="summary-product-info">
 
-          <span>
-            Qty : {item.quantity}
-          </span>
+                  <h4>
+                    {item.productId.name}
+                  </h4>
+
+                  <p>
+                    {item.productId.weight}
+                  </p>
+
+                  <span>
+                    Qty: {item.quantity}
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <div className="summary-product-right">
+
+                <span>
+                  Rs.{" "}
+                  {item.productId.price *
+                    item.quantity}
+                </span>
+
+              </div>
+
+            </div>
+
+          ))}
+
+
+          {/* =========================
+              COUPON
+          ========================== */}
+
+          <div className="coupon-section">
+
+            <h3>🎟️ Apply Coupon</h3>
+
+            {!appliedCoupon ? (
+
+              <div className="coupon-input-group">
+
+                <input
+                  type="text"
+                  placeholder="Enter coupon code"
+                  value={couponCode}
+                  onChange={(e) =>
+                    setCouponCode(
+                      e.target.value.toUpperCase()
+                    )
+                  }
+                />
+
+                <button
+                  type="button"
+                  onClick={applyCoupon}
+                  disabled={couponLoading}
+                >
+                  {couponLoading
+                    ? "Applying..."
+                    : "Apply"}
+                </button>
+
+              </div>
+
+            ) : (
+
+              <div className="applied-coupon">
+
+                <div>
+
+                  <strong>
+                    🎉 {appliedCoupon.code}
+                  </strong>
+
+                  <p>
+
+                    {appliedCoupon.discountValue}
+
+                    {appliedCoupon.discountType ===
+                    "percentage"
+                      ? "%"
+                      : " Rs."}
+
+                    {" "}discount
+
+                  </p>
+
+                </div>
+
+
+                <button
+                  type="button"
+                  onClick={removeCoupon}
+                >
+                  Remove
+                </button>
+
+              </div>
+
+            )}
+
+          </div>
+
+
+          <hr />
+
+
+          {/* =========================
+              SUMMARY
+          ========================== */}
+
+          <div className="summary-row">
+
+            <span>Total Items</span>
+
+            <span>{totalItems}</span>
+
+          </div>
+
+
+          <div className="summary-row">
+
+            <span>Subtotal</span>
+
+            <span>
+              Rs. {subtotal}
+            </span>
+
+          </div>
+
+
+          <div className="summary-row">
+
+            <span>Delivery Charge</span>
+
+            <span>
+
+              {deliveryCharge === 0
+                ? "FREE"
+                : `Rs. ${deliveryCharge}`}
+
+            </span>
+
+          </div>
+
+
+          {/* Coupon Discount */}
+
+          {discountAmount > 0 && (
+
+            <div className="summary-row discount-row">
+
+              <span>
+                Coupon Discount
+              </span>
+
+              <span>
+                - Rs. {discountAmount}
+              </span>
+
+            </div>
+
+          )}
+
+
+          <hr />
+
+
+          {/* Final Total */}
+
+          <div className="summary-total">
+
+            <span>
+              Final Total
+            </span>
+
+            <span>
+              Rs. {finalTotal}
+            </span>
+
+          </div>
+
+
+          {/* Place Order */}
+
+          <button
+            className="place-order-btn"
+            onClick={placeOrder}
+            disabled={placingOrder}
+          >
+
+            {placingOrder
+              ? "Placing Order..."
+              : "Place Order"}
+
+          </button>
 
         </div>
-
-      </div>
-
-      <div className="summary-product-right">
-
-        <span>
-          Rs. {item.productId.price * item.quantity}
-        </span>
-
-      </div>
-
-    </div>
-
-  ))}
-
-  <hr />
-
-  <div className="summary-row">
-
-    <span>Total Items</span>
-
-    <span>{totalItems}</span>
-
-  </div>
-
-  <div className="summary-row">
-
-    <span>Subtotal</span>
-
-    <span>Rs. {subtotal}</span>
-
-  </div>
-
-  <div className="summary-row">
-
-    <span>Delivery Charge</span>
-
-    <span>
-
-      {deliveryCharge === 0
-        ? "FREE"
-        : `Rs. ${deliveryCharge}`}
-
-    </span>
-
-  </div>
-
-  <hr />
-
-  <div className="summary-total">
-
-    <span>Grand Total</span>
-
-    <span>Rs. {grandTotal}</span>
-
-  </div>
-
- <button
-  className="place-order-btn"
-  onClick={placeOrder}
-  disabled={placingOrder}
->
-
-{
-placingOrder
-? "Placing Order..."
-: "Place Order"
-}
-
-</button>
-
-</div>
 
       </div>
 

@@ -1,5 +1,7 @@
 const Order=require("../models/Order");
 const Cart=require("../models/UserCart");
+const Coupon=require("../models/Coupon");
+const {checkAndGenerateCoupons} = require("./couponController");
 
 // ====================================
 // Create Order
@@ -12,40 +14,144 @@ const createOrderController = async (req, res) => {
         const userId = req.user._id;
 
         const {
-
             shippingAddress,
-
-            paymentMethod
-
+            paymentMethod,
+            couponCode
         } = req.body;
 
+
+        // ====================================
+        // Get Cart
+        // ====================================
+
         const cart = await Cart.findOne({
-
             userId
-
         }).populate("products.productId");
+
 
         if (!cart || cart.products.length === 0) {
 
             return res.status(400).json({
-
                 message: "Cart is empty."
-
             });
 
         }
 
-        let totalAmount = 0;
+
+        // ====================================
+        // Calculate Subtotal
+        // ====================================
+
+        let subtotal = 0;
 
         cart.products.forEach((item) => {
 
-            totalAmount +=
-
+            subtotal +=
                 item.productId.price *
-
                 item.quantity;
 
         });
+
+
+        // ====================================
+        // Delivery Charge
+        // ====================================
+
+        const deliveryCharge =
+            subtotal >= 1000 ? 0 : 100;
+
+
+        const grandTotal =
+            subtotal + deliveryCharge;
+
+
+        // ====================================
+        // Coupon
+        // ====================================
+
+        let discountAmount = 0;
+
+        let validCoupon = null;
+
+
+        if (couponCode) {
+
+            validCoupon = await Coupon.findOne({
+
+                code: couponCode.toUpperCase().trim(),
+
+                userId,
+
+                isUsed: false
+
+            });
+
+
+            if (!validCoupon) {
+
+                return res.status(400).json({
+                    message: "Invalid or unavailable coupon."
+                });
+
+            }
+
+
+            // Check expiry
+
+            if (
+                validCoupon.expiryDate <=
+                new Date()
+            ) {
+
+                return res.status(400).json({
+                    message: "This coupon has expired."
+                });
+
+            }
+
+
+            // Calculate discount
+
+            if (
+                validCoupon.discountType ===
+                "percentage"
+            ) {
+
+                discountAmount =
+                    (grandTotal *
+                        validCoupon.discountValue) /
+                    100;
+
+            } else {
+
+                discountAmount =
+                    validCoupon.discountValue;
+
+            }
+
+
+            // Prevent discount exceeding total
+
+            if (discountAmount > grandTotal) {
+
+                discountAmount = grandTotal;
+
+            }
+
+        }
+
+
+        // ====================================
+        // Final Total
+        // ====================================
+
+        const totalAmount =
+            grandTotal - discountAmount;
+
+
+        // ====================================
+        // Create Order
+        // ====================================
 
         const order = await Order.create({
 
@@ -65,6 +171,13 @@ const createOrderController = async (req, res) => {
 
             totalAmount,
 
+            couponCode:
+                validCoupon
+                    ? validCoupon.code
+                    : null,
+
+            discountAmount,
+
             shippingAddress,
 
             paymentMethod,
@@ -72,29 +185,51 @@ const createOrderController = async (req, res) => {
             paymentStatus: "Pending"
 
         });
-        
 
-        // Clear cart
+
+        // ====================================
+        // Mark Coupon As Used
+        // ====================================
+
+        if (validCoupon) {
+
+            validCoupon.isUsed = true;
+
+            await validCoupon.save();
+
+        }
+
+
+        // ====================================
+        // Clear Cart
+        // ====================================
 
         cart.products = [];
 
         await cart.save();
 
+
         return res.status(201).json({
 
-            message: "Order created successfully.",
+            message:
+                "Order created successfully.",
 
             order
 
         });
 
+
     } catch (error) {
 
-        console.log("Create Order Error:", error);
+        console.log(
+            "Create Order Error:",
+            error
+        );
 
         return res.status(500).json({
 
-            message: "Internal Server Error."
+            message:
+                "Internal Server Error."
 
         });
 
@@ -377,6 +512,14 @@ const updateOrderStatusController = async (req, res) => {
         order.orderStatus = orderStatus;
 
         await order.save();
+
+        if (orderStatus === "Delivered") {
+
+    await checkAndGenerateCoupons(
+        order.userId
+    );
+
+}
 
         return res.status(200).json({
 

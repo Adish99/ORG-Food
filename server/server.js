@@ -13,6 +13,7 @@ const paymentRoute=require("./router/paymentRoutes");
 const profileRoute=require("./router/profileRoutes");
 const reviewRoute=require("./router/reviewRoute");
 const wishlistRoute=require("./router/wishlistRoute");
+const couponRouter=require("./router/couponRouter");
 const app=express();
 const PORT=process.env.PORT_NO || 3000;
 
@@ -46,6 +47,7 @@ app.use("/api/payment", paymentRoute);
 app.use("/api/profile", profileRoute);
 app.use("/api/reviews", reviewRoute);
 app.use("/api/wishlist", wishlistRoute);
+app.use("/api/coupon",couponRouter);
 
 //Server Running
 app.listen(PORT,async()=>{

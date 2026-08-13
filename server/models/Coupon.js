@@ -44,6 +44,17 @@ const couponSchema = new mongoose.Schema(
             enum: ["loyalty", "monthly-spending"],
             required: true
         },
+           // For 5, 10, 15, 20... purchases
+        purchaseMilestone: {
+            type: Number,
+            default: 0
+        },
+
+        // Example: "2026-08"
+        couponMonth: {
+            type: String,
+            default: ""
+        },
         minPurchaseAmount: {
     type: Number,
     default: 0
