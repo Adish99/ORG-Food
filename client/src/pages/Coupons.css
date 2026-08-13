@@ -1,0 +1,105 @@
+/* ================================
+   COUPON SECTION
+================================ */
+
+.coupon-section {
+    margin: 20px 0;
+    padding: 18px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fafafa;
+}
+
+.coupon-section h3 {
+    margin-bottom: 12px;
+    font-size: 18px;
+}
+
+
+/* Coupon Input */
+
+.coupon-input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.coupon-input-group input {
+    flex: 1;
+    padding: 11px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+}
+
+.coupon-input-group input:focus {
+    border-color: #4caf50;
+}
+
+.coupon-input-group button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    background: #4caf50;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.coupon-input-group button:hover {
+    background: #388e3c;
+}
+
+.coupon-input-group button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* ================================
+   APPLIED COUPON
+================================ */
+
+.applied-coupon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border: 1px dashed #4caf50;
+    border-radius: 8px;
+    background: #f1f8e9;
+}
+
+.applied-coupon strong {
+    font-size: 16px;
+}
+
+.applied-coupon p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.applied-coupon button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 5px;
+    background: #e53935;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.applied-coupon button:hover {
+    background: #c62828;
+}
+
+
+/* ================================
+   DISCOUNT ROW
+================================ */
+
+.discount-row {
+    color: #2e7d32;
+    font-weight: 600;
+}

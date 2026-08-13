@@ -43,6 +43,40 @@ minlength:3
         type:String,
         required:true
     },
+    // Coupon / Loyalty Progress
+deliveredPurchaseCount: {
+    type: Number,
+    default: 0,
+    min: 0
+},
+
+lastCouponMilestone: {
+    type: Number,
+    default: 0,
+    min: 0
+},
+// Monthly Spending Progress
+monthlySpending: {
+    type: Number,
+    default: 0,
+    min: 0
+},
+
+monthlySpendingMonth: {
+    type: String,
+    default: ""
+},
+usedCouponCount: {
+    type: Number,
+    default: 0,
+    min: 0
+},
+
+lastSpecialCouponMilestone: {
+    type: Number,
+    default: 0,
+    min: 0
+},
     profileImage: {
     type: String,
     default: ""

@@ -109,6 +109,16 @@ export const Navbar = () => {
                     )
                 }
 
+                {
+    isLoggedIn && (
+        <li>
+            <NavLink to="/coupons">
+                🎟️ Coupons
+            </NavLink>
+        </li>
+    )
+}
+
 
                 {/* Checkout */}
 

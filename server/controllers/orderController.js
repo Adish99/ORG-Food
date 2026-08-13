@@ -1,6 +1,7 @@
 const Order=require("../models/Order");
 const Cart=require("../models/UserCart");
 const Coupon=require("../models/Coupon");
+const User=require("../models/User");
 const {checkAndGenerateCoupons} = require("./couponController");
 
 // ====================================
@@ -467,32 +468,24 @@ const getSingleAdminOrderController = async (req, res) => {
 // ====================================
 
 const updateOrderStatusController = async (req, res) => {
+
     try {
 
         const { id } = req.params;
-
         const { orderStatus } = req.body;
 
         const validStatus = [
-
             "Pending",
-
             "Processing",
-
             "Shipped",
-
             "Delivered",
-
             "Cancelled"
-
         ];
 
         if (!validStatus.includes(orderStatus)) {
 
             return res.status(400).json({
-
                 message: "Invalid order status."
-
             });
 
         }
@@ -502,28 +495,96 @@ const updateOrderStatusController = async (req, res) => {
         if (!order) {
 
             return res.status(404).json({
-
                 message: "Order not found."
-
             });
 
         }
 
+        // Prevent counting the same order twice
+        const wasAlreadyDelivered =
+            order.orderStatus === "Delivered";
+
+        // Update order status
         order.orderStatus = orderStatus;
 
         await order.save();
 
-        if (orderStatus === "Delivered") {
 
-    await checkAndGenerateCoupons(
-        order.userId
-    );
+        // ====================================
+        // Loyalty + Monthly Spending Progress
+        // ====================================
 
-}
+        if (
+            orderStatus === "Delivered" &&
+            !wasAlreadyDelivered
+        ) {
+
+            const user = await User.findById(
+                order.userId
+            );
+
+            if (user) {
+
+                // ====================================
+                // 1. Increase Delivered Purchase Count
+                // ====================================
+
+                user.deliveredPurchaseCount += 1;
+
+
+                // ====================================
+                // 2. Monthly Spending
+                // ====================================
+
+                const now = new Date();
+
+                const currentMonth =
+                    `${now.getFullYear()}-${String(
+                        now.getMonth() + 1
+                    ).padStart(2, "0")}`;
+
+
+                // If a new month has started,
+                // reset monthly spending.
+
+                if (
+                    user.monthlySpendingMonth !==
+                    currentMonth
+                ) {
+
+                    user.monthlySpending = 0;
+
+                    user.monthlySpendingMonth =
+                        currentMonth;
+
+                }
+
+
+                // Add this delivered order's amount
+                user.monthlySpending +=
+                    order.totalAmount;
+
+
+                await user.save();
+
+
+                // ====================================
+                // 3. Check & Generate Coupons
+                // ====================================
+
+                await checkAndGenerateCoupons(
+                    user._id
+                );
+
+            }
+
+        }
+
 
         return res.status(200).json({
 
-            message: "Order status updated successfully.",
+            message:
+                "Order status updated successfully.",
 
             order
 
@@ -531,11 +592,15 @@ const updateOrderStatusController = async (req, res) => {
 
     } catch (error) {
 
-        console.log("Update Order Status Error:", error);
+        console.log(
+            "Update Order Status Error:",
+            error
+        );
 
         return res.status(500).json({
 
-            message: "Internal Server Error"
+            message:
+                "Internal Server Error"
 
         });
 

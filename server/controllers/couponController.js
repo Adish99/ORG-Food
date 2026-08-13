@@ -1,29 +1,37 @@
 const Coupon = require("../models/Coupon");
 const Order = require("../models/Order");
+const User = require("../models/User");
 
 const checkAndGenerateCoupons = async (userId) => {
 
     try {
 
         // ====================================
-        // Get all delivered orders
+        // Get User
         // ====================================
 
-        const deliveredOrders = await Order.find({
-            userId,
-            orderStatus: "Delivered"
-        });
+        const user = await User.findById(userId);
+
+        if (!user) {
+            console.log("User not found.");
+            return;
+        }
 
 
         // ====================================
-        // 1. EVERY 5 PURCHASES
+        // 1. EVERY 5 DELIVERED PURCHASES
         // ====================================
 
         const purchaseMilestone =
-            Math.floor(deliveredOrders.length / 5) * 5;
+            Math.floor(
+                user.deliveredPurchaseCount / 5
+            ) * 5;
 
 
-        if (purchaseMilestone >= 5) {
+        if (
+            purchaseMilestone >= 5 &&
+            purchaseMilestone > user.lastCouponMilestone
+        ) {
 
             const existingLoyaltyCoupon =
                 await Coupon.findOne({
@@ -68,6 +76,14 @@ const checkAndGenerateCoupons = async (userId) => {
 
             }
 
+
+            // Remember the latest rewarded milestone
+
+            user.lastCouponMilestone =
+                purchaseMilestone;
+
+            await user.save();
+
         }
 
 
@@ -75,60 +91,33 @@ const checkAndGenerateCoupons = async (userId) => {
         // 2. MONTHLY SPENDING
         // ====================================
 
-        const now = new Date();
-
-
-        const startOfMonth = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            1
-        );
-
-
-        const startOfNextMonth = new Date(
-            now.getFullYear(),
-            now.getMonth() + 1,
-            1
-        );
-
-
-        const monthlyOrders =
-            deliveredOrders.filter((order) =>
-
-                order.createdAt >= startOfMonth &&
-
-                order.createdAt < startOfNextMonth
-
-            );
-
+        // User.monthlySpending is already
+        // maintained when an order becomes Delivered.
 
         const monthlySpending =
-            monthlyOrders.reduce(
-
-                (total, order) =>
-
-                    total + order.totalAmount,
-
-                0
-
-            );
+            user.monthlySpending;
 
 
-        // Example: "2026-08"
         const couponMonth =
-            `${now.getFullYear()}-${String(
-                now.getMonth() + 1
-            ).padStart(2, "0")}`;
+            user.monthlySpendingMonth;
 
 
-        if (monthlySpending >= 2500) {
+        // ====================================
+        // Generate VIP Coupon
+        // ====================================
+
+        if (
+            monthlySpending >= 2500 &&
+            couponMonth
+        ) {
 
             const existingMonthlyCoupon =
                 await Coupon.findOne({
 
                     userId,
 
-                    couponType: "monthly-spending",
+                    couponType:
+                        "monthly-spending",
 
                     couponMonth
 
@@ -154,14 +143,17 @@ const checkAndGenerateCoupons = async (userId) => {
 
                     userId,
 
-                    couponType: "monthly-spending",
+                    couponType:
+                        "monthly-spending",
 
-                    couponMonth
+                    couponMonth,
+
+                    minPurchaseAmount: 2500
 
                 });
 
                 console.log(
-                    `Monthly coupon generated for ${couponMonth}.`
+                    `Monthly VIP coupon generated for ${couponMonth}.`
                 );
 
             }

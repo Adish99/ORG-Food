@@ -40,6 +40,7 @@ import { PaymentFailure } from "./pages/PaymentFailure";
 import { PaymentSuccess } from "./pages/PaymentSuccess";
 import { AdminReviews } from "./pages/admin/AdminReviews";
 import { Wishlist } from "./pages/Wishlist";
+import { Coupons } from "./pages/Coupons";
 
 
 const App=()=>{
@@ -107,6 +108,14 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         )
       },
+      {
+    path: "coupons",
+    element: (
+        <ProtectedRoute>
+            <Coupons />
+        </ProtectedRoute>
+    )
+},
       {
         path: "checkout",
         element: (
