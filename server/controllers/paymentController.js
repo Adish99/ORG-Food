@@ -221,6 +221,39 @@ const order = await Order.findById(orderId);
 
         order.paymentStatus = "Paid";
 
+        // ====================================
+// Mark Coupon As Used After Successful Payment
+// ====================================
+
+if (order.couponCode) {
+
+    const coupon = await Coupon.findOne({
+        code: order.couponCode,
+        userId: order.userId,
+        isUsed: false
+    });
+
+    if (coupon) {
+
+        coupon.isUsed = true;
+        await coupon.save();
+
+        // Increase used coupon count
+        const user = await User.findById(order.userId);
+
+        if (user) {
+
+            user.usedCouponCount =
+                (user.usedCouponCount || 0) + 1;
+
+            await user.save();
+
+            // Check for special coupon
+            await checkAndGenerateCoupons(user._id);
+        }
+    }
+}
+
         order.paymentId =
             verificationResponse.data.ref_id ||
             decodedData.transaction_code;

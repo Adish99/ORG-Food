@@ -108,26 +108,6 @@ const checkAndGenerateCoupons = async (userId) => {
             user.monthlySpendingMonth;
 
 
-        console.log(
-            "===== VIP COUPON DEBUG ====="
-        );
-
-        console.log(
-            "User ID:",
-            userId
-        );
-
-        console.log(
-            "Monthly Spending:",
-            monthlySpending
-        );
-
-        console.log(
-            "Monthly Spending Month:",
-            couponMonth
-        );
-
-
         // ====================================
         // Check VIP Eligibility
         // ====================================
