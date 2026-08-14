@@ -189,16 +189,23 @@ const createOrderController = async (req, res) => {
 
 
         // ====================================
-        // Mark Coupon As Used
-        // ====================================
+// Mark Coupon As Used
+// ====================================
 
-        if (validCoupon) {
+// COD orders are considered successful immediately.
+// Online payment coupons will be marked as used
+// after successful payment.
 
-            validCoupon.isUsed = true;
+if (
+    validCoupon &&
+    paymentMethod === "COD"
+) {
 
-            await validCoupon.save();
+    validCoupon.isUsed = true;
 
-        }
+    await validCoupon.save();
+
+}
 
 
         // ====================================
@@ -500,11 +507,18 @@ const updateOrderStatusController = async (req, res) => {
 
         }
 
+        // ====================================
         // Prevent counting the same order twice
+        // ====================================
+
         const wasAlreadyDelivered =
             order.orderStatus === "Delivered";
 
-        // Update order status
+
+        // ====================================
+        // Update Order Status
+        // ====================================
+
         order.orderStatus = orderStatus;
 
         await order.save();
@@ -544,8 +558,9 @@ const updateOrderStatusController = async (req, res) => {
                     ).padStart(2, "0")}`;
 
 
-                // If a new month has started,
-                // reset monthly spending.
+                // ====================================
+                // New Month
+                // ====================================
 
                 if (
                     user.monthlySpendingMonth !==
@@ -560,12 +575,53 @@ const updateOrderStatusController = async (req, res) => {
                 }
 
 
-                // Add this delivered order's amount
+                // ====================================
+                // Add Delivered Order Amount
+                // ====================================
+
                 user.monthlySpending +=
                     order.totalAmount;
 
 
                 await user.save();
+
+
+                // ====================================
+                // VIP COUPON DEBUG
+                // ====================================
+
+                console.log(
+                    "===== VIP COUPON DEBUG ====="
+                );
+
+                console.log(
+                    "User ID:",
+                    user._id
+                );
+
+                console.log(
+                    "Order Amount:",
+                    order.totalAmount
+                );
+
+                console.log(
+                    "Monthly Spending:",
+                    user.monthlySpending
+                );
+
+                console.log(
+                    "Monthly Spending Month:",
+                    user.monthlySpendingMonth
+                );
+
+                console.log(
+                    "Delivered Purchase Count:",
+                    user.deliveredPurchaseCount
+                );
+
+                console.log(
+                    "============================"
+                );
 
 
                 // ====================================
@@ -581,6 +637,10 @@ const updateOrderStatusController = async (req, res) => {
         }
 
 
+        // ====================================
+        // Response
+        // ====================================
+
         return res.status(200).json({
 
             message:
@@ -589,6 +649,7 @@ const updateOrderStatusController = async (req, res) => {
             order
 
         });
+
 
     } catch (error) {
 
@@ -607,7 +668,6 @@ const updateOrderStatusController = async (req, res) => {
     }
 
 };
-
 // ====================================
 // Delete Order (Admin)
 // ====================================

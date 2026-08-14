@@ -2,6 +2,11 @@ const Coupon = require("../models/Coupon");
 const Order = require("../models/Order");
 const User = require("../models/User");
 
+
+// ====================================
+// Check & Generate Coupons
+// ====================================
+
 const checkAndGenerateCoupons = async (userId) => {
 
     try {
@@ -35,13 +40,9 @@ const checkAndGenerateCoupons = async (userId) => {
 
             const existingLoyaltyCoupon =
                 await Coupon.findOne({
-
                     userId,
-
                     couponType: "loyalty",
-
                     purchaseMilestone
-
                 });
 
 
@@ -66,7 +67,9 @@ const checkAndGenerateCoupons = async (userId) => {
 
                     couponType: "loyalty",
 
-                    purchaseMilestone
+                    purchaseMilestone,
+
+                    minPurchaseAmount: 0
 
                 });
 
@@ -77,8 +80,7 @@ const checkAndGenerateCoupons = async (userId) => {
             }
 
 
-            // Remember the latest rewarded milestone
-
+            // Remember the rewarded milestone
             user.lastCouponMilestone =
                 purchaseMilestone;
 
@@ -88,28 +90,44 @@ const checkAndGenerateCoupons = async (userId) => {
 
 
         // ====================================
-        // 2. MONTHLY SPENDING
+        // 2. MONTHLY SPENDING VIP COUPON
         // ====================================
 
-        // User.monthlySpending is already
-        // maintained when an order becomes Delivered.
-
         const monthlySpending =
-            user.monthlySpending;
-
+            user.monthlySpending || 0;
 
         const couponMonth =
             user.monthlySpendingMonth;
 
 
+        console.log("===== VIP COUPON DEBUG =====");
+        console.log("User ID:", userId);
+        console.log(
+            "Monthly Spending:",
+            monthlySpending
+        );
+        console.log(
+            "Monthly Spending Month:",
+            couponMonth
+        );
+
+
         // ====================================
-        // Generate VIP Coupon
+        // Check VIP Eligibility
         // ====================================
 
         if (
             monthlySpending >= 2500 &&
             couponMonth
         ) {
+
+            console.log(
+                "VIP eligibility: PASSED"
+            );
+
+
+            // Check whether this month's
+            // VIP coupon already exists
 
             const existingMonthlyCoupon =
                 await Coupon.findOne({
@@ -124,41 +142,70 @@ const checkAndGenerateCoupons = async (userId) => {
                 });
 
 
-            if (!existingMonthlyCoupon) {
-
-                await Coupon.create({
-
-                    code:
-                        `VIP20-${couponMonth}-${Date.now()}`,
-
-                    discountType: "percentage",
-
-                    discountValue: 20,
-
-                    expiryDate:
-                        new Date(
-                            Date.now() +
-                            30 * 24 * 60 * 60 * 1000
-                        ),
-
-                    userId,
-
-                    couponType:
-                        "monthly-spending",
-
-                    couponMonth,
-
-                    minPurchaseAmount: 2500
-
-                });
+            if (existingMonthlyCoupon) {
 
                 console.log(
-                    `Monthly VIP coupon generated for ${couponMonth}.`
+                    `VIP coupon already exists for ${couponMonth}.`
+                );
+
+            } else {
+
+                // ====================================
+                // Generate VIP Coupon
+                // ====================================
+
+                const vipCoupon =
+                    await Coupon.create({
+
+                        code:
+                            `VIP20-${couponMonth}-${Date.now()}`,
+
+                        discountType: "percentage",
+
+                        discountValue: 20,
+
+                        expiryDate:
+                            new Date(
+                                Date.now() +
+                                30 * 24 * 60 * 60 * 1000
+                            ),
+
+                        userId,
+
+                        couponType:
+                            "monthly-spending",
+
+                        couponMonth,
+
+                        minPurchaseAmount: 2500
+
+                    });
+
+
+                console.log(
+                    "VIP coupon generated successfully:",
+                    vipCoupon.code
                 );
 
             }
 
+        } else {
+
+            console.log(
+                "VIP eligibility: FAILED"
+            );
+
+            console.log(
+                "Required: Rs. 2500"
+            );
+
+            console.log(
+                "Current spending:",
+                monthlySpending
+            );
+
         }
+
 
     } catch (error) {
 
@@ -171,6 +218,7 @@ const checkAndGenerateCoupons = async (userId) => {
 
 };
 
+
 // ====================================
 // Get User Coupons
 // ====================================
@@ -182,16 +230,26 @@ const getUserCouponsController = async (req, res) => {
         const userId = req.user._id;
 
         const coupons = await Coupon.find({
+
             userId,
+
             isUsed: false,
-            expiryDate: { $gt: new Date() }
+
+            expiryDate: {
+                $gt: new Date()
+            }
+
         }).sort({
+
             createdAt: -1
+
         });
+
 
         return res.status(200).json({
 
-            message: "Coupons fetched successfully.",
+            message:
+                "Coupons fetched successfully.",
 
             coupons
 
@@ -206,13 +264,15 @@ const getUserCouponsController = async (req, res) => {
 
         return res.status(500).json({
 
-            message: "Something went wrong."
+            message:
+                "Something went wrong."
 
         });
 
     }
 
 };
+
 
 // ====================================
 // Validate Coupon
@@ -224,94 +284,169 @@ const validateCouponController = async (req, res) => {
 
         const userId = req.user._id;
 
-        const { code, totalAmount } = req.body;
+        const {
+            code,
+            totalAmount
+        } = req.body;
 
+
+        // ====================================
+        // Basic Validation
+        // ====================================
 
         if (!code) {
 
             return res.status(400).json({
 
-                message: "Coupon code is required."
+                message:
+                    "Coupon code is required."
 
             });
 
         }
 
 
-        if (!totalAmount || totalAmount <= 0) {
+        if (
+            !totalAmount ||
+            totalAmount <= 0
+        ) {
 
             return res.status(400).json({
 
-                message: "Invalid order amount."
+                message:
+                    "Invalid order amount."
 
             });
 
         }
 
 
-        const coupon = await Coupon.findOne({
+        // ====================================
+        // Find Coupon
+        // ====================================
 
-            code: code.toUpperCase().trim(),
+        const coupon =
+            await Coupon.findOne({
 
-            userId,
+                code:
+                    code.toUpperCase().trim(),
 
-            isUsed: false
+                userId,
 
-        });
+                isUsed: false
+
+            });
 
 
         if (!coupon) {
 
             return res.status(404).json({
 
-                message: "Invalid or unavailable coupon."
+                message:
+                    "Invalid or unavailable coupon."
 
             });
 
         }
 
 
-        // Check expiry
+        // ====================================
+        // Check Expiry
+        // ====================================
 
-        if (coupon.expiryDate <= new Date()) {
+        if (
+            coupon.expiryDate <= new Date()
+        ) {
 
             return res.status(400).json({
 
-                message: "This coupon has expired."
+                message:
+                    "This coupon has expired."
 
             });
 
         }
 
 
-        // Calculate discount
+        // ====================================
+        // Check Minimum Purchase
+        // ====================================
+
+        if (
+            totalAmount <
+            coupon.minPurchaseAmount
+        ) {
+
+            return res.status(400).json({
+
+                message:
+                    `Minimum purchase amount is Rs. ${coupon.minPurchaseAmount}.`
+
+            });
+
+        }
+
+
+        // ====================================
+        // Calculate Discount
+        // ====================================
 
         let discountAmount = 0;
 
 
-        if (coupon.discountType === "percentage") {
+        if (
+            coupon.discountType ===
+            "percentage"
+        ) {
 
             discountAmount =
-                (totalAmount * coupon.discountValue) / 100;
+                (
+                    totalAmount *
+                    coupon.discountValue
+                ) / 100;
 
         }
 
 
-        const finalAmount =
-            totalAmount - discountAmount;
+        // Prevent negative total
+        discountAmount =
+            Math.min(
+                discountAmount,
+                totalAmount
+            );
 
+
+        const finalAmount =
+            totalAmount -
+            discountAmount;
+
+
+        // ====================================
+        // Return Result
+        // ====================================
 
         return res.status(200).json({
 
-            message: "Coupon applied successfully.",
+            message:
+                "Coupon applied successfully.",
 
             coupon: {
 
+                id: coupon._id,
+
                 code: coupon.code,
 
-                discountType: coupon.discountType,
+                couponType:
+                    coupon.couponType,
 
-                discountValue: coupon.discountValue
+                discountType:
+                    coupon.discountType,
+
+                discountValue:
+                    coupon.discountValue,
+
+                minPurchaseAmount:
+                    coupon.minPurchaseAmount
 
             },
 
@@ -320,6 +455,7 @@ const validateCouponController = async (req, res) => {
             finalAmount
 
         });
+
 
     } catch (error) {
 
@@ -330,7 +466,8 @@ const validateCouponController = async (req, res) => {
 
         return res.status(500).json({
 
-            message: "Something went wrong."
+            message:
+                "Something went wrong."
 
         });
 
@@ -339,9 +476,16 @@ const validateCouponController = async (req, res) => {
 };
 
 
+// ====================================
+// Exports
+// ====================================
 
 module.exports = {
+
     checkAndGenerateCoupons,
+
     getUserCouponsController,
+
     validateCouponController
+
 };
