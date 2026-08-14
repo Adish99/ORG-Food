@@ -201,9 +201,36 @@ if (
     paymentMethod === "COD"
 ) {
 
+   
+
     validCoupon.isUsed = true;
 
     await validCoupon.save();
+
+
+    // ====================================
+    // Increase Used Coupon Count
+    // ====================================
+
+    const user = await User.findById(userId);
+
+    if (user) {
+
+        user.usedCouponCount =
+            (user.usedCouponCount || 0) + 1;
+
+        await user.save();
+
+
+        // Check whether a special coupon
+        // has been earned
+        await checkAndGenerateCoupons(
+            user._id
+        );
+
+    
+
+}
 
 }
 
