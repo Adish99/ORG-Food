@@ -18,8 +18,11 @@ const checkAndGenerateCoupons = async (userId) => {
         const user = await User.findById(userId);
 
         if (!user) {
+
             console.log("User not found.");
+
             return;
+
         }
 
 
@@ -40,9 +43,13 @@ const checkAndGenerateCoupons = async (userId) => {
 
             const existingLoyaltyCoupon =
                 await Coupon.findOne({
+
                     userId,
+
                     couponType: "loyalty",
+
                     purchaseMilestone
+
                 });
 
 
@@ -81,6 +88,7 @@ const checkAndGenerateCoupons = async (userId) => {
 
 
             // Remember the rewarded milestone
+
             user.lastCouponMilestone =
                 purchaseMilestone;
 
@@ -100,12 +108,20 @@ const checkAndGenerateCoupons = async (userId) => {
             user.monthlySpendingMonth;
 
 
-        console.log("===== VIP COUPON DEBUG =====");
-        console.log("User ID:", userId);
+        console.log(
+            "===== VIP COUPON DEBUG ====="
+        );
+
+        console.log(
+            "User ID:",
+            userId
+        );
+
         console.log(
             "Monthly Spending:",
             monthlySpending
         );
+
         console.log(
             "Monthly Spending Month:",
             couponMonth
@@ -125,9 +141,6 @@ const checkAndGenerateCoupons = async (userId) => {
                 "VIP eligibility: PASSED"
             );
 
-
-            // Check whether this month's
-            // VIP coupon already exists
 
             const existingMonthlyCoupon =
                 await Coupon.findOne({
@@ -207,6 +220,89 @@ const checkAndGenerateCoupons = async (userId) => {
         }
 
 
+        // ====================================
+        // 3. SPECIAL COUPON
+        // EVERY 5 SUCCESSFULLY USED COUPONS
+        // ====================================
+
+        const specialMilestone =
+            Math.floor(
+                (user.usedCouponCount || 0) / 5
+            ) * 5;
+
+
+        if (
+            specialMilestone >= 5 &&
+            specialMilestone >
+                (user.lastSpecialCouponMilestone || 0)
+        ) {
+
+            console.log(
+                `Special coupon milestone reached: ${specialMilestone}`
+            );
+
+
+            const existingSpecialCoupon =
+                await Coupon.findOne({
+
+                    userId,
+
+                    couponType: "special",
+
+                    usedCouponMilestone:
+                        specialMilestone
+
+                });
+
+
+            if (!existingSpecialCoupon) {
+
+                const specialCoupon =
+                    await Coupon.create({
+
+                        code:
+                            `SPECIAL15-${specialMilestone}-${Date.now()}`,
+
+                        discountType: "percentage",
+
+                        discountValue: 15,
+
+                        expiryDate:
+                            new Date(
+                                Date.now() +
+                                30 * 24 * 60 * 60 * 1000
+                            ),
+
+                        userId,
+
+                        couponType: "special",
+
+                        usedCouponMilestone:
+                            specialMilestone,
+
+                        minPurchaseAmount: 0
+
+                    });
+
+
+                console.log(
+                    "Special coupon generated successfully:",
+                    specialCoupon.code
+                );
+
+            }
+
+
+            // Remember the rewarded milestone
+
+            user.lastSpecialCouponMilestone =
+                specialMilestone;
+
+            await user.save();
+
+        }
+
+
     } catch (error) {
 
         console.log(
@@ -217,8 +313,6 @@ const checkAndGenerateCoupons = async (userId) => {
     }
 
 };
-
-
 // ====================================
 // Get User Coupons
 // ====================================

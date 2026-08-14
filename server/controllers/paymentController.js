@@ -1,6 +1,7 @@
 const axios = require("axios");
 const crypto = require("crypto");
 const Order = require("../models/Order");
+const Coupon = require("../models/Coupon");
 
 // ====================================
 // Generate Signature
@@ -230,6 +231,32 @@ const order = await Order.findById(orderId);
         order.paidAt = new Date();
 
         await order.save();
+
+        // ====================================
+// Mark Coupon As Used After Successful Payment
+// ====================================
+
+if (order.couponCode) {
+
+    const coupon = await Coupon.findOne({
+        code: order.couponCode,
+        userId: order.userId,
+        isUsed: false
+    });
+
+    if (coupon) {
+
+        coupon.isUsed = true;
+
+        await coupon.save();
+
+        console.log(
+            `Coupon ${coupon.code} marked as used.`
+        );
+
+    }
+
+}
 
         return res.redirect(
             "http://localhost:5173/payment/success"

@@ -585,45 +585,6 @@ const updateOrderStatusController = async (req, res) => {
 
                 await user.save();
 
-
-                // ====================================
-                // VIP COUPON DEBUG
-                // ====================================
-
-                console.log(
-                    "===== VIP COUPON DEBUG ====="
-                );
-
-                console.log(
-                    "User ID:",
-                    user._id
-                );
-
-                console.log(
-                    "Order Amount:",
-                    order.totalAmount
-                );
-
-                console.log(
-                    "Monthly Spending:",
-                    user.monthlySpending
-                );
-
-                console.log(
-                    "Monthly Spending Month:",
-                    user.monthlySpendingMonth
-                );
-
-                console.log(
-                    "Delivered Purchase Count:",
-                    user.deliveredPurchaseCount
-                );
-
-                console.log(
-                    "============================"
-                );
-
-
                 // ====================================
                 // 3. Check & Generate Coupons
                 // ====================================
