@@ -43,27 +43,6 @@ const verifySignature = (decodedData) => {
             .update(message)
             .digest("base64");
 
-    console.log("===== eSEWA SIGNATURE DEBUG =====");
-
-    console.log(
-        "Signed Fields:",
-        decodedData.signed_field_names
-    );
-
-    console.log(
-        "Message:",
-        message
-    );
-
-    console.log(
-        "Received Signature:",
-        decodedData.signature
-    );
-
-    console.log(
-        "Expected Signature:",
-        expectedSignature
-    );
 
     return (
         expectedSignature ===
@@ -144,27 +123,6 @@ const initiateEsewaPaymentController = async (req, res) => {
             signature
 
         };
-
-        // ====================================
-// Debug eSewa Payment Data
-// ====================================
-
-console.log("===== ESEWA PAYMENT DATA =====");
-
-console.log(
-    "SUCCESS URL:",
-    process.env.ESEWA_SUCCESS_URL
-);
-
-console.log(
-    "FAILURE URL:",
-    process.env.ESEWA_FAILURE_URL
-);
-
-console.log(
-    "Payment Data:",
-    paymentData
-);
 
         return res.status(200).json({
 
