@@ -1,0 +1,36 @@
+.payment-notice {
+    width: 100%;
+    overflow: hidden;
+    background: #fff8e1;
+    border-bottom: 1px solid #ffe082;
+    padding: 9px 0;
+    white-space: nowrap;
+}
+
+.payment-marquee {
+    display: flex;
+    width: max-content;
+    animation: paymentScroll 22s linear infinite;
+}
+
+.payment-marquee span {
+    padding-right: 80px;
+    font-size: 17px;
+    color: #5d4037;
+}
+
+.payment-marquee strong {
+    color: #1b7f3a;
+}
+
+@keyframes paymentScroll {
+
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+
+}
