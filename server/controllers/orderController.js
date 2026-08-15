@@ -3,7 +3,7 @@ const Cart=require("../models/UserCart");
 const Coupon=require("../models/Coupon");
 const User=require("../models/User");
 const {checkAndGenerateCoupons} = require("./couponController");
-
+const sendOrderStatusEmail = require("../utils/orderEmail");
 // ====================================
 // Create Order
 // ====================================
@@ -242,6 +242,22 @@ if (
         cart.products = [];
 
         await cart.save();
+
+                // ====================================
+// Send Order Placed Email
+// ====================================
+
+const user = await User.findById(userId);
+
+if (user) {
+
+    await sendOrderStatusEmail(
+        user,
+        order,
+        "Placed"
+    );
+
+}
 
 
         return res.status(201).json({
@@ -534,8 +550,9 @@ const updateOrderStatusController = async (req, res) => {
 
         }
 
+
         // ====================================
-        // Prevent counting the same order twice
+        // Prevent counting same order twice
         // ====================================
 
         const wasAlreadyDelivered =
@@ -552,6 +569,15 @@ const updateOrderStatusController = async (req, res) => {
 
 
         // ====================================
+        // Get User
+        // ====================================
+
+        const user = await User.findById(
+            order.userId
+        );
+
+
+        // ====================================
         // Loyalty + Monthly Spending Progress
         // ====================================
 
@@ -559,10 +585,6 @@ const updateOrderStatusController = async (req, res) => {
             orderStatus === "Delivered" &&
             !wasAlreadyDelivered
         ) {
-
-            const user = await User.findById(
-                order.userId
-            );
 
             if (user) {
 
@@ -612,6 +634,7 @@ const updateOrderStatusController = async (req, res) => {
 
                 await user.save();
 
+
                 // ====================================
                 // 3. Check & Generate Coupons
                 // ====================================
@@ -621,6 +644,21 @@ const updateOrderStatusController = async (req, res) => {
                 );
 
             }
+
+        }
+
+
+        // ====================================
+        // Send Order Status Email
+        // ====================================
+
+        if (user && orderStatus !== "Pending") {
+
+            await sendOrderStatusEmail(
+                user,
+                order,
+                orderStatus
+            );
 
         }
 
@@ -656,6 +694,7 @@ const updateOrderStatusController = async (req, res) => {
     }
 
 };
+
 // ====================================
 // Delete Order (Admin)
 // ====================================

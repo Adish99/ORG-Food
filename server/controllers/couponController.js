@@ -1,6 +1,8 @@
 const Coupon = require("../models/Coupon");
 const Order = require("../models/Order");
 const User = require("../models/User");
+const sendCouponGeneratedEmail =
+    require("../utils/couponEmail");
 
 
 // ====================================
@@ -26,76 +28,89 @@ const checkAndGenerateCoupons = async (userId) => {
         }
 
 
+      // ====================================
+// 1. EVERY 5 DELIVERED PURCHASES
+// ====================================
+
+const purchaseMilestone =
+    Math.floor(
+        user.deliveredPurchaseCount / 5
+    ) * 5;
+
+
+if (
+    purchaseMilestone >= 5 &&
+    purchaseMilestone > user.lastCouponMilestone
+) {
+
+    const existingLoyaltyCoupon =
+        await Coupon.findOne({
+
+            userId,
+
+            couponType: "loyalty",
+
+            purchaseMilestone
+
+        });
+
+
+    if (!existingLoyaltyCoupon) {
+
+        const loyaltyCoupon =
+            await Coupon.create({
+
+                code:
+                    `LOYAL10-${purchaseMilestone}-${Date.now()}`,
+
+                discountType: "percentage",
+
+                discountValue: 10,
+
+                expiryDate:
+                    new Date(
+                        Date.now() +
+                        30 * 24 * 60 * 60 * 1000
+                    ),
+
+                userId,
+
+                couponType: "loyalty",
+
+                purchaseMilestone,
+
+                minPurchaseAmount: 0
+
+            });
+
+
         // ====================================
-        // 1. EVERY 5 DELIVERED PURCHASES
+        // Send Coupon Generated Email
         // ====================================
 
-        const purchaseMilestone =
-            Math.floor(
-                user.deliveredPurchaseCount / 5
-            ) * 5;
+        await sendCouponGeneratedEmail(
+            user,
+            loyaltyCoupon
+        );
 
 
-        if (
-            purchaseMilestone >= 5 &&
-            purchaseMilestone > user.lastCouponMilestone
-        ) {
+        console.log(
+            `Loyalty coupon generated for ${purchaseMilestone} purchases.`
+        );
 
-            const existingLoyaltyCoupon =
-                await Coupon.findOne({
-
-                    userId,
-
-                    couponType: "loyalty",
-
-                    purchaseMilestone
-
-                });
+    }
 
 
-            if (!existingLoyaltyCoupon) {
+    // ====================================
+    // Remember the rewarded milestone
+    // ====================================
 
-                await Coupon.create({
+    user.lastCouponMilestone =
+        purchaseMilestone;
 
-                    code:
-                        `LOYAL10-${purchaseMilestone}-${Date.now()}`,
+    await user.save();
 
-                    discountType: "percentage",
-
-                    discountValue: 10,
-
-                    expiryDate:
-                        new Date(
-                            Date.now() +
-                            30 * 24 * 60 * 60 * 1000
-                        ),
-
-                    userId,
-
-                    couponType: "loyalty",
-
-                    purchaseMilestone,
-
-                    minPurchaseAmount: 0
-
-                });
-
-                console.log(
-                    `Loyalty coupon generated for ${purchaseMilestone} purchases.`
-                );
-
-            }
-
-
-            // Remember the rewarded milestone
-
-            user.lastCouponMilestone =
-                purchaseMilestone;
-
-            await user.save();
-
-        }
-
+}
 
         // ====================================
         // 2. MONTHLY SPENDING VIP COUPON
@@ -173,6 +188,11 @@ const checkAndGenerateCoupons = async (userId) => {
                         minPurchaseAmount: 2500
 
                     });
+
+                    await sendCouponGeneratedEmail(
+    user,
+    vipCoupon
+);
 
 
                 console.log(
@@ -263,6 +283,11 @@ const checkAndGenerateCoupons = async (userId) => {
                         minPurchaseAmount: 0
 
                     });
+
+                    await sendCouponGeneratedEmail(
+    user,
+    specialCoupon
+);
 
 
                 console.log(

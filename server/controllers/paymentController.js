@@ -2,6 +2,7 @@ const axios = require("axios");
 const crypto = require("crypto");
 const Order = require("../models/Order");
 const Coupon = require("../models/Coupon");
+const sendPaymentSuccessEmail = require("../utils/paymentEmail");
 
 // ====================================
 // Generate Signature
@@ -354,6 +355,23 @@ const verifyEsewaPaymentController = async (req, res) => {
 
 
         await order.save();
+
+        // ====================================
+// Send Payment Successful Email
+// ====================================
+
+const user = await User.findById(
+    order.userId
+);
+
+if (user) {
+
+    await sendPaymentSuccessEmail(
+        user,
+        order
+    );
+
+}
 
 
         // ====================================
