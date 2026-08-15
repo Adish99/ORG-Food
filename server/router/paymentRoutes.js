@@ -21,11 +21,17 @@ router.post(
 
 );
 router.get(
+    "/esewa/failure",
+    (req, res) => {
 
-    "/esewa/verify",
+        console.log("🔥 eSEWA FAILURE ROUTE HIT");
+        console.log("Failure Query:", req.query);
 
-    verifyEsewaPaymentController
+        res.json({
+            message: "eSewa failure callback reached",
+            query: req.query
+        });
 
+    }
 );
-
 module.exports = router;

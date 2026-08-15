@@ -22,23 +22,55 @@ const generateSignature = (message, secret) => {
 
 const verifySignature = (decodedData) => {
 
+
+    const signedFieldNames =
+        decodedData.signed_field_names.split(",");
+
     const message =
-        `transaction_code=${decodedData.transaction_code},` +
-        `status=${decodedData.status},` +
-        `total_amount=${decodedData.total_amount},` +
-        `transaction_uuid=${decodedData.transaction_uuid},` +
-        `product_code=${decodedData.product_code},` +
-        `signed_field_names=${decodedData.signed_field_names}`;
+        signedFieldNames
+            .map(
+                (fieldName) =>
+                    `${fieldName}=${decodedData[fieldName]}`
+            )
+            .join(",");
 
-    const expectedSignature = crypto
-        .createHmac("sha256", process.env.ESEWA_SECRET_KEY)
-        .update(message)
-        .digest("base64");
+    const expectedSignature =
+        crypto
+            .createHmac(
+                "sha256",
+                process.env.ESEWA_SECRET_KEY
+            )
+            .update(message)
+            .digest("base64");
 
-    return expectedSignature === decodedData.signature;
+    console.log("===== eSEWA SIGNATURE DEBUG =====");
+
+    console.log(
+        "Signed Fields:",
+        decodedData.signed_field_names
+    );
+
+    console.log(
+        "Message:",
+        message
+    );
+
+    console.log(
+        "Received Signature:",
+        decodedData.signature
+    );
+
+    console.log(
+        "Expected Signature:",
+        expectedSignature
+    );
+
+    return (
+        expectedSignature ===
+        decodedData.signature
+    );
 
 };
-
 
 // ====================================
 // Initiate eSewa Payment
@@ -84,6 +116,8 @@ const initiateEsewaPaymentController = async (req, res) => {
 
         );
 
+
+
         const paymentData = {
 
             amount: order.totalAmount,
@@ -110,6 +144,27 @@ const initiateEsewaPaymentController = async (req, res) => {
             signature
 
         };
+
+        // ====================================
+// Debug eSewa Payment Data
+// ====================================
+
+console.log("===== ESEWA PAYMENT DATA =====");
+
+console.log(
+    "SUCCESS URL:",
+    process.env.ESEWA_SUCCESS_URL
+);
+
+console.log(
+    "FAILURE URL:",
+    process.env.ESEWA_FAILURE_URL
+);
+
+console.log(
+    "Payment Data:",
+    paymentData
+);
 
         return res.status(200).json({
 
@@ -143,23 +198,61 @@ const verifyEsewaPaymentController = async (req, res) => {
 
         const { data } = req.query;
 
+        console.log("===== eSEWA VERIFICATION START =====");
+        console.log("Received data:", data);
+
+
+        // ====================================
+        // Check Response Data
+        // ====================================
+
         if (!data) {
+
+            console.log("eSewa data not received.");
 
             return res.redirect(
                 "http://localhost:5173/payment/failure"
             );
 
         }
+
+
+        // ====================================
+        // Decode eSewa Response
+        // ====================================
 
         const decodedData = JSON.parse(
 
-            Buffer.from(data, "base64").toString("utf8")
+            Buffer
+                .from(data, "base64")
+                .toString("utf8")
 
         );
 
-        // Verify Signature
+        console.log(
+            "Decoded eSewa Data:",
+            decodedData
+        );
 
-        if (!verifySignature(decodedData)) {
+
+        // ====================================
+        // Verify Signature
+        // ====================================
+
+        const signatureValid =
+            verifySignature(decodedData);
+
+        console.log(
+            "Signature Valid:",
+            signatureValid
+        );
+
+
+        if (!signatureValid) {
+
+            console.log(
+                "eSewa signature verification failed."
+            );
 
             return res.redirect(
                 "http://localhost:5173/payment/failure"
@@ -167,45 +260,88 @@ const verifyEsewaPaymentController = async (req, res) => {
 
         }
 
-        // Verify with eSewa Server
 
-        const verificationResponse = await axios.get(
+        // ====================================
+        // Verify Transaction With eSewa
+        // ====================================
 
-            "https://rc.esewa.com.np/api/epay/transaction/status/",
+        const verificationResponse =
+            await axios.get(
 
-            {
+                "https://rc.esewa.com.np/api/epay/transaction/status/",
 
-                params: {
+                {
+                    params: {
 
-                    product_code: decodedData.product_code,
+                        product_code:
+                            decodedData.product_code,
 
-                    total_amount: decodedData.total_amount,
+                        total_amount:
+                            decodedData.total_amount,
 
-                    transaction_uuid: decodedData.transaction_uuid
+                        transaction_uuid:
+                            decodedData.transaction_uuid
 
+                    }
                 }
 
-            }
+            );
 
+
+        console.log(
+            "eSewa Status Response:",
+            verificationResponse.data
         );
 
-        // Find Order with the help of orderId
 
-        const orderId = decodedData.transaction_uuid.split("-")[0];
+        // ====================================
+        // Find Order
+        // ====================================
 
-const order = await Order.findById(orderId);
+        const orderId =
+            decodedData.transaction_uuid.split("-")[0];
+
+
+        console.log(
+            "Extracted Order ID:",
+            orderId
+        );
+
+
+        const order =
+            await Order.findById(orderId);
+
 
         if (!order) {
 
+            console.log(
+                "Order not found:",
+                orderId
+            );
+
             return res.redirect(
                 "http://localhost:5173/payment/failure"
             );
 
         }
 
-        // Payment Failed Condition
 
-        if (verificationResponse.data.status !== "COMPLETE") {
+        // ====================================
+        // Verify Amount
+        // ====================================
+
+        if (
+            Number(decodedData.total_amount) !==
+            Number(order.totalAmount)
+        ) {
+
+            console.log(
+                "Amount mismatch!",
+                "eSewa:",
+                decodedData.total_amount,
+                "Order:",
+                order.totalAmount
+            );
 
             order.paymentStatus = "Failed";
 
@@ -217,42 +353,37 @@ const order = await Order.findById(orderId);
 
         }
 
-        // Payment Successful
-
-        order.paymentStatus = "Paid";
 
         // ====================================
-// Mark Coupon As Used After Successful Payment
-// ====================================
+        // Check Payment Status
+        // ====================================
 
-if (order.couponCode) {
+        if (
+            verificationResponse.data.status !==
+            "COMPLETE"
+        ) {
 
-    const coupon = await Coupon.findOne({
-        code: order.couponCode,
-        userId: order.userId,
-        isUsed: false
-    });
+            console.log(
+                "eSewa payment is not COMPLETE:",
+                verificationResponse.data.status
+            );
 
-    if (coupon) {
+            order.paymentStatus = "Failed";
 
-        coupon.isUsed = true;
-        await coupon.save();
+            await order.save();
 
-        // Increase used coupon count
-        const user = await User.findById(order.userId);
+            return res.redirect(
+                "http://localhost:5173/payment/failure"
+            );
 
-        if (user) {
-
-            user.usedCouponCount =
-                (user.usedCouponCount || 0) + 1;
-
-            await user.save();
-
-            // Check for special coupon
-            await checkAndGenerateCoupons(user._id);
         }
-    }
-}
+
+
+        // ====================================
+        // Payment Successful
+        // ====================================
+
+        order.paymentStatus = "Paid";
 
         order.paymentId =
             verificationResponse.data.ref_id ||
@@ -263,37 +394,83 @@ if (order.couponCode) {
 
         order.paidAt = new Date();
 
+
         await order.save();
 
+
         // ====================================
-// Mark Coupon As Used After Successful Payment
-// ====================================
+        // Mark Coupon As Used
+        // ====================================
 
-if (order.couponCode) {
+        if (order.couponCode) {
 
-    const coupon = await Coupon.findOne({
-        code: order.couponCode,
-        userId: order.userId,
-        isUsed: false
-    });
+            const coupon =
+                await Coupon.findOne({
 
-    if (coupon) {
+                    code: order.couponCode,
 
-        coupon.isUsed = true;
+                    userId: order.userId,
 
-        await coupon.save();
+                    isUsed: false
+
+                });
+
+
+            if (coupon) {
+
+                coupon.isUsed = true;
+
+                await coupon.save();
+
+
+                console.log(
+                    `Coupon ${coupon.code} marked as used.`
+                );
+
+
+                // ====================================
+                // Increase Used Coupon Count
+                // ====================================
+
+                const user =
+                    await User.findById(
+                        order.userId
+                    );
+
+
+                if (user) {
+
+                    user.usedCouponCount =
+                        (user.usedCouponCount || 0) + 1;
+
+
+                    await user.save();
+
+
+                    // ====================================
+                    // Check Special Coupon
+                    // ====================================
+
+                    await checkAndGenerateCoupons(
+                        user._id
+                    );
+
+                }
+
+            }
+
+        }
+
 
         console.log(
-            `Coupon ${coupon.code} marked as used.`
+            "===== eSEWA PAYMENT SUCCESS ====="
         );
 
-    }
-
-}
 
         return res.redirect(
             "http://localhost:5173/payment/success"
         );
+
 
     } catch (error) {
 
@@ -302,9 +479,11 @@ if (order.couponCode) {
             error
         );
 
+
         return res.status(500).json({
 
-            message: "Internal Server Error."
+            message:
+                "Internal Server Error."
 
         });
 
