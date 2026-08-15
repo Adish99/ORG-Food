@@ -5,21 +5,36 @@ const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
 
 const {
-
     initiateEsewaPaymentController,
     verifyEsewaPaymentController
-
 } = require("../controllers/paymentController");
 
+
+// ====================================
+// eSewa Initiate
+// ====================================
+
 router.post(
-
     "/esewa/initiate",
-
     authMiddleware,
-
     initiateEsewaPaymentController
-
 );
+
+
+// ====================================
+// eSewa Verify
+// ====================================
+
+router.get(
+    "/esewa/verify",
+    verifyEsewaPaymentController
+);
+
+
+// ====================================
+// eSewa Failure
+// ====================================
+
 router.get(
     "/esewa/failure",
     (req, res) => {
@@ -34,4 +49,6 @@ router.get(
 
     }
 );
+
+
 module.exports = router;
