@@ -71,7 +71,7 @@ const updateQuantity = async (productId, quantity) => {
       // Refresh cart after updating quantity
       getUserCart();
     } else {
-      alert(data.message);
+      toast.success(data.message);
     }
   } catch (error) {
     console.log("Update quantity error:", error);
