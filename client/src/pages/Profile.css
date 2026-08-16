@@ -1,19 +1,29 @@
-.profile-page{
-    min-height:100vh;
-    background:#f5f7fa;
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    padding:40px 20px;
+.profile-page {
+    min-height: 100vh;
+    background: #f5f7fa;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 40px 20px;
+
+    box-sizing: border-box;
 }
 
-.profile-card{
-    width:100%;
-    max-width:900px;
-    background:#fff;
-    border-radius:15px;
-    padding:35px;
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
+.profile-card {
+    width: 100%;
+    max-width: 900px;
+
+    box-sizing: border-box;
+
+    background: #fff;
+    border-radius: 15px;
+
+    padding: 35px;
+    margin-bottom: 25px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
 }
 
 .profile-header{
@@ -96,71 +106,30 @@
     background:#256f46;
 }
 
-@media(max-width:768px){
 
-.profile-form{
-
-grid-template-columns:1fr;
-
-}
-
-.full-width,
-.update-btn{
-
-grid-column:1;
-
-}
-
-.profile-header{
-
-flex-direction:column;
-text-align:center;
-
-}
-
-}
-.password-input{
-
-    position:relative;
-
-}
-
-.password-input input{
-
-    width:100%;
-    padding-right:50px;
-
-}
-
-.password-toggle{
-
-    position:absolute;
-
-    right:15px;
-
-    top:50%;
-
-    transform:translateY(-50%);
-
-    cursor:pointer;
-
-    user-select:none;
-
-    font-size:1.2rem;
-
-}
 /* ====================================
    Profile Picture
 ==================================== */
 
 .profile-picture-section {
+    width: 100%;
+    max-width: 900px;
+
+    box-sizing: border-box;
+
     display: flex;
     flex-direction: column;
     align-items: center;
+
     gap: 15px;
+
     padding: 25px;
-    margin-bottom: 30px;
-    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 25px;
+
+    background: #fff;
+    border-radius: 15px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
 }
 
 .profile-picture {
@@ -246,62 +215,105 @@ text-align:center;
 
 
 /* ====================================
-   Mobile
+   PROFILE PAGE RESPONSIVENESS
 ==================================== */
 
-@media (max-width: 600px) {
+@media (max-width: 1000px) {
+
+    .profile-page {
+        padding: 35px 5%;
+    }
+
+    .profile-card {
+        max-width: 850px;
+    }
+
+}
+
+
+
+@media (max-width: 768px) {
+
+    .profile-page {
+        padding: 25px 15px;
+    }
 
     .profile-picture-section {
+        padding: 20px;
+    }
+
+    .profile-card {
+        padding: 25px 20px;
+    }
+
+    .profile-form {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .full-width,
+    .update-btn {
+        grid-column: 1;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 2.2rem;
+    }
+
+    .profile-group input,
+    .profile-group textarea {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .password-input {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 400px) {
+
+    .profile-page {
         padding: 20px 10px;
     }
 
+    .profile-picture-section {
+        padding: 18px 12px;
+    }
+
+    .profile-card {
+        padding: 20px 15px;
+        border-radius: 12px;
+    }
+
     .profile-picture {
-        width: 110px;
-        height: 110px;
+        width: 105px;
+        height: 105px;
     }
 
     .default-avatar {
-        font-size: 42px;
+        font-size: 40px;
     }
 
-    .profile-picture-section input[type="file"] {
-        max-width: 100%;
+    .profile-upload-label {
+        width: 100%;
+        max-width: 280px;
+        box-sizing: border-box;
+        text-align: center;
     }
 
-}
+    .profile-picture-section button {
+        width: 100%;
+        max-width: 280px;
+    }
 
-.profile-upload-label {
-    display: inline-block;
-
-    padding: 10px 20px;
-
-    border: 1px solid #2e7d32;
-    border-radius: 8px;
-
-    color: #2e7d32;
-    background: white;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: all 0.2s ease;
-}
-
-.profile-upload-label:hover {
-    background: #e8f5e9;
-}
-
-.profile-upload-label input {
-    display: none;
-}
-.remove-profile-btn {
-    border: 1px solid #d32f2f !important;
-    background: white !important;
-    color: #d32f2f !important;
-}
-
-.remove-profile-btn:hover {
-    background: #ffebee !important;
-    color: #b71c1c !important;
 }

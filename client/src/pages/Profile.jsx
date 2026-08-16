@@ -514,87 +514,56 @@ if(loading){
 </div>
 
 <form
-className="profile-form"
-onSubmit={handleSubmit}
+    className="profile-form"
+    onSubmit={handleSubmit}
 >
 
-<div className="profile-group">
+    <div className="profile-group">
+        <label>Username</label>
 
-<label>Username</label>
+        <input
+            type="text"
+            name="username"
+            value={profile.username}
+            onChange={handleChange}
+        />
+    </div>
 
-<input
-type="text"
-name="username"
-value={profile.username}
-onChange={handleChange}
-/>
+    <div className="profile-group">
+        <label>Email</label>
 
-</div>
+        <input
+            type="email"
+            value={profile.email}
+            readOnly
+        />
+    </div>
 
-<div className="profile-group">
+    <div className="profile-group">
+        <label>Phone</label>
 
-<label>Email</label>
+        <input
+            type="text"
+            name="phone"
+            value={profile.phone}
+            onChange={handleChange}
+        />
+    </div>
 
-<input
-type="email"
-value={profile.email}
-readOnly
-/>
+    <div className="profile-group full-width">
+        <label>Address</label>
 
-</div>
+        <textarea
+            rows="4"
+            name="address"
+            value={profile.address}
+            onChange={handleChange}
+        />
+    </div>
 
-<div className="profile-group">
-
-<label>Phone</label>
-
-<input
-type="text"
-name="phone"
-value={profile.phone}
-onChange={handleChange}
-/>
-
-</div>
-
-<div className="profile-group">
-
-<label>Address</label>
-
-<textarea
-rows="4"
-name="address"
-value={profile.address}
-onChange={handleChange}
-/>
-
-</div>
-
-{selectedImage && (
-
-    <button
-        type="button"
-        onClick={handleProfileImageUpload}
-        disabled={uploadingImage}
-    >
-        {uploadingImage
-            ? "Uploading..."
-            : "Upload Profile Picture"
-        }
+    <button className="update-btn">
+        Update Profile
     </button>
-
-)}
-
-{imagePreview && (
-
-    <button
-        type="button"
-        className="remove-profile-btn"
-        onClick={handleRemoveProfileImage}
-    >
-        Remove Profile Picture
-    </button>
-
-)}
 
 </form>
 

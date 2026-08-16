@@ -1,0 +1,86 @@
+/* ====================================
+   React Toastify Responsive
+==================================== */
+
+.Toastify__toast-container {
+    width: 350px;
+}
+
+
+/* Toast itself */
+
+.Toastify__toast {
+    border-radius: 10px;
+    font-size: 15px;
+    min-height: 55px;
+}
+
+
+/* Message */
+
+.Toastify__toast-body {
+    padding: 8px;
+    line-height: 1.4;
+}
+
+
+
+/* ====================================
+   REACT TOASTIFY RESPONSIVE FIX
+==================================== */
+
+/* Desktop */
+
+.Toastify__toast-container--top-right {
+    top: 80px !important;
+    right: 20px !important;
+    width: 350px !important;
+}
+
+
+/* Tablet */
+
+@media (max-width: 768px) {
+
+    .Toastify__toast-container--top-right {
+        top: 70px !important;
+        right: 15px !important;
+        width: 320px !important;
+    }
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 480px) {
+
+    .Toastify__toast-container--top-right {
+        top: 70px !important;
+
+        left: 15px !important;
+        right: 15px !important;
+
+        width: calc(100vw - 30px) !important;
+        max-width: 345px !important;
+
+        margin: 0 !important;
+    }
+
+    .Toastify__toast {
+        width: 100% !important;
+        min-height: 50px;
+
+        margin-bottom: 10px;
+
+        border-radius: 8px;
+
+        font-size: 14px;
+    }
+
+    .Toastify__toast-body {
+        padding: 6px;
+        line-height: 1.4;
+    }
+
+}

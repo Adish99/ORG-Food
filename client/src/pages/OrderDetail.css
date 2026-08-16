@@ -256,46 +256,146 @@
 
 }
 
-@media(max-width:768px){
+/* ===========================
+   TABLET
+=========================== */
 
-.details-header{
+@media (max-width: 900px) {
 
-    flex-direction:column;
+    .order-details-page {
+        padding: 35px 5%;
+    }
 
-    align-items:flex-start;
-
-    gap:15px;
-
-}
-
-.details-product{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:15px;
+    .order-details-card {
+        padding: 28px;
+    }
 
 }
 
-.details-product-right{
 
-    text-align:left;
+/* ===========================
+   MOBILE
+=========================== */
+
+@media (max-width: 768px) {
+
+    .order-details-page {
+        padding: 30px 5%;
+    }
+
+    .order-details-page h1 {
+        font-size: 28px;
+        margin-bottom: 25px;
+    }
+
+    .order-details-card {
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+
+    /* Header */
+
+    .details-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+
+    .details-header h2 {
+        font-size: 20px;
+    }
+
+
+    /* Product */
+
+    .details-product {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .details-product img {
+        width: 90px;
+        height: 90px;
+    }
+
+    .details-product-info {
+        margin-left: 0;
+    }
+
+    .details-product-right {
+        width: 100%;
+        text-align: left;
+    }
+
+
+    /* Summary */
+
+    .details-summary {
+        padding: 18px;
+    }
+
+    .details-summary div {
+        gap: 15px;
+        font-size: 14px;
+    }
+
+    .grand-total {
+        font-size: 18px;
+    }
+
+
+    /* Cancel button */
+
+    .cancel-btn {
+        font-size: 16px;
+        padding: 13px;
+    }
 
 }
 
-}
 
-.cancelled-message{
+/* ===========================
+   SMALL MOBILE
+=========================== */
 
-    margin-top:25px;
+@media (max-width: 450px) {
 
-    text-align:center;
+    .order-details-page {
+        padding: 25px 15px;
+    }
 
-    color:#d32f2f;
+    .order-details-page h1 {
+        font-size: 24px;
+    }
 
-    font-weight:bold;
+    .order-details-card {
+        padding: 16px;
+    }
 
-    font-size:18px;
+    .details-header h2 {
+        font-size: 18px;
+    }
+
+    .details-section h3 {
+        font-size: 18px;
+    }
+
+    .details-product img {
+        width: 75px;
+        height: 75px;
+    }
+
+    .details-summary div {
+        flex-direction: column;
+        gap: 4px;
+        margin: 14px 0;
+    }
+
+    .grand-total {
+        font-size: 18px;
+    }
 
 }

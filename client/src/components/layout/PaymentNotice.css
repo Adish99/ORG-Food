@@ -1,27 +1,44 @@
+
 .payment-notice {
     width: 100%;
     overflow: hidden;
+
     background: #fff8e1;
     border-bottom: 1px solid #ffe082;
+
     padding: 9px 0;
+
     white-space: nowrap;
+    box-sizing: border-box;
 }
+
 
 .payment-marquee {
     display: flex;
+
     width: max-content;
+
     animation: paymentScroll 22s linear infinite;
 }
 
+
 .payment-marquee span {
     padding-right: 80px;
+
     font-size: 17px;
+
     color: #5d4037;
 }
+
 
 .payment-marquee strong {
     color: #1b7f3a;
 }
+
+
+/* =========================
+   Animation
+========================= */
 
 @keyframes paymentScroll {
 
@@ -31,6 +48,44 @@
 
     100% {
         transform: translateX(-50%);
+    }
+
+}
+
+
+/* =========================
+   Tablet
+========================= */
+
+@media (max-width: 768px) {
+
+    .payment-notice {
+        padding: 8px 0;
+    }
+
+    .payment-marquee span {
+        font-size: 15px;
+
+        padding-right: 60px;
+    }
+
+}
+
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 480px) {
+
+    .payment-notice {
+        padding: 7px 0;
+    }
+
+    .payment-marquee span {
+        font-size: 13px;
+
+        padding-right: 45px;
     }
 
 }

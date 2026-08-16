@@ -2,6 +2,16 @@
    HOME PAGE
 ===================================================== */
 
+* {
+    box-sizing: border-box;
+}
+
+.home {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 .home {
     width: 100%;
     background: #ffffff;
@@ -616,47 +626,80 @@
 
 
 /* =====================================================
-   TABLET
+   LARGE TABLET
 ===================================================== */
 
 @media (max-width: 1100px) {
 
     .hero {
         gap: 40px;
-
-        padding-left: 6%;
-        padding-right: 6%;
+        padding: 60px 5%;
     }
 
+    .hero-content {
+        width: 50%;
+    }
 
     .hero-content h1 {
-        font-size: 43px;
+        font-size: 42px;
     }
 
-
-    .slider,
-    .slider img {
+    .slider {
         width: 400px;
     }
 
-
     .slider img {
+        width: 400px;
         height: 290px;
     }
-
 
     .categories-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 
-
     .why-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
-
     .featured-products {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+/* =====================================================
+   TABLET / SMALL LAPTOP
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .hero {
+        gap: 30px;
+        padding: 55px 4%;
+    }
+
+    .hero-content h1 {
+        font-size: 38px;
+    }
+
+    .hero-content p {
+        font-size: 16px;
+    }
+
+    .slider {
+        width: 360px;
+    }
+
+    .slider img {
+        width: 360px;
+        height: 270px;
+    }
+
+    .categories-section,
+    .why-section,
+    .featured-section {
+        padding-left: 5%;
+        padding-right: 5%;
     }
 
 }
@@ -671,51 +714,64 @@
     .hero {
         flex-direction: column;
 
-        padding: 55px 5%;
+        width: 100%;
+
+        padding: 50px 5%;
+
+        gap: 45px;
 
         text-align: center;
     }
 
-
     .hero-content {
         width: 100%;
+        max-width: 600px;
     }
-
 
     .hero-content h1 {
-        font-size: 38px;
+        font-size: 36px;
+        line-height: 1.2;
     }
-
 
     .hero-content p {
-        margin-left: auto;
-        margin-right: auto;
+        max-width: 500px;
+        margin: 0 auto 28px;
 
         font-size: 16px;
+        line-height: 1.6;
     }
-
 
     .hero-buttons {
         justify-content: center;
+        flex-wrap: wrap;
     }
-
 
     .hero-features {
         justify-content: center;
     }
 
 
+    /* Hero Slider */
+
     .slider {
         width: 100%;
         max-width: 470px;
     }
 
-
     .slider img {
         width: 100%;
-        height: 280px;
+        height: auto;
+        aspect-ratio: 16 / 10;
+
+        object-fit: cover;
     }
 
+    .slider h2 {
+        font-size: 21px;
+    }
+
+
+    /* Categories */
 
     .categories-section,
     .why-section,
@@ -723,53 +779,67 @@
         padding: 60px 5%;
     }
 
-
     .categories-grid {
         grid-template-columns: repeat(2, 1fr);
-
         gap: 15px;
     }
 
 
+    /* Why Us */
+
     .why-grid {
         grid-template-columns: 1fr;
+        gap: 18px;
     }
 
+
+    /* Featured Products */
 
     .featured-products {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
     }
 
+
+    /* Headings */
+
+    .section-heading {
+        margin-bottom: 35px;
+    }
 
     .section-heading h2 {
-        font-size: 28px;
+        font-size: 29px;
+    }
+
+    .section-heading p {
+        font-size: 15px;
     }
 
 
-    .home-cta {
-        margin: 45px 5% 55px;
-
-        padding: 45px 20px;
-    }
-
-
-    .home-cta h2 {
-        font-size: 27px;
-    }
-
+    /* Offer */
 
     .offer-section {
         padding: 50px 5%;
     }
 
-
     .offer-content {
         padding: 35px 20px;
     }
 
-
     .offer-content h2 {
         font-size: 25px;
+    }
+
+
+    /* Final CTA */
+
+    .home-cta {
+        margin: 45px 5% 55px;
+        padding: 45px 20px;
+    }
+
+    .home-cta h2 {
+        font-size: 27px;
     }
 
 }
@@ -779,35 +849,143 @@
    SMALL MOBILE
 ===================================================== */
 
-@media (max-width: 450px) {
+@media (max-width: 500px) {
 
-    .hero-content h1 {
-        font-size: 32px;
+    .hero {
+        padding: 45px 5%;
+        gap: 35px;
     }
 
+    .hero-badge {
+        font-size: 13px;
+        padding: 7px 13px;
+    }
+
+    .hero-content h1 {
+        font-size: 31px;
+    }
+
+    .hero-content p {
+        font-size: 15px;
+    }
+
+
+    /* Buttons */
 
     .hero-buttons {
         flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
 
+    .hero-buttons a {
         width: 100%;
     }
 
-
-    .hero-buttons a,
     .hero-buttons button {
         width: 100%;
     }
 
+
+    /* Hero image */
+
+    .slider {
+        width: 100%;
+    }
+
+    .slider img {
+        width: 100%;
+        aspect-ratio: 1 / 0.75;
+
+        border-radius: 18px;
+    }
+
+    .slider h2 {
+        font-size: 19px;
+    }
+
+
+    /* Categories */
 
     .categories-grid {
         grid-template-columns: 1fr;
     }
 
 
+    /* Featured */
+
+    .featured-products {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* Features */
+
     .hero-features {
         flex-direction: column;
-
         gap: 8px;
+    }
+
+
+    /* Section headings */
+
+    .section-heading h2 {
+        font-size: 26px;
+    }
+
+    .section-heading p {
+        font-size: 14px;
+    }
+
+
+    /* CTA */
+
+    .home-cta h2 {
+        font-size: 24px;
+    }
+
+    .home-cta p {
+        font-size: 15px;
+    }
+
+}
+
+
+/* =====================================================
+   VERY SMALL PHONES
+===================================================== */
+
+@media (max-width: 375px) {
+
+    .hero {
+        padding: 40px 4%;
+    }
+
+    .hero-content h1 {
+        font-size: 28px;
+    }
+
+    .hero-content p {
+        font-size: 14px;
+    }
+
+    .slider h2 {
+        font-size: 17px;
+    }
+
+    .category-card {
+        min-height: 150px;
+        padding: 18px 12px;
+    }
+
+    .category-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 27px;
+    }
+
+    .category-card h3 {
+        font-size: 16px;
     }
 
 }

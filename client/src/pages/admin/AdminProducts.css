@@ -200,25 +200,142 @@
 
 
 /* ====================================
-   Responsive
+   Responsive Admin Product Table
+==================================== */
+
+@media (max-width: 1100px) {
+
+    .table-container {
+        overflow-x: hidden;
+    }
+
+    .product-table {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+    }
+
+    .product-table th,
+    .product-table td {
+        padding: 12px 8px;
+        font-size: 14px;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    .product-image {
+        width: 55px;
+        height: 55px;
+    }
+
+}
+
+
+/* ====================================
+   Tablet
 ==================================== */
 
 @media (max-width: 768px) {
 
-    .admin-product-controls {
-        justify-content: stretch;
+    .admin-products-page {
+        padding: 15px;
     }
 
-    .admin-product-controls input {
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .admin-header h1 {
+        font-size: 26px;
+    }
+
+    .add-product-btn {
         width: 100%;
     }
 
-    .pagination {
-        gap: 10px;
+    .table-container {
+        width: 100%;
+        overflow: hidden;
     }
 
-    .pagination button {
-        padding: 8px 12px;
+    .product-table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .product-table th,
+    .product-table td {
+        padding: 10px 6px;
+        font-size: 13px;
+    }
+
+    .product-image {
+        width: 50px;
+        height: 50px;
+    }
+
+}
+
+
+/* ====================================
+   Mobile
+==================================== */
+
+@media (max-width: 600px) {
+
+    .admin-products-page {
+        padding: 10px;
+    }
+
+    .product-table th,
+    .product-table td {
+        padding: 8px 5px;
+        font-size: 12px;
+    }
+
+    .product-image {
+        width: 48px;
+        height: 48px;
+    }
+
+    /* Hide less important columns */
+
+    .product-table th:nth-child(3),
+    .product-table td:nth-child(3) {
+        display: none;
+    }
+
+    .product-table th:nth-child(4),
+    .product-table td:nth-child(4) {
+        display: none;
+    }
+
+    .product-table th:nth-child(5),
+    .product-table td:nth-child(5) {
+        display: none;
+    }
+
+    /* Image */
+
+    .product-table th:nth-child(1),
+    .product-table td:nth-child(1) {
+        width: 25%;
+    }
+
+    /* Name */
+
+    .product-table th:nth-child(2),
+    .product-table td:nth-child(2) {
+        width: 45%;
+    }
+
+    /* Remaining column */
+
+    .product-table th:nth-child(6),
+    .product-table td:nth-child(6) {
+        width: 30%;
     }
 
 }

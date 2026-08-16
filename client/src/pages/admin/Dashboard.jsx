@@ -340,7 +340,7 @@ setLoading(true);
 
                 <h2>Recent Orders</h2>
 
-                <table>
+                <table className="recent-orders-table">
 
                     <thead>
 
@@ -444,7 +444,7 @@ setLoading(true);
 
                 <h2>Recent Users</h2>
 
-                <table>
+                <table className="recent-users-table">
 
                     <thead>
 

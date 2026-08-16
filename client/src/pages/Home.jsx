@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./Home.css";
 import { NavLink } from "react-router-dom";
 import { ProductCard } from "../components/UI/ProductCard";
-import { UseAuth } from "../store/Authentication";
 
 export const Home = () => {
 
@@ -35,7 +34,7 @@ export const Home = () => {
 
     const [featuredProducts, setFeaturedProducts] = useState([]);
 
-    const { userAuthToken } = UseAuth();
+   
 
 
     // ====================================

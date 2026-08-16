@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { UseAuth } from "../../store/Authentication";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 
 export const Navbar = () => {
+const [menuOpen, setMenuOpen] = useState(false);
 
     const {
         isLoggedIn,
@@ -23,203 +24,141 @@ export const Navbar = () => {
 
 return (
 
-    <nav className="navbar">
+  <nav className="navbar">
 
-        <div className="logo">
+    <div className="logo">
+        <NavLink to="/">
+            🌱 Org-Khana
+        </NavLink>
+    </div>
 
-            <NavLink to="/">
-                🌱 Org-Khana
+    {/* Mobile Menu Button */}
+    <button
+        className="mobile-menu-btn"
+        onClick={() => setMenuOpen(!menuOpen)}
+    >
+        {menuOpen ? "✕" : "☰"}
+    </button>
+
+    <ul className={`nav-links ${menuOpen ? "mobile-open" : ""}`}>
+
+        <li>
+            <NavLink to="/" onClick={() => setMenuOpen(false)}>
+                Home
             </NavLink>
+        </li>
 
-        </div>
+        <li>
+            <NavLink to="/about" onClick={() => setMenuOpen(false)}>
+                Learn More
+            </NavLink>
+        </li>
 
+        <li>
+            <NavLink to="/products" onClick={() => setMenuOpen(false)}>
+                Products
+            </NavLink>
+        </li>
 
-        <ul className="nav-links">
-
-            {/* Home */}
-
+        {isLoggedIn && (
             <li>
-                <NavLink to="/">
-                    Home
+                <NavLink to="/wishlist" onClick={() => setMenuOpen(false)}>
+                    ❤️ Wishlist
                 </NavLink>
             </li>
+        )}
 
-
-            {/* About */}
-
+        {isLoggedIn && user?.role === "admin" && (
             <li>
-                <NavLink to="/about">
-                    Learn More
+                <NavLink to="/admin/dashboard" onClick={() => setMenuOpen(false)}>
+                    Admin
                 </NavLink>
             </li>
+        )}
 
-
-            {/* Products */}
-
+        {isLoggedIn && (
             <li>
-                <NavLink to="/products">
-                    Products
+                <NavLink to="/cart" onClick={() => setMenuOpen(false)}>
+                    Cart 🛒
                 </NavLink>
             </li>
+        )}
 
+        {isLoggedIn && (
+            <li>
+                <NavLink to="/orders" onClick={() => setMenuOpen(false)}>
+                    Orders
+                </NavLink>
+            </li>
+        )}
 
-            {/* Wishlist */}
+        {isLoggedIn && (
+            <li>
+                <NavLink to="/coupons" onClick={() => setMenuOpen(false)}>
+                    🎟️ Coupons
+                </NavLink>
+            </li>
+        )}
 
-            {isLoggedIn && (
+        {isLoggedIn && (
+            <li>
+                <NavLink to="/checkout" onClick={() => setMenuOpen(false)}>
+                    Checkout
+                </NavLink>
+            </li>
+        )}
 
+        {!isLoggedIn ? (
+            <>
                 <li>
-                    <NavLink to="/wishlist">
-                        ❤️ Wishlist
+                    <NavLink to="/login" onClick={() => setMenuOpen(false)}>
+                        Login
                     </NavLink>
                 </li>
 
-            )}
-
-
-            {/* Admin */}
-
-            {isLoggedIn && user?.role === "admin" && (
-
                 <li>
-                    <NavLink to="/admin/dashboard">
-                        Admin
+                    <NavLink to="/register" onClick={() => setMenuOpen(false)}>
+                        Register
                     </NavLink>
                 </li>
+            </>
+        ) : (
+            <li>
+                <NavLink to="/logout" onClick={() => setMenuOpen(false)}>
+                    Logout
+                </NavLink>
+            </li>
+        )}
 
-            )}
+        {isLoggedIn && (
+            <li>
+                <NavLink
+                    to="/profile"
+                    className="account-link"
+                    onClick={() => setMenuOpen(false)}
+                >
+                    <div className="navbar-profile-picture">
+                        {user?.profileImage ? (
+                            <img
+                                src={user.profileImage}
+                                alt="Profile"
+                            />
+                        ) : (
+                            <div className="navbar-default-avatar">
+                                {user?.username
+                                    ?.charAt(0)
+                                    .toUpperCase() || "A"}
+                            </div>
+                        )}
+                    </div>
 
+                    <span>My Account</span>
+                </NavLink>
+            </li>
+        )}
 
-            {/* Cart */}
+    </ul>
 
-            {isLoggedIn && (
-
-                <li>
-                    <NavLink to="/cart">
-                        Cart 🛒
-                    </NavLink>
-                </li>
-
-            )}
-
-
-            {/* Orders */}
-
-            {isLoggedIn && (
-
-                <li>
-                    <NavLink to="/orders">
-                        Orders
-                    </NavLink>
-                </li>
-
-            )}
-
-
-            {/* Coupons */}
-
-            {isLoggedIn && (
-
-                <li>
-                    <NavLink to="/coupons">
-                        🎟️ Coupons
-                    </NavLink>
-                </li>
-
-            )}
-
-
-            {/* Checkout */}
-
-            {isLoggedIn && (
-
-                <li>
-                    <NavLink to="/checkout">
-                        Checkout
-                    </NavLink>
-                </li>
-
-            )}
-
-
-            {/* Login / Register */}
-
-            {!isLoggedIn ? (
-
-                <>
-
-                    <li>
-                        <NavLink to="/login">
-                            Login
-                        </NavLink>
-                    </li>
-
-                    <li>
-                        <NavLink to="/register">
-                            Register
-                        </NavLink>
-                    </li>
-
-                </>
-
-            ) : (
-
-                <li>
-                    <NavLink to="/logout">
-                        Logout
-                    </NavLink>
-                </li>
-
-            )}
-
-
-            {/* My Account */}
-
-            {isLoggedIn && (
-
-                <li>
-
-                    <NavLink
-                        to="/profile"
-                        className="account-link"
-                    >
-
-                        <div className="navbar-profile-picture">
-
-                            {user?.profileImage ? (
-
-                                <img
-                                    src={user.profileImage}
-                                    alt="Profile"
-                                />
-
-                            ) : (
-
-                                <div className="navbar-default-avatar">
-
-                                    {user?.username
-                                        ?.charAt(0)
-                                        .toUpperCase() || "A"}
-
-                                </div>
-
-                            )}
-
-                        </div>
-
-                        <span>
-                            My Account
-                        </span>
-
-                    </NavLink>
-
-                </li>
-
-            )}
-
-
-        </ul>
-
-    </nav>
-
+</nav>
 );
 };

@@ -256,11 +256,7 @@
 }
 
 
-/* ==========================
-   Responsive
-========================== */
-
-@media (max-width: 900px) {
+@media (max-width: 600px) {
 
     .admin-layout {
         flex-direction: column;
@@ -272,18 +268,50 @@
 
         position: relative;
 
-        padding: 20px;
+        padding: 15px;
+    }
+
+    .sidebar-logo h2 {
+        font-size: 22px;
+    }
+
+    .sidebar-logo p {
+        font-size: 12px;
+    }
+
+    .admin-sidebar-profile {
+        margin: 15px 0;
+        padding: 10px 12px;
+    }
+
+    .admin-sidebar-avatar {
+        width: 42px;
+        height: 42px;
     }
 
     .sidebar nav {
-        flex-direction: row;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
 
-        overflow-y: visible;
+        overflow: visible;
+        padding-right: 0;
+    }
+
+    .sidebar-link {
+        padding: 10px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .logout-btn {
+        margin-top: 12px;
+        padding: 11px;
     }
 
     .admin-main {
-        padding: 20px;
+        width: 100%;
+        padding: 15px;
+        box-sizing: border-box;
     }
-
 }

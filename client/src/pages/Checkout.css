@@ -338,3 +338,180 @@
   }
 
 }
+/* =========================
+   CHECKOUT RESPONSIVENESS
+========================= */
+
+@media (max-width: 900px) {
+
+    .checkout-page {
+        padding: 35px 5%;
+    }
+
+    .checkout-container {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .checkout-card,
+    .summary-card {
+        padding: 22px;
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .checkout-page {
+        padding: 25px 15px;
+    }
+
+    .checkout-page h1 {
+        font-size: 27px;
+        margin-bottom: 25px;
+    }
+
+
+    .checkout-card,
+    .summary-card {
+        padding: 18px;
+        border-radius: 12px;
+    }
+
+
+    .checkout-card h2,
+    .summary-card h2 {
+        font-size: 20px;
+    }
+
+
+    /* Form fields */
+
+    .checkout-card input,
+    .checkout-card textarea,
+    .checkout-card select {
+        box-sizing: border-box;
+        font-size: 14px;
+        padding: 12px;
+    }
+
+
+    /* Summary products */
+
+    .summary-product {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .summary-product-left {
+        width: 100%;
+    }
+
+    .summary-product-image {
+        width: 60px;
+        height: 60px;
+        flex-shrink: 0;
+    }
+
+    .summary-product-info h4 {
+        font-size: 15px;
+    }
+
+    .summary-product-right {
+        align-self: flex-end;
+        font-size: 16px;
+    }
+
+
+    /* Summary rows */
+
+    .summary-row {
+        font-size: 15px;
+    }
+
+    .summary-total {
+        font-size: 20px;
+    }
+
+
+    /* Place order */
+
+    .place-order-btn {
+        font-size: 16px;
+        padding: 13px;
+    }
+
+
+    /* Coupon */
+
+    .coupon-section {
+        padding: 14px;
+    }
+
+    .coupon-input-group {
+        flex-direction: column;
+    }
+
+    .coupon-input-group input {
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    .coupon-input-group button {
+        width: 100%;
+    }
+
+
+    /* Applied coupon */
+
+    .applied-coupon {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .applied-coupon button {
+        width: 100%;
+    }
+
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 400px) {
+
+    .checkout-page {
+        padding: 20px 12px;
+    }
+
+    .checkout-page h1 {
+        font-size: 24px;
+    }
+
+    .checkout-card,
+    .summary-card {
+        padding: 15px;
+    }
+
+    .summary-product-left {
+        gap: 10px;
+    }
+
+    .summary-product-image {
+        width: 55px;
+        height: 55px;
+    }
+
+    .summary-total {
+        font-size: 18px;
+    }
+
+}

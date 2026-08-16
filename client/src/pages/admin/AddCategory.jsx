@@ -1,26 +1,29 @@
+
 import "./AddCategory.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { UseAuth } from "../../store/Authentication";
 
 export const AddCategory = () => {
 
     const navigate = useNavigate();
 
+    const { userAuthToken } = UseAuth();
+
     const [category, setCategory] = useState({
-    categoryName: ""
-});
-const [isSubmitting, setIsSubmitting] = useState(false);
+        categoryName: ""
+    });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (e) => {
 
         const { name, value } = e.target;
 
         setCategory((prev) => ({
-
             ...prev,
             [name]: value
-
         }));
 
     };
@@ -28,7 +31,8 @@ const [isSubmitting, setIsSubmitting] = useState(false);
     const handleSubmit = async (e) => {
 
         e.preventDefault();
-         setIsSubmitting(true);
+
+        setIsSubmitting(true);
 
         try {
 
@@ -36,9 +40,12 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                 "http://localhost:8000/api/category/add",
                 {
                     method: "POST",
+
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        Authorization: userAuthToken
                     },
+
                     body: JSON.stringify(category)
                 }
             );
@@ -59,10 +66,14 @@ const [isSubmitting, setIsSubmitting] = useState(false);
 
         } catch (error) {
 
-            console.log(error);
+            console.log("Add Category Error:", error);
 
-        }finally {
-    setIsSubmitting(false);
+            toast.error("Something went wrong.");
+
+        } finally {
+
+            setIsSubmitting(false);
+
         }
 
     };
@@ -75,27 +86,32 @@ const [isSubmitting, setIsSubmitting] = useState(false);
 
                 <h1>Add New Category</h1>
 
-               <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
 
-    <label>Category Name</label>
+                    <label>
+                        Category Name
+                    </label>
 
-    <input
-        type="text"
-        name="categoryName"
-        value={category.categoryName}
-        onChange={handleChange}
-        placeholder="Enter category name"
-        required
-    />
+                    <input
+                        type="text"
+                        name="categoryName"
+                        value={category.categoryName}
+                        onChange={handleChange}
+                        placeholder="Enter category name"
+                        required
+                    />
 
-   <button
-    type="submit"
-    disabled={isSubmitting}
->
-    {isSubmitting ? "Adding...." : "Add Category"}
-</button>
+                    <button
+                        type="submit"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting
+                            ? "Adding..."
+                            : "Add Category"
+                        }
+                    </button>
 
-</form>
+                </form>
 
             </div>
 
