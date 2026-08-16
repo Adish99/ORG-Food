@@ -41,6 +41,7 @@ import { PaymentSuccess } from "./pages/PaymentSuccess";
 import { AdminReviews } from "./pages/admin/AdminReviews";
 import { Wishlist } from "./pages/Wishlist";
 import { Coupons } from "./pages/Coupons";
+import { About } from "./pages/About";
 
 
 const App=()=>{
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />
+      },
+      {
+        path:"about",
+        element:<About/>
       },
       {
         path: "register",
