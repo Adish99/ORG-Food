@@ -10,37 +10,63 @@ console.log("AdminProducts Rendered");
 export const AdminProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const [deletingId, setDeletingId] = useState(null);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+const [page, setPage] = useState(1);
+const [totalPages, setTotalPages] = useState(1);
 
 
   const navigate = useNavigate();
 const { userAuthToken } = UseAuth();
-  const getProducts = async () => {
-     setIsSubmitting(true);
+
+
+const getProducts = async () => {
+
+   setLoading(true);
+
     try {
-      const res = await fetch(
-        "http://localhost:8000/api/products/getallprod"
-      );
 
-      console.log("Status:", res.status);
+        const res = await fetch(
+            `http://localhost:8000/api/products/getallprod?search=${debouncedSearch}&page=${page}&limit=5`
+        );
 
-      const data = await res.json();
-      console.log("Status:", res.status);
+        const data = await res.json();
 
-      if (res.ok) {
-        setProducts(data.products);
-      }
+        console.log("Status:", res.status);
+
+        if (res.ok) {
+
+            setProducts(data.products || []);
+            setTotalPages(data.totalPages || 1);
+
+        }
+
     } catch (error) {
-      console.log(error);
+
+        console.log("Fetch products error:", error);
+
     } finally {
-      setLoading(false);
-        setIsSubmitting(false);
+
+        setLoading(false);
     }
-  };
+
+};
+useEffect(() => {
+
+    const timer = setTimeout(() => {
+
+        setDebouncedSearch(search);
+
+    }, 500);
+
+    return () => clearTimeout(timer);
+
+}, [search]);
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [debouncedSearch,page]);
 
   const deleteProduct = async (id) => {
 
@@ -49,6 +75,7 @@ const { userAuthToken } = UseAuth();
     );
 
     if (!confirmDelete) return;
+setDeletingId(id);
 
     try {
 
@@ -88,6 +115,8 @@ const { userAuthToken } = UseAuth();
 
         console.log(error);
 
+    }finally{
+      setDeletingId(null);
     }
 
 };
@@ -114,6 +143,19 @@ const { userAuthToken } = UseAuth();
 </button>
 
       </div>
+      <div className="admin-product-controls">
+
+    <input
+        type="text"
+        placeholder="Search product by name..."
+        value={search}
+        onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+        }}
+    />
+
+</div>
 
       <div className="table-container">
 
@@ -169,26 +211,27 @@ const { userAuthToken } = UseAuth();
                       </span>
                     )}
                   </td>
+<td>
 
-                  <td>
-
-                    <button
+                   <button
     className="edit-btn"
     onClick={() =>
         navigate(`/admin/products/edit/${product._id}`)
     }
-      disabled={isSubmitting}
 >
-        {isSubmitting ? "Editing..." : "Edit"}
+    Edit
 </button>
 
-                   <button
-    className="delete-btn"
-    onClick={() => deleteProduct(product._id)}
-     disabled={isSubmitting}
->
-       {isSubmitting ? "Deleting..." : "Delete"}
-</button>
+
+    <button
+        className="delete-btn"
+        onClick={() => deleteProduct(product._id)}
+        disabled={deletingId === product._id}
+    >
+        {deletingId === product._id
+            ? "Deleting..."
+            : "Delete"}
+    </button>
 
                   </td>
 
@@ -207,6 +250,32 @@ const { userAuthToken } = UseAuth();
           </tbody>
 
         </table>
+
+        {totalPages > 1 && (
+
+    <div className="pagination">
+
+        <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+        >
+            Previous
+        </button>
+
+        <span>
+            Page {page} of {totalPages}
+        </span>
+
+        <button
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+        >
+            Next
+        </button>
+
+    </div>
+
+)}
 
       </div>
 

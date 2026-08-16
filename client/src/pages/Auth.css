@@ -176,3 +176,31 @@ transition:.3s;
 text-decoration:underline;
 
 }
+
+.password-input {
+    position: relative;
+    width: 100%;
+}
+
+.password-input input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 45px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: auto !important;
+    padding: 0 !important;
+
+    border: none !important;
+    background: transparent !important;
+
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+}

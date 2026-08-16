@@ -13,6 +13,7 @@ export const Products = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+const [debouncedSearch, setDebouncedSearch] = useState("");
   const [category, setCategory] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -27,7 +28,7 @@ export const Products = () => {
       setLoading(true);
 
       const res = await fetch(
-        `http://localhost:8000/api/products/getallprod?search=${search}&category=${category}&page=${page}&limit=5&sort=${sort}`,
+        `http://localhost:8000/api/products/getallprod?search=${debouncedSearch}&category=${category}&page=${page}&limit=5&sort=${sort}`,
         {
           method: "GET",
           headers: {
@@ -77,10 +78,22 @@ export const Products = () => {
     getCategories();
   }, []);
 
+  useEffect(() => {
+
+  const timer = setTimeout(() => {
+
+    setDebouncedSearch(search);
+
+  }, 500);
+
+  return () => clearTimeout(timer);
+
+}, [search]);
+
   // Load Products whenever filters change
   useEffect(() => {
-    getProducts();
-  }, [search, category, page, sort]);
+  getProducts();
+}, [debouncedSearch, category, page, sort]);
 
  if (loading) {
 

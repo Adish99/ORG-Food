@@ -17,6 +17,7 @@ address:""
 
 });
 const [isSubmitting, setIsSubmitting] = useState(false);
+const [showPassword, setShowPassword] = useState(false);
 
 const navigate=useNavigate();
 
@@ -119,19 +120,26 @@ onChange={handleChange}
 
 />
 
-<input
+<div className="password-input">
 
-type="password"
+    <input
+        type={showPassword ? "text" : "password"}
+        name="password"
+        placeholder="Enter your password"
+        value={formData.password}
+        onChange={handleChange}
+        required
+    />
 
-name="password"
+    <button
+        type="button"
+        className="password-toggle"
+        onClick={() => setShowPassword(!showPassword)}
+    >
+        {showPassword ? "🙈" : "👁️"}
+    </button>
 
-placeholder="Password"
-
-value={formData.password}
-
-onChange={handleChange}
-
-/>
+</div>
 
 <input
 

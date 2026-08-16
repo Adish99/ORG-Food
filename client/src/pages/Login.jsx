@@ -16,6 +16,7 @@ password:""
 const [isSubmitting, setIsSubmitting] = useState(false);
 
 const {storeTokenInLs,storeUser}=UseAuth();
+const [showPassword, setShowPassword] = useState(false);
 
 
 const navigate=useNavigate();
@@ -68,71 +69,74 @@ navigate("/");
 }
 }
 
-return(
+return (
 
-<div className="auth-container">
+    <div className="auth-container">
 
+        <form
+            className="auth-form"
+            onSubmit={handleSubmit}
+        >
 
-<form
+            <h2>
+                Welcome Back 🌱
+            </h2>
 
-className="auth-form"
+            <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={loginData.email}
+                onChange={handleChange}
+            />
 
-onSubmit={handleSubmit}
+            <div className="password-input">
 
->
+                <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Enter your password"
+                    value={loginData.password}
+                    onChange={handleChange}
+                    required
+                />
 
+                <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() =>
+                        setShowPassword(!showPassword)
+                    }
+                >
+                    {showPassword ? "🙈" : "👁️"}
+                </button>
 
-<h2>
-Welcome Back 🌱
-</h2>
+            </div>
 
-<input
+            <button
+                type="submit"
+                disabled={isSubmitting}
+            >
+                {isSubmitting
+                    ? "Logging in..."
+                    : "Login"}
+            </button>
 
-type="email"
+            <p className="forgot-link">
 
-name="email"
+                <span
+                    onClick={() =>
+                        navigate("/forgot-password")
+                    }
+                >
+                    Forgot Password?
+                </span>
 
-placeholder="Email"
+            </p>
 
-value={loginData.email}
+        </form>
 
-onChange={handleChange}
+    </div>
 
-/>
-
-<input
-
-type="password"
-
-name="password"
-
-placeholder="Password"
-
-value={loginData.password}
-
-onChange={handleChange}
-/>
-<button
-    type="submit"
-    disabled={isSubmitting}
->
-    {isSubmitting ? "Logging in..." : "Login"}
-</button>
-<p className="forgot-link">
-
-    <span
-
-        onClick={() => navigate("/forgot-password")}
-
-    >
-
-        Forgot Password?
-
-    </span>
-
-</p>
-
-</form>
-</div>
-)
+);
 }
