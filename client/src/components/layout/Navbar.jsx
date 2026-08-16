@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { UseAuth } from "../../store/Authentication";
+import { useContext } from "react";
+
 
 export const Navbar = () => {
 
@@ -19,225 +21,205 @@ export const Navbar = () => {
         return null;
     }
 
-    return (
+return (
 
-        <nav className="navbar">
+    <nav className="navbar">
 
-            <div className="logo">
+        <div className="logo">
 
+            <NavLink to="/">
+                🌱 Org-Khana
+            </NavLink>
+
+        </div>
+
+
+        <ul className="nav-links">
+
+            {/* Home */}
+
+            <li>
                 <NavLink to="/">
-                    🌱 Org-Khana
+                    Home
                 </NavLink>
+            </li>
 
-            </div>
+
+            {/* About */}
+
+            <li>
+                <NavLink to="/about">
+                    Learn More
+                </NavLink>
+            </li>
 
 
-            <ul className="nav-links">
+            {/* Products */}
+
+            <li>
+                <NavLink to="/products">
+                    Products
+                </NavLink>
+            </li>
+
+
+            {/* Wishlist */}
+
+            {isLoggedIn && (
 
                 <li>
-                    <NavLink to="/">
-                        Home
+                    <NavLink to="/wishlist">
+                        ❤️ Wishlist
                     </NavLink>
                 </li>
 
-                <li>
-                    <NavLink to="/about">
-        Learn More
-</NavLink>
-                </li>
+            )}
 
 
+            {/* Admin */}
+
+            {isLoggedIn && user?.role === "admin" && (
+
                 <li>
-                    <NavLink to="/products">
-                        Products
+                    <NavLink to="/admin/dashboard">
+                        Admin
                     </NavLink>
                 </li>
-              {
-    isLoggedIn && (
-        <li>
-            <NavLink to="/wishlist">
-                ❤️ Wishlist
-            </NavLink>
-        </li>
-    )
-}
-                
+
+            )}
 
 
-                {/* Admin */}
+            {/* Cart */}
 
-                {
-                    isLoggedIn &&
-                    user?.role === "admin" && (
+            {isLoggedIn && (
 
-                        <li>
+                <li>
+                    <NavLink to="/cart">
+                        Cart 🛒
+                    </NavLink>
+                </li>
 
-                            <NavLink to="/admin/dashboard">
-                                Admin
-                            </NavLink>
-
-                        </li>
-
-                    )
-                }
+            )}
 
 
-                {/* Cart */}
+            {/* Orders */}
 
-                {
-                    isLoggedIn && (
+            {isLoggedIn && (
 
-                        <li>
+                <li>
+                    <NavLink to="/orders">
+                        Orders
+                    </NavLink>
+                </li>
 
-                            <NavLink to="/cart">
-                                Cart 🛒
-                            </NavLink>
-
-                        </li>
-
-                    )
-                }
+            )}
 
 
-                {/* Orders */}
+            {/* Coupons */}
 
-                {
-                    isLoggedIn && (
+            {isLoggedIn && (
 
-                        <li>
+                <li>
+                    <NavLink to="/coupons">
+                        🎟️ Coupons
+                    </NavLink>
+                </li>
 
-                            <NavLink to="/orders">
-                                Orders
-                            </NavLink>
-
-                        </li>
-
-                    )
-                }
-
-                {
-    isLoggedIn && (
-        <li>
-            <NavLink to="/coupons">
-                🎟️ Coupons
-            </NavLink>
-        </li>
-    )
-}
+            )}
 
 
-                {/* Checkout */}
+            {/* Checkout */}
 
-                {
-                    isLoggedIn && (
+            {isLoggedIn && (
 
-                        <li>
+                <li>
+                    <NavLink to="/checkout">
+                        Checkout
+                    </NavLink>
+                </li>
 
-                            <NavLink to="/checkout">
-                                Checkout
-                            </NavLink>
-
-                        </li>
-
-                    )
-                }
+            )}
 
 
-                {/* Login / Register / Logout */}
+            {/* Login / Register */}
 
-                {
-                    !isLoggedIn ? (
+            {!isLoggedIn ? (
 
-                        <>
+                <>
 
-                            <li>
+                    <li>
+                        <NavLink to="/login">
+                            Login
+                        </NavLink>
+                    </li>
 
-                                <NavLink to="/login">
-                                    Login
-                                </NavLink>
+                    <li>
+                        <NavLink to="/register">
+                            Register
+                        </NavLink>
+                    </li>
 
-                            </li>
+                </>
 
+            ) : (
 
-                            <li>
+                <li>
+                    <NavLink to="/logout">
+                        Logout
+                    </NavLink>
+                </li>
 
-                                <NavLink to="/register">
-                                    Register
-                                </NavLink>
-
-                            </li>
-
-                        </>
-
-                    ) : (
-
-                        <li>
-
-                            <NavLink to="/logout">
-                                Logout
-                            </NavLink>
-
-                        </li>
-
-                    )
-                }
+            )}
 
 
-                {/* My Account + Profile Picture */}
+            {/* My Account */}
 
-                {
-                    isLoggedIn && (
+            {isLoggedIn && (
 
-                        <li>
+                <li>
 
-                            <NavLink
-                                to="/profile"
-                                className="account-link"
-                            >
+                    <NavLink
+                        to="/profile"
+                        className="account-link"
+                    >
 
-                                <div className="navbar-profile-picture">
+                        <div className="navbar-profile-picture">
 
-                                    {
-                                        user?.profileImage ? (
+                            {user?.profileImage ? (
 
-                                            <img
-                                                src={user.profileImage}
-                                                alt="Profile"
-                                            />
+                                <img
+                                    src={user.profileImage}
+                                    alt="Profile"
+                                />
 
-                                        ) : (
+                            ) : (
 
-                                            <div className="navbar-default-avatar">
+                                <div className="navbar-default-avatar">
 
-                                                {
-                                                    user?.username
-                                                        ?.charAt(0)
-                                                        .toUpperCase() || "A"
-                                                }
-
-                                            </div>
-
-                                        )
-
-                                    }
+                                    {user?.username
+                                        ?.charAt(0)
+                                        .toUpperCase() || "A"}
 
                                 </div>
 
-                                <span>
-                                    My Account
-                                </span>
+                            )}
 
-                            </NavLink>
+                        </div>
 
-                        </li>
+                        <span>
+                            My Account
+                        </span>
 
-                    )
-                }
+                    </NavLink>
 
-            </ul>
+                </li>
 
-        </nav>
+            )}
 
-    );
 
+        </ul>
+
+    </nav>
+
+);
 };

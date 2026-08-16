@@ -9,7 +9,7 @@ import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary.jsx';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
-      <ErrorBoundary>
+<ErrorBoundary>
  <App />
       </ErrorBoundary>
     </AuthProvider>
