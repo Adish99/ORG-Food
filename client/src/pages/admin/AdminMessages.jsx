@@ -204,8 +204,8 @@ export const AdminMessages = () => {
         <div className="admin-messages">
 
             <h1>Customer Messages</h1>
-
-            <table>
+            <div className="table-container">
+<table>
 
                 <thead>
 
@@ -318,6 +318,8 @@ export const AdminMessages = () => {
                 </tbody>
 
             </table>
+            </div>
+
 
             {/* ==========================
                 View Message Modal

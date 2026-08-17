@@ -11,6 +11,8 @@
     background: #f8f9f7;
 
     box-sizing: border-box;
+
+    overflow-x: hidden;
 }
 
 
@@ -40,16 +42,17 @@
     margin: 0 auto 40px;
 
     display: flex;
+
     justify-content: center;
     align-items: center;
 
     gap: 15px;
 
     flex-wrap: wrap;
+
+    box-sizing: border-box;
 }
 
-
-/* Search */
 
 .product-controls input {
     width: 350px;
@@ -58,6 +61,7 @@
     padding: 14px 18px;
 
     border: 1px solid #ddd;
+
     border-radius: 10px;
 
     font-size: 16px;
@@ -79,8 +83,6 @@
         0 0 5px rgba(27, 143, 58, 0.3);
 }
 
-
-/* Selects */
 
 .product-controls select {
     min-width: 190px;
@@ -120,6 +122,10 @@
         repeat(4, minmax(0, 1fr));
 
     gap: 25px;
+
+    align-items: stretch;
+
+    box-sizing: border-box;
 }
 
 
@@ -203,6 +209,27 @@
 
     .product-controls input {
         width: 320px;
+    }
+
+}
+
+
+/* =====================================================
+   1024px / TABLET
+===================================================== */
+
+@media (max-width: 1024px) {
+
+    .products-page {
+        padding: 40px 4%;
+    }
+
+
+    .products-container {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 18px;
     }
 
 }

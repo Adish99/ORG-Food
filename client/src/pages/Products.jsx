@@ -8,6 +8,22 @@ import { EmptyState } from "../components/UI/EmptyState";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+const getProductsLimit = () => {
+  if (window.innerWidth > 1100) {
+    return 8;
+  }
+
+  if (window.innerWidth > 850) {
+    return 6;
+  }
+
+  if (window.innerWidth > 600) {
+    return 8;
+  }
+
+  return 5;
+};
+
 export const Products = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -18,9 +34,36 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [sort, setSort] = useState("");
+  const [productsPerPage, setProductsPerPage] = useState(getProductsLimit());
 
   const { userAuthToken } = UseAuth();
   const navigate=useNavigate();
+
+  useEffect(() => {
+
+  const handleResize = () => {
+
+    const newLimit = getProductsLimit();
+
+    setProductsPerPage((currentLimit) => {
+
+      if (currentLimit !== newLimit) {
+        setPage(1);
+        return newLimit;
+      }
+
+      return currentLimit;
+    });
+
+  };
+
+  window.addEventListener("resize", handleResize);
+
+  return () => {
+    window.removeEventListener("resize", handleResize);
+  };
+
+}, []);
 
   // Fetch Products
   const getProducts = async () => {
@@ -28,7 +71,7 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
       setLoading(true);
 
       const res = await fetch(
-        `http://localhost:8000/api/products/getallprod?search=${debouncedSearch}&category=${category}&page=${page}&limit=5&sort=${sort}`,
+        `http://localhost:8000/api/products/getallprod?search=${debouncedSearch}&category=${category}&page=${page}&limit=${productsPerPage}&sort=${sort}`,
         {
           method: "GET",
           headers: {
@@ -73,6 +116,8 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
     }
   };
 
+  
+
   // Load Categories Once
   useEffect(() => {
     getCategories();
@@ -93,7 +138,7 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
   // Load Products whenever filters change
   useEffect(() => {
   getProducts();
-}, [debouncedSearch, category, page, sort]);
+}, [debouncedSearch, category, page, sort,productsPerPage]);
 
  if (loading) {
 

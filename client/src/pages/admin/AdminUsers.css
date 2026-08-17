@@ -84,6 +84,22 @@
     background: #fafafa;
 }
 
+/* ====================================
+   Username Column
+==================================== */
+
+.users-table th:first-child,
+.users-table td:first-child {
+    min-width: 150px;
+    width: 20%;
+}
+
+.users-table td:first-child {
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: normal;
+}
+
 
 /* ====================================
    Role
@@ -232,6 +248,10 @@
         font-size: 13px;
         padding: 5px 10px;
     }
+     .users-table th:first-child,
+    .users-table td:first-child {
+        min-width: 140px;
+    }
 
 }
 
@@ -329,6 +349,10 @@
         padding: 9px;
 
         font-size: 12px;
+    }
+      .users-table th:first-child,
+    .users-table td:first-child {
+        min-width: 130px;
     }
 
     .edit-btn,
