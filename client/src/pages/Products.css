@@ -294,75 +294,87 @@
 @media (max-width: 600px) {
 
     .products-page {
-        padding: 30px 5%;
+        padding: 30px 15px;
     }
-
 
     .products-page h1 {
         font-size: 29px;
-
         margin-bottom: 25px;
     }
 
-
-    /* Filters */
+    /* =========================
+       FILTERS
+    ========================= */
 
     .product-controls {
         display: flex;
-
         flex-direction: column;
-
-        align-items: stretch;
+        align-items: center;
 
         width: 100%;
-
         gap: 12px;
 
         margin-bottom: 30px;
     }
 
-
     .product-controls input,
     .product-controls select {
         width: 100%;
+        max-width: 400px;
 
         min-width: 0;
 
         font-size: 15px;
-
         padding: 13px 15px;
+
+        box-sizing: border-box;
     }
 
 
-    /* Products */
+    /* =========================
+       PRODUCTS
+    ========================= */
 
     .products-container {
+        width: 100%;
+
+        display: grid;
         grid-template-columns: 1fr;
+
+        justify-items: center;
 
         gap: 20px;
     }
 
 
-    /* Pagination */
+    /* IMPORTANT:
+       Prevent product card from
+       becoming too wide
+    */
+
+    .products-container .product-card {
+        width: 100%;
+        max-width: 380px;
+    }
+
+
+    /* =========================
+       PAGINATION
+    ========================= */
 
     .pagination {
         gap: 10px;
-
         margin-top: 35px;
     }
 
-
     .pagination button {
         padding: 10px 15px;
-
         font-size: 14px;
     }
-
 
     .pagination span {
         font-size: 15px;
     }
-
 }
 
 
@@ -370,15 +382,30 @@
    SMALL MOBILE
 ===================================================== */
 
-@media (max-width: 375px) {
+@media (max-width: 400px) {
 
     .products-page {
-        padding: 25px 4%;
+        padding: 25px 12px;
     }
-
 
     .products-page h1 {
         font-size: 26px;
+    }
+
+
+    .products-container {
+        width: 100%;
+    }
+
+
+    .products-container .product-card {
+        width: 100%;
+        max-width: 350px;
+    }
+
+
+    .product-card img {
+        height: 220px;
     }
 
 
@@ -386,11 +413,8 @@
         flex-direction: column;
     }
 
-
     .pagination button {
         width: 100%;
-
         max-width: 180px;
     }
-
 }

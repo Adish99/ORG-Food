@@ -405,11 +405,11 @@ const handleWishlist = async () => {
 
                     </div>
 
-                    <button
+             <button
     className={
         isWishlisted
-            ? "wishlist-btn active"
-            : "wishlist-btn"
+            ? "product-detail-wishlist-btn active"
+            : "product-detail-wishlist-btn"
     }
     onClick={handleWishlist}
     disabled={wishlistLoading}

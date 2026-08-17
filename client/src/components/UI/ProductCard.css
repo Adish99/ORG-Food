@@ -58,7 +58,7 @@
 
     height: 100%;
 
-    object-fit: cover;
+    object-fit: 94% 98%;
 
     display: block;
 }
