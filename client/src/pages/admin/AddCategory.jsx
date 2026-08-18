@@ -37,7 +37,7 @@ export const AddCategory = () => {
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/category/add",
+                `${import.meta.env.VITE_API_URL}/api/category/add`,
                 {
                     method: "POST",
 

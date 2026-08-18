@@ -71,7 +71,7 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
       setLoading(true);
 
       const res = await fetch(
-        `http://localhost:8000/api/products/getallprod?search=${debouncedSearch}&category=${category}&page=${page}&limit=${productsPerPage}&sort=${sort}`,
+        `${import.meta.env.VITE_API_URL}/api/products/getallprod?search=${debouncedSearch}&category=${category}&page=${page}&limit=${productsPerPage}&sort=${sort}`,
         {
           method: "GET",
           headers: {
@@ -97,7 +97,7 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
   const getCategories = async () => {
     try {
       const res = await fetch(
-        "http://localhost:8000/api/category",
+        `${import.meta.env.VITE_API_URL}/api/category`,
         {
           method: "GET",
           headers: {

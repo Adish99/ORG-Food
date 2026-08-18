@@ -20,7 +20,7 @@ export const AdminOrders = () => {
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/order/admin",
+            `${import.meta.env.VITE_API_URL}/api/order/admin`,
                 {
                     headers: {
                         Authorization: userAuthToken

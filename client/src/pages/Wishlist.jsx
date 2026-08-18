@@ -28,7 +28,7 @@ export const Wishlist = () => {
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/wishlist",
+                `${import.meta.env.VITE_API_URL}/api/wishlist`,
                 {
                     method: "GET",
 
@@ -90,7 +90,7 @@ export const Wishlist = () => {
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/wishlist/toggle",
+                `${import.meta.env.VITE_API_URL}/api/wishlist/toggle`,
                 {
                     method: "POST",
 
@@ -149,7 +149,7 @@ export const Wishlist = () => {
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/cart/add",
+                `${import.meta.env.VITE_API_URL}/api/cart/add`,
                 {
                     method: "POST",
 

@@ -95,7 +95,7 @@ const updateUser = (updatedData) => {
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/users",
+                `${import.meta.env.VITE_API_URL}/api/users`,
                 {
                     method: "GET",
                     headers: {

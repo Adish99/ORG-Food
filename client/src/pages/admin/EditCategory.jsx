@@ -18,7 +18,7 @@ export const EditCategory = () => {
         try {
 
             const res = await fetch(
-                `http://localhost:8000/api/category/${id}`
+                `${import.meta.env.VITE_API_URL}/api/category/${id}`
             );
 
             const data = await res.json();
@@ -65,7 +65,7 @@ export const EditCategory = () => {
 
             const res = await fetch(
 
-                `http://localhost:8000/api/category/update/${id}`,
+                `${import.meta.env.VITE_API_URL}/api/category/update/${id}`,
 
                 {
                     method: "PUT",

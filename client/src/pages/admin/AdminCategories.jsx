@@ -16,7 +16,7 @@ export const AdminCategories = () => {
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/category"
+                `${import.meta.env.VITE_API_URL}/api/category`
             );
 
             const data = await res.json();
@@ -58,7 +58,7 @@ export const AdminCategories = () => {
 
         const res = await fetch(
 
-            `http://localhost:8000/api/category/delete/${id}`,
+            `${import.meta.env.VITE_API_URL}/api/category/delete/${id}`,
 
             {
                 method: "DELETE"

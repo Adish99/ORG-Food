@@ -21,7 +21,7 @@ export const VerifyResetOtp = () => {
 
             const res = await fetch(
 
-                "http://localhost:8000/api/verify-reset-otp",
+                `${import.meta.env.VITE_API_URL}/api/verify-reset-otp`,
 
                 {
 

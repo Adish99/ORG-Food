@@ -24,7 +24,7 @@ export const VerifyOtp = () => {
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/verify-otp",
+                `${import.meta.env.VITE_API_URL}/api/verify-otp`,
                 {
                     method: "POST",
 
@@ -79,7 +79,7 @@ export const VerifyOtp = () => {
 
         const res = await fetch(
 
-            "http://localhost:8000/api/resend-otp",
+            `${import.meta.env.VITE_API_URL}/api/resend-otp`,
 
             {
 

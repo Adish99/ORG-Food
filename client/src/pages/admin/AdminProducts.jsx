@@ -28,7 +28,7 @@ const getProducts = async () => {
     try {
 
         const res = await fetch(
-            `http://localhost:8000/api/products/getallprod?search=${debouncedSearch}&page=${page}&limit=5`
+            `${import.meta.env.VITE_API_URL}/api/products/getallprod?search=${debouncedSearch}&page=${page}&limit=5`
         );
 
         const data = await res.json();
@@ -81,7 +81,7 @@ setDeletingId(id);
 
         const res = await fetch(
 
-            `http://localhost:8000/api/products/delete/${id}`,
+            `${import.meta.env.VITE_API_URL}/api/products/delete/${id}`,
 
             {
 

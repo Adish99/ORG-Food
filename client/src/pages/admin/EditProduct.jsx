@@ -33,7 +33,7 @@ export const EditProduct = () => {
     try {
 
       const res = await fetch(
-        `http://localhost:8000/api/products/getprod/${id}`
+        `${import.meta.env.VITE_API_URL}/api/products/getprod/${id}`
       );
 
       const data = await res.json();
@@ -68,7 +68,7 @@ export const EditProduct = () => {
     try {
 
       const res = await fetch(
-        "http://localhost:8000/api/category"
+        `${import.meta.env.VITE_API_URL}/api/category`
       );
 
       const data = await res.json();
@@ -165,7 +165,7 @@ if (product.image instanceof File) {
 
       const res = await fetch(
 
-    `http://localhost:8000/api/products/update/${id}`,
+    `${import.meta.env.VITE_API_URL}/api/products/update/${id}`,
 
     {
 

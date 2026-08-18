@@ -19,7 +19,7 @@ export const AdminUsers = () => {
 
             const res = await fetch(
 
-                "http://localhost:8000/api/admin/users",
+                `${import.meta.env.VITE_API_URL}/api/admin/users`,
 
                 {
 
@@ -66,7 +66,7 @@ export const AdminUsers = () => {
 
         const res = await fetch(
 
-            `http://localhost:8000/api/admin/users/${id}`,
+            `${import.meta.env.VITE_API_URL}/api/admin/users/${id}`,
 
             {
 
@@ -117,7 +117,7 @@ const deleteUser = async (id) => {
 
         const res = await fetch(
 
-            `http://localhost:8000/api/admin/users/${id}`,
+            `${import.meta.env.VITE_API_URL}/api/admin/users/${id}`,
 
             {
 

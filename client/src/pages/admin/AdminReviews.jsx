@@ -25,7 +25,7 @@ export const AdminReviews = () => {
             setLoading(true);
 
             const res = await fetch(
-                "http://localhost:8000/api/reviews/admin/all",
+                `${import.meta.env.VITE_API_URL}/api/reviews/admin/all`,
                 {
                     method: "GET",
                     headers: {
@@ -81,7 +81,7 @@ export const AdminReviews = () => {
             setDeletingReview(reviewId);
 
             const res = await fetch(
-                `http://localhost:8000/api/reviews/admin/${reviewId}`,
+                `${import.meta.env.VITE_API_URL}/api/reviews/admin/${reviewId}`,
                 {
                     method: "DELETE",
                     headers: {

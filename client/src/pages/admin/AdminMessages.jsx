@@ -22,7 +22,7 @@ export const AdminMessages = () => {
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/contact/admin",
+                `${import.meta.env.VITE_API_URL}/api/contact/admin`,
                 {
                     headers: {
                         Authorization: userAuthToken
@@ -65,7 +65,7 @@ export const AdminMessages = () => {
         try {
 
             const res = await fetch(
-                `http://localhost:8000/api/contact/admin/${id}`,
+                `${import.meta.env.VITE_API_URL}/api/contact/admin/${id}`,
                 {
                     method: "PUT",
                     headers: {
@@ -110,7 +110,7 @@ export const AdminMessages = () => {
 
         const res = await fetch(
 
-            `http://localhost:8000/api/contact/admin/${message._id}`,
+            `${import.meta.env.VITE_API_URL}/api/contact/admin/${message._id}`,
 
             {
 
@@ -156,7 +156,7 @@ export const AdminMessages = () => {
         try {
 
             const res = await fetch(
-                `http://localhost:8000/api/contact/admin/${id}`,
+                `${import.meta.env.VITE_API_URL}/api/contact/admin/${id}`,
                 {
                     method: "DELETE",
                     headers: {

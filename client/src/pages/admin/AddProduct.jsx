@@ -89,7 +89,7 @@ const [isUploading, setIsUploading] = useState(false);
 
             const res = await fetch(
 
-                "http://localhost:8000/api/category"
+                `${import.meta.env.VITE_API_URL}/api/category`
 
             );
 
@@ -146,7 +146,7 @@ const [isUploading, setIsUploading] = useState(false);
 
             const res = await fetch(
 
-                "http://localhost:8000/api/products/add",
+                `${import.meta.env.VITE_API_URL}/api/products/add`,
 
                 {
 

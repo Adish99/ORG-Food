@@ -26,7 +26,7 @@ export const AdminOrderDetails = () => {
 
             const res = await fetch(
 
-                `http://localhost:8000/api/order/admin/${id}`,
+                `${import.meta.env.VITE_API_URL}/api/order/admin/${id}`,
 
                 {
                     headers: {
@@ -71,7 +71,7 @@ export const AdminOrderDetails = () => {
         console.log("Sending status:", status);
 
         const res = await fetch(
-            `http://localhost:8000/api/order/admin/${id}/update`,
+            `${import.meta.env.VITE_API_URL}/api/order/admin/${id}/update`,
             {
                 method: "PUT",
                 headers: {
@@ -118,7 +118,7 @@ const deleteOrder = async () => {
 
         const res = await fetch(
 
-            `http://localhost:8000/api/order/admin/${id}/delete`,
+            `${import.meta.env.VITE_API_URL}/api/order/admin/${id}/delete`,
 
             {
 

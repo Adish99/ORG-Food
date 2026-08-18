@@ -58,7 +58,7 @@ setLoading(true);
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/profile",
+                `${import.meta.env.VITE_API_URL}/api/profile`,
                 {
                     headers: {
                         Authorization: userAuthToken
@@ -128,7 +128,7 @@ setLoading(true);
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/profile",
+                `${import.meta.env.VITE_API_URL}/api/profile`,
                 {
                     method: "PUT",
 
@@ -224,7 +224,7 @@ setLoading(true);
             );
 
             const res = await fetch(
-                "http://localhost:8000/api/profile/profile-image",
+                `${import.meta.env.VITE_API_URL}/api/profile/profile-image`,
                 {
                     method: "PUT",
 
@@ -308,7 +308,7 @@ const handleRemoveProfileImage = async () => {
     try {
 
         const res = await fetch(
-            "http://localhost:8000/api/profile/profile-image",
+            `${import.meta.env.VITE_API_URL}/api/profile/profile-image`,
             {
                 method: "DELETE",
 
@@ -409,7 +409,7 @@ const handleRemoveProfileImage = async () => {
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/change-password",
+                `${import.meta.env.VITE_API_URL}/api/change-password`,
                 {
                     method: "PUT",
 
