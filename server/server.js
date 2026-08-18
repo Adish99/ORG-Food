@@ -16,7 +16,7 @@ const wishlistRoute=require("./router/wishlistRoute");
 const couponRouter=require("./router/couponRouter");
 const app=express();
 const PORT=process.env.PORT || 3000;
-
+//Change corsOptions for deployment
 const corsOptns = {
     origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"],
