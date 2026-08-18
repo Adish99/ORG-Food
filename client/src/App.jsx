@@ -26,7 +26,7 @@ import { EditCategory } from "./pages/admin/EditCategory";
 import { AdminOrderDetails } from "./pages/admin/AdminOrderDetails";
 import { AdminProtectedRoute } from "./components/AdminProtectedRoute";
 import { NotFound } from "./pages/errors/NotFound";
-import { Unauthorized } from "./pages/errors/UnAuthorized";
+import { Unauthorized } from "./pages/errors/Unauthorized";
 import { ErrorPage } from "./pages/errors/ErrorPage";
 import { Contact } from "./pages/Contact";
 import { AdminMessages } from "./pages/admin/AdminMessages";
