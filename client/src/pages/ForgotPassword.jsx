@@ -17,7 +17,7 @@ export const ForgotPassword = () => {
 
             const res = await fetch(
 
-                "http://localhost:8000/api/forgot-password",
+                `${import.meta.env.VITE_API_URL}/api/forgot-password`,
 
                 {
 

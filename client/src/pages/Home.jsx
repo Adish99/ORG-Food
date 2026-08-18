@@ -68,7 +68,7 @@ export const Home = () => {
             try {
 
                 const res = await fetch(
-                    "http://localhost:8000/api/products/getallprod?limit=4"
+                    `${import.meta.env.VITE_API_URL}/api/products/getallprod?limit=4`
                 );
 
                 const data = await res.json();

@@ -21,7 +21,7 @@ export const Orders = () => {
   const getOrders = async () => {
     try {
       const res = await fetch(
-        "http://localhost:8000/api/order",
+        `${import.meta.env.VITE_API_URL}/api/order`,
         {
           method: "GET",
           headers: {
@@ -48,7 +48,7 @@ export const Orders = () => {
 setPayingOrder(orderId);
         const res = await fetch(
 
-            "http://localhost:8000/api/payment/esewa/initiate",
+            `${import.meta.env.VITE_API_URL}/api/payment/esewa/initiate`,
 
             {
 

@@ -19,7 +19,7 @@ export const OrderDetails = () => {
     try {
 
       const res = await fetch(
-        `http://localhost:8000/api/order/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/order/${id}`,
         {
           method: "GET",
           headers: {
@@ -71,7 +71,7 @@ export const OrderDetails = () => {
     try {
 
         const res = await fetch(
-            `http://localhost:8000/api/order/${order._id}/cancel/`,
+            `${import.meta.env.VITE_API_URL}/api/order/${order._id}/cancel/`,
             {
                 method: "PUT",
                 headers: {

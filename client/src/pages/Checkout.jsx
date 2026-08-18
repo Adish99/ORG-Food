@@ -37,7 +37,7 @@ const handleChange = (e) => {
 const getUserCart = async () => {
   try {
     const res = await fetch(
-      "http://localhost:8000/api/cart",
+      `${import.meta.env.VITE_API_URL}/api/cart`,
       {
         headers: {
           Authorization: userAuthToken,
@@ -93,7 +93,7 @@ const finalTotal =
     setCouponLoading(true);
 
     const res = await fetch(
-      "http://localhost:8000/api/coupon/validate",
+      `${import.meta.env.VITE_API_URL}/api/coupon/validate`,
       {
         method: "POST",
         headers: {
@@ -160,7 +160,7 @@ setIsSubmitting(true);
     setPlacingOrder(true);
 
     const res = await fetch(
-      "http://localhost:8000/api/order",
+      `${import.meta.env.VITE_API_URL}/api/order`,
       {
         method: "POST",
         headers: {
@@ -220,7 +220,7 @@ const initiateEsewaPayment = async (order) => {
 
         const res = await fetch(
 
-            "http://localhost:8000/api/payment/esewa",
+            `${import.meta.env.VITE_API_URL}/api/payment/esewa`,
 
             {
 

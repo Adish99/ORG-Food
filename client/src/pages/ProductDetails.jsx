@@ -33,7 +33,7 @@ const [wishlistLoading, setWishlistLoading] = useState(false);
         try {
 
             const res = await fetch(
-                `http://localhost:8000/api/products/getprod/${id}`,
+                `${import.meta.env.VITE_API_URL}/api/products/getprod/${id}`,
                 {
                     method: "GET",
                     headers: {
@@ -71,7 +71,7 @@ const [wishlistLoading, setWishlistLoading] = useState(false);
             setReviewsLoading(true);
 
             const res = await fetch(
-                `http://localhost:8000/api/reviews/product/${id}`
+                `${import.meta.env.VITE_API_URL}/api/reviews/product/${id}`
             );
 
             const data = await res.json();
@@ -127,7 +127,7 @@ const [wishlistLoading, setWishlistLoading] = useState(false);
         setSubmittingReview(true);
 
         const res = await fetch(
-            "http://localhost:8000/api/reviews/add",
+            `${import.meta.env.VITE_API_URL}/api/reviews/add`,
             {
                 method: "POST",
 
@@ -187,7 +187,7 @@ const checkWishlist = async () => {
     try {
 
         const res = await fetch(
-            "http://localhost:8000/api/wishlist",
+            `${import.meta.env.VITE_API_URL}/api/wishlist`,
             {
                 method: "GET",
                 headers: {
@@ -233,7 +233,7 @@ const handleWishlist = async () => {
         setWishlistLoading(true);
 
         const res = await fetch(
-            "http://localhost:8000/api/wishlist/toggle",
+            `${import.meta.env.VITE_API_URL}/api/wishlist/toggle`,
             {
                 method: "POST",
 
@@ -308,7 +308,7 @@ const handleWishlist = async () => {
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/cart/add",
+                `${import.meta.env.VITE_API_URL}/api/cart/add`,
                 {
                     method: "POST",
 

@@ -21,7 +21,7 @@ const [wishlistLoading, setWishlistLoading] = useState(false);
     try {
 
         const res = await fetch(
-            "http://localhost:8000/api/wishlist",
+            `${import.meta.env.VITE_API_URL}/api/wishlist`,
             {
                 method: "GET",
                 headers: {
@@ -76,7 +76,7 @@ const handleWishlist = async () => {
         setWishlistLoading(true);
 
         const res = await fetch(
-            "http://localhost:8000/api/wishlist/toggle",
+            `${import.meta.env.VITE_API_URL}/api/wishlist/toggle`,
             {
                 method: "POST",
 

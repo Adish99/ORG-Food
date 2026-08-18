@@ -17,7 +17,7 @@ export const Coupons = () => {
         try {
 
             const res = await fetch(
-                "http://localhost:8000/api/coupon",
+                `${import.meta.env.VITE_API_URL}/api/coupon`,
                 {
                     method: "GET",
                     headers: {

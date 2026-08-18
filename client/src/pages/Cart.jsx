@@ -18,7 +18,7 @@ const {userAuthToken}=UseAuth();
 const getUserCart = async () => {
   try {
     const res = await fetch(
-      "http://localhost:8000/api/cart",
+      `${import.meta.env.VITE_API_URL}/api/cart`,
       {
         method: "GET",
         headers: {
@@ -51,7 +51,7 @@ useEffect(() => {
 const updateQuantity = async (productId, quantity) => {
   try {
     const res = await fetch(
-      "http://localhost:8000/api/cart/update",
+      `${import.meta.env.VITE_API_URL}/api/cart/update`,
       {
         method: "PUT",
         headers: {
@@ -87,7 +87,7 @@ const removeProduct = async (productId) => {
   if (!confirmDelete) return;
   try {
     const res = await fetch(
-      "http://localhost:8000/api/cart/remove",
+      `${import.meta.env.VITE_API_URL}/api/cart/remove`,
       {
         method: "DELETE",
         headers: {
