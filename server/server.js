@@ -15,12 +15,12 @@ const reviewRoute=require("./router/reviewRoute");
 const wishlistRoute=require("./router/wishlistRoute");
 const couponRouter=require("./router/couponRouter");
 const app=express();
-const PORT=process.env.PORT_NO || 3000;
+const PORT=process.env.PORT || 3000;
 
-const corsOptns={
-    origin:"http://localhost:5173",
-    methods:["GET","POST","PUT","PATCH","DELETE","HEAD"],
-    credentials:true
+const corsOptns = {
+    origin: process.env.FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"],
+    credentials: true
 };
 
 //CORS middleware
