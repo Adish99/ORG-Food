@@ -35,50 +35,64 @@ setFormData({
 
 }
 
-const handleSubmit=async(e)=>{
-e.preventDefault();
- setIsSubmitting(true);
-try{
-    const res=await fetch(`${import.meta.env.VITE_API_URL}/api/register`,{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify(formData)
-    });
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const data=await res.json();
-      console.log(data);
-    if(res.ok){
-       toast.success("Registration Successfully");
-        storeTokenInLs(data.token);
-        setFormData({
-username:"",
-email:"",
-password:"",
-phone:"",
-address:""
-});
+    setIsSubmitting(true);
 
-navigate("/verify-otp", {
+    try {
 
-    state: {
+        const res = await fetch(
+            `${import.meta.env.VITE_API_URL}/api/register`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            }
+        );
 
-        email: data.email
+        const data = await res.json();
+
+        console.log(data);
+
+        if (res.ok) {
+
+            toast.success(data.message);
+
+            setFormData({
+                username: "",
+                email: "",
+                password: "",
+                phone: "",
+                address: ""
+            });
+
+            navigate("/verify-otp", {
+                state: {
+                    email: data.email
+                }
+            });
+
+        } else {
+
+            toast.error(data.message);
+
+        }
+
+    } catch (error) {
+
+        console.log("Registration Error:", error);
+
+        toast.error("Registration failed!");
+
+    } finally {
+
+        setIsSubmitting(false);
 
     }
-
-});
-    }else{
-        console.log(data.message);
-    }
-}catch(error){
-   toast.error("Registration failed!");
-    console.log(error);
-}finally {
-    setIsSubmitting(false);
-}
-}
+};
 
 return(
 
