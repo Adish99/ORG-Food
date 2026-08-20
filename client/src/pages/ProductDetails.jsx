@@ -433,7 +433,7 @@ const handleWishlist = async () => {
                             </button>
 
                         ) : (
-
+//If not login then user can login first
                             <button
                                 className="add-cart-btn"
                                 disabled
