@@ -1,7 +1,7 @@
 import "./ProductDetails.css";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { UseAuth } from "../store/Authentication";
 import { ProductDetailsSkeleton } from "../components/UI/ProductDetailsSkeleton";
 
@@ -438,7 +438,9 @@ const handleWishlist = async () => {
                                 className="add-cart-btn"
                                 disabled
                             >
-                                Login to Add Cart
+                                <NavLink to="/login">
+                                 Login to Add Cart
+                                </NavLink>
                             </button>
 
                         )
