@@ -65,7 +65,7 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
 
 }, []);
 
-  // Fetch Products
+  
   const getProducts = async () => {
     try {
       setLoading(true);
