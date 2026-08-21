@@ -93,7 +93,7 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
     }
   };
 
-  // Fetch Categories
+
   const getCategories = async () => {
     try {
       const res = await fetch(
