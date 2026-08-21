@@ -17,7 +17,7 @@ export const Orders = () => {
   const navigate=useNavigate();
   
 
-//Get orders 
+
   const getOrders = async () => {
     try {
       const res = await fetch(
