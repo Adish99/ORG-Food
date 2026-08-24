@@ -6,7 +6,7 @@ const sendEmail = async (to, subject, html) => {
 
     const { data, error } = await resend.emails.send({
 
-        from: "Org-Khana <onboarding@resend.dev>",
+       from: "Org-Khana <noreply@adishbabukarki.com.np>",
 
         to: [to],
 
