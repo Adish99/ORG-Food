@@ -1,11 +1,17 @@
+import SEO from "../components/SEO";
 import "./About.css";
 import { NavLink } from "react-router-dom";
 
 export const About = () => {
 
     return (
+        <>
+<SEO
+    title="About Us | Org-Khana"
+    description="Learn more about Org-Khana, our mission, and our commitment to providing quality organic food and natural products in Nepal."
+/>
 
-        <div className="about-page">
+         <div className="about-page">
 
             {/* ================================
                 ABOUT HERO
@@ -302,6 +308,7 @@ export const About = () => {
             </section>
 
         </div>
+        </>
 
     );
 

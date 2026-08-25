@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { UseAuth } from "../store/Authentication";
 import { ProductDetailsSkeleton } from "../components/UI/ProductDetailsSkeleton";
+import SEO from "../components/SEO";
 
 export const ProductDetail = () => {
 
@@ -358,8 +359,17 @@ const handleWishlist = async () => {
 
 
     return (
+        <>
+        <SEO
+    title={`${product.name} | Org-Khana`}
+    description={
+        product.description?.slice(0, 155) ||
+        `Buy ${product.name} online from Org-Khana.`
+    }
 
-        <div className="product-detail-page">
+/>
+
+     <div className="product-detail-page">
 
 
             {/* ==========================
@@ -630,7 +640,8 @@ const handleWishlist = async () => {
 </div>
 
         </div>
-
+    
+        </>
     );
 
 };

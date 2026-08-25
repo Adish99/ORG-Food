@@ -1,6 +1,7 @@
 import "./Contact.css";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import SEO from "../components/SEO";
 
 export const Contact = () => {
 
@@ -81,8 +82,13 @@ const handleSubmit = async (e) => {
 };
 
     return (
+        <>
+        <SEO
+    title="Contact Us | Org-Khana"
+    description="Get in touch with Org-Khana for questions, support, feedback, or information about our organic products and services."
+/>
 
-        <div className="contact-page">
+ <div className="contact-page">
 
             {/* Hero */}
 
@@ -309,6 +315,7 @@ const handleSubmit = async (e) => {
             </div>
 
         </div>
+        </>
 
     );
 
