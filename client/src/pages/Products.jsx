@@ -7,6 +7,7 @@ import { ProductSkeleton } from "../components/UI/ProductSkeleton";
 import { EmptyState } from "../components/UI/EmptyState";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import SEO from "../components/SEO";
 
 const getProductsLimit = () => {
   if (window.innerWidth > 1100) {
@@ -159,7 +160,12 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
 }
 
   return (
-    <div className="products-page">
+    <>
+    <SEO
+  title="Organic Products | Org-Khana"
+  description="Explore fresh organic food and natural products available from Org-Khana."
+/>
+ <div className="products-page">
       <h1>All Products</h1>
 
       {/* Search + Category + Sort */}
@@ -260,5 +266,7 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
         </>
       )}
     </div>
+</>
+
   );
 };

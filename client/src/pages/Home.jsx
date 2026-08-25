@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./Home.css";
 import { NavLink } from "react-router-dom";
 import { ProductCard } from "../components/UI/ProductCard";
+import SEO from "../components/SEO";
 
 export const Home = () => {
 
@@ -105,8 +106,14 @@ export const Home = () => {
 
 
     return (
+        <>
 
-        <div className="home">
+        <SEO
+  title="Org-Khana | Organic Food & Products in Nepal"
+  description="Shop fresh organic food and natural products online with Org-Khana. Discover quality organic products delivered conveniently across Nepal."
+/>
+
+         <div className="home">
 
 
             {/* ====================================
@@ -585,6 +592,7 @@ export const Home = () => {
 
         </div>
 
+        </>
     );
 
 };
