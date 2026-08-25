@@ -204,3 +204,32 @@ text-decoration:underline;
     font-size: 18px;
     line-height: 1;
 }
+/* =====================================================
+   AUTH PAGE SWITCH LINK
+===================================================== */
+
+.auth-switch {
+    margin: 15px 0 0;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    color: #666;
+}
+
+.auth-switch span {
+    color: #1b8f3a;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: color 0.2s ease;
+}
+
+.auth-switch span:hover {
+    color: #146c2c;
+
+    text-decoration: underline;
+}

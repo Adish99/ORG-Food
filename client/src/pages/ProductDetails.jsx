@@ -444,14 +444,12 @@ const handleWishlist = async () => {
 
                         ) : (
 //If not login then user can login first
-                            <button
-                                className="add-cart-btn"
-                                disabled
-                            >
-                                <NavLink to="/login">
-                                 Login to Add Cart
-                                </NavLink>
-                            </button>
+                           <NavLink
+    to="/login"
+    className="add-cart-btn login-cart-btn"
+>
+    Login to Add Cart
+</NavLink>
 
                         )
                     }

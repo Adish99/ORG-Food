@@ -156,6 +156,23 @@
 
     transform: translateY(-2px);
 }
+/* =====================================================
+   LOGIN TO ADD CART
+===================================================== */
+
+.login-cart-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    text-decoration: none;
+}
+
+.login-cart-btn:hover {
+    color: white;
+}
 
 
 /* =====================================================

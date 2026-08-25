@@ -188,6 +188,13 @@ onChange={handleChange}
     {isSubmitting ? "Registering..." : "Register"}
 </button>
 
+<p className="auth-switch">
+    Already have an account?{" "}
+    <span onClick={() => navigate("/login")}>
+        Sign in
+    </span>
+</p>
+
 </form>
 
 </div>

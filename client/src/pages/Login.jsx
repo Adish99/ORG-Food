@@ -113,26 +113,31 @@ return (
 
             </div>
 
-            <button
-                type="submit"
-                disabled={isSubmitting}
-            >
-                {isSubmitting
-                    ? "Logging in..."
-                    : "Login"}
-            </button>
+           <button
+    type="submit"
+    disabled={isSubmitting}
+>
+    {isSubmitting
+        ? "Logging in..."
+        : "Login"}
+</button>
 
-            <p className="forgot-link">
+<p className="forgot-link">
+    <span
+        onClick={() =>
+            navigate("/forgot-password")
+        }
+    >
+        Forgot Password?
+    </span>
+</p>
 
-                <span
-                    onClick={() =>
-                        navigate("/forgot-password")
-                    }
-                >
-                    Forgot Password?
-                </span>
-
-            </p>
+<p className="auth-switch">
+    Don't have an account?{" "}
+    <span onClick={() => navigate("/register")}>
+        Sign up now
+    </span>
+</p>
 
         </form>
 
