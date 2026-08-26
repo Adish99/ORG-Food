@@ -1,6 +1,6 @@
 const mongoose=require("mongoose");
 
-//Schema creation for category 
+//Schema creation for categories 
 const categorySchema=new mongoose.Schema({
     categoryName:{
         type:String,
