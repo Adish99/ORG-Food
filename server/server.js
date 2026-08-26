@@ -16,6 +16,7 @@ const wishlistRoute=require("./router/wishlistRoute");
 const couponRouter=require("./router/couponRouter");
 const app=express();
 const PORT=process.env.PORT || 3000;
+
 //Change corsOptions for deployment
 const corsOptns = {
     origin: process.env.FRONTEND_URL,
@@ -49,7 +50,7 @@ app.use("/api/reviews", reviewRoute);
 app.use("/api/wishlist", wishlistRoute);
 app.use("/api/coupon",couponRouter);
 
-//Server Running
+//Server Running on Port
 app.listen(PORT,async()=>{
     console.log("Server running on the port number",PORT);
     await dbConnection();
