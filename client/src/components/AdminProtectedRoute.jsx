@@ -1,6 +1,8 @@
 import { Navigate } from "react-router-dom";
 import { UseAuth } from "../store/Authentication";
 
+
+//Protected Routes component
 export const AdminProtectedRoute = ({ children }) => {
 
     const {
@@ -12,7 +14,6 @@ export const AdminProtectedRoute = ({ children }) => {
         loading
 
     } = UseAuth();
-
     if (loading) {
 
         return <h2>Loading...</h2>;
