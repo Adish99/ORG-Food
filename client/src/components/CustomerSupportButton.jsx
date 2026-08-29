@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "./CustomerSupportButton.css";
 
+//Customer supoort button Component
 export const CustomerSupportButton = () => {
 
     const navigate = useNavigate();
