@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+//SEO Component
 const SEO = ({ title, description }) => {
   useEffect(() => {
     document.title = title;
