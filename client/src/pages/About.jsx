@@ -2,6 +2,8 @@ import SEO from "../components/SEO";
 import "./About.css";
 import { NavLink } from "react-router-dom";
 
+
+//About page component
 export const About = () => {
 
     return (
