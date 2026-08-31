@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { UseAuth } from "../store/Authentication";
 
-
+//Protected routes component
 export const ProtectedRoute=({children})=>{
 
 

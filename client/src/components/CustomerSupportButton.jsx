@@ -13,9 +13,7 @@ export const CustomerSupportButton = () => {
             onClick={() => navigate("/contact")}
             title="Need Help?"
         >
-
             💬
-
         </button>
 
     );
