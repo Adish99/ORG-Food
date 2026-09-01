@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Loader } from "../components/UI/Loader";
 import { EmptyState } from "../components/UI/EmptyState";
 
+//Cart component
 export const Cart=()=>{
 
     const [cart, setCart] = useState(null);
