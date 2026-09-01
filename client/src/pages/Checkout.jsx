@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+
+//Checkout component
 export const Checkout=()=>{
 
     const [cart, setCart] = useState(null);
