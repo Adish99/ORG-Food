@@ -95,7 +95,7 @@ export const OrderDetails = () => {
 
     } catch (error) {
 
-        console.log(error);
+        console.log("Cancel order error:",error);
 
     }
 
