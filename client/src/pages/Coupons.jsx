@@ -11,7 +11,8 @@ export const Coupons = () => {
     const [loading, setLoading] = useState(true);
 
     const { userAuthToken } = UseAuth();
-
+    
+//get coupons function
     const getCoupons = async () => {
 
         try {
