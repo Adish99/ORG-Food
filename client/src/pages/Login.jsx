@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { UseAuth } from "../store/Authentication";
 import { toast } from "react-toastify";
 
+//login component
 export const Login=()=>{
-
 
 const [loginData,setLoginData]=useState({
 
