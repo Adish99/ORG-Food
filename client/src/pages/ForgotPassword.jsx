@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Auth.css";
 
+//forgot password component
 export const ForgotPassword = () => {
 
     const navigate = useNavigate();
