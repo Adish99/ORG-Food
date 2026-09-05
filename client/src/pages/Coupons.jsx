@@ -58,7 +58,7 @@ export const Coupons = () => {
         getCoupons();
 
     }, []);
-
+//copy coupon function
     const copyCoupon = async (code) => {
 
         try {
