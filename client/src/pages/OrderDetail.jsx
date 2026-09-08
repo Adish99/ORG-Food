@@ -61,6 +61,7 @@ export const OrderDetails = () => {
     return <h2 className="loading">Order Not Found</h2>;
   }
 
+  //Cancel order function
   const cancelOrder = async () => {
 
     const confirmCancel = window.confirm(
