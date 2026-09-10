@@ -1,6 +1,7 @@
 import "./Payment.css";
 import { useNavigate } from "react-router-dom";
 
+//Payment Success Component
 export const PaymentSuccess = () => {
 
     const navigate = useNavigate();
