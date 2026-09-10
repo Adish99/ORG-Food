@@ -6,6 +6,7 @@ import { UseAuth } from "../store/Authentication";
 import { ProductDetailsSkeleton } from "../components/UI/ProductDetailsSkeleton";
 import SEO from "../components/SEO";
 
+//Product Detail Component 
 export const ProductDetail = () => {
 
     const { userAuthToken, isLoggedIn } = UseAuth();
