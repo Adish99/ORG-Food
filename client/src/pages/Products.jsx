@@ -68,7 +68,7 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
 
 }, []);
 
-  
+  //Get Products function
   const getProducts = async () => {
     try {
       setLoading(true);
