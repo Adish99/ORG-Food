@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import SEO from "../components/SEO";
 
+//get Product limit function
 const getProductsLimit = () => {
   if (window.innerWidth > 1100) {
     return 8;
