@@ -26,6 +26,7 @@ const getProductsLimit = () => {
   return 5;
 };
 
+//Product Component
 export const Products = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
