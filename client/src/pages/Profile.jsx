@@ -4,6 +4,8 @@ import { UseAuth } from "../store/Authentication";
 import { toast } from "react-toastify";
 import { ProfileSkeleton } from "../components/UI/ProfileSkeleton";
 
+
+//Profile Component
 export const Profile = () => {
 
   const {
