@@ -4,6 +4,8 @@ import { useNavigate} from "react-router-dom";
 import { UseAuth } from "../store/Authentication";
 import { toast } from "react-toastify";
 
+
+//Resistration Component
 export const Register=()=>{
 
 
