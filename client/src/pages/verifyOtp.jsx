@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import { UseAuth } from "../store/Authentication";
 import "./Auth.css";
 
+
+//Verify OTP component
 export const VerifyOtp = () => {
 
     const navigate = useNavigate();
