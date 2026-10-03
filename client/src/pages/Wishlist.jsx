@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { Loader } from "../components/UI/Loader";
 import { EmptyState } from "../components/UI/EmptyState";
 
+
+//Wishlist component
 export const Wishlist = () => {
 
     const [wishlist, setWishlist] = useState([]);
