@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Auth.css";
 
+//VerifyOtp Controller
 export const VerifyResetOtp = () => {
 
     const navigate = useNavigate();
